@@ -64,9 +64,9 @@ public class Product {
         } else {
             if (discountPrice == null) throw new IllegalArgumentException("Discount price is required when product is on sale");
             if (discountPrice < 0) throw new IllegalArgumentException("Discount price must be 0 or greater");
+            if (discountPrice >= price) throw new IllegalArgumentException("Discount price must be less than product price");
             this.discountPrice = discountPrice;
         }
-
     }
     public void setStock(int stock) {
         if (stock < 0) throw new IllegalArgumentException("Stock cannot be negative");
