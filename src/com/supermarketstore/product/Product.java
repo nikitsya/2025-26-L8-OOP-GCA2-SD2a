@@ -1,7 +1,5 @@
 package com.supermarketstore.product;
 
-import java.math.BigDecimal;
-
 public class Product {
     private int productId;
     private String name;
