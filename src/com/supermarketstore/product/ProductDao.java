@@ -3,6 +3,11 @@ package com.supermarketstore.product;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * TODO
+ *
+ * @author Nikita Smiichyk (primary)
+ */
 public interface ProductDao {
     List<Product> getAllProducts();
 

@@ -4,6 +4,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+/**
+ * TODO
+ *
+ * @author Nikita Smiichyk (primary)
+ */
 public class JdbcProductDao implements ProductDao, ProductJsonConverter {
 
     @Override
