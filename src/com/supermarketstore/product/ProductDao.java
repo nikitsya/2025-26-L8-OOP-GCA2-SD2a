@@ -5,7 +5,8 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
- * TODO
+ * Defines data access operations for Product entities.
+ * Provides CRUD methods and predicate-based filtering.
  *
  * @author Nikita Smiichyk (primary)
  */
