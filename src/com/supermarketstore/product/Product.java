@@ -26,23 +26,9 @@ public class Product {
     public int getProductId() {
         return productId;
     }
+
     public String getName() {
         return name;
-    }
-    public double getPrice() {
-        return price;
-    }
-    public boolean isOnSale() {
-        return onSale;
-    }
-    public Double getDiscountPrice() {
-        return discountPrice;
-    }
-    public int getStock() {
-        return stock;
-    }
-    public int getDepartmentId() {
-        return departmentId;
     }
 
     public void setName(String name) {
@@ -51,6 +37,11 @@ public class Product {
         }
         this.name = name.trim();
     }
+
+    public double getPrice() {
+        return price;
+    }
+
     public void setPrice(double price) {
         if (price <= 0) throw new IllegalArgumentException("Product price must be greater than 0");
         if (onSale && discountPrice != null && discountPrice >= price) {
@@ -58,24 +49,46 @@ public class Product {
         }
         this.price = price;
     }
+
+    public boolean isOnSale() {
+        return onSale;
+    }
+
     public void setOnSale(boolean onSale) {
         this.onSale = onSale;
         if (!onSale) discountPrice = null;
     }
+
+    public Double getDiscountPrice() {
+        return discountPrice;
+    }
+
     public void setDiscountPrice(Double discountPrice) {
         if (!onSale) {
             this.discountPrice = null;
         } else {
-            if (discountPrice == null) throw new IllegalArgumentException("Discount price is required when product is on sale");
+            if (discountPrice == null)
+                throw new IllegalArgumentException("Discount price is required when product is on sale");
             if (discountPrice < 0) throw new IllegalArgumentException("Discount price must be 0 or greater");
-            if (discountPrice >= price) throw new IllegalArgumentException("Discount price must be less than product price");
+            if (discountPrice >= price)
+                throw new IllegalArgumentException("Discount price must be less than product price");
             this.discountPrice = discountPrice;
         }
     }
+
+    public int getStock() {
+        return stock;
+    }
+
     public void setStock(int stock) {
         if (stock < 0) throw new IllegalArgumentException("Stock cannot be negative");
         this.stock = stock;
     }
+
+    public int getDepartmentId() {
+        return departmentId;
+    }
+
     public void setDepartmentId(int departmentId) {
         if (departmentId <= 0) throw new IllegalArgumentException("Department id must be greater than 0");
         this.departmentId = departmentId;
