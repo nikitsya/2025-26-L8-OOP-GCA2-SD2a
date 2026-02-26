@@ -18,6 +18,6 @@ CREATE TABLE product (
      FOREIGN KEY (department_id) REFERENCES department(department_id)
 );
 
-# TODO: (Hanna) department Insert
+# TODO: (Hanna) department Insert > 10 seed rows
 
-# TODO: (Nikita) product Insert
+# TODO: (Nikita) product Insert > 10 seed rows
