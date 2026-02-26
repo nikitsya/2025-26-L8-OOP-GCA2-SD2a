@@ -45,7 +45,7 @@ public class Product {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Product name cannot be empty");
         }
-        this.name = name;
+        this.name = name.trim();
     }
     public void setPrice(double price) {
         if (price <= 0) {
@@ -64,7 +64,7 @@ public class Product {
     }
     public void setStock(int stock) {
         if (stock < 0) {
-            throw new IllegalArgumentException("Product stock cannot be less than 0");
+            throw new IllegalArgumentException("Stock cannot be negative");
         }
         this.stock = stock;
     }
