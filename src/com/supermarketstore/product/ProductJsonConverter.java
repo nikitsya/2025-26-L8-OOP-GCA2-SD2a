@@ -3,7 +3,8 @@ package com.supermarketstore.product;
 import java.util.List;
 
 /**
- * TODO
+ * Defines JSON conversion operations for Product entities.
+ * Provides conversion for a single Product and for Product lists.
  *
  * @author Nikita Smiichyk (primary)
  */
