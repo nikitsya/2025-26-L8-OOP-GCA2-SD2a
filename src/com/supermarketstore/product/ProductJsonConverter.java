@@ -1,11 +1,13 @@
 package com.supermarketstore.product;
 
 import java.util.List;
-import java.util.function.Predicate;
 
+/**
+ * TODO
+ *
+ * @author Nikita Smiichyk (primary)
+ */
 public interface ProductJsonConverter {
-    List<Product> findProductsByFilter(Predicate<Product> filter);
-
     String productToJson(Product entity);
 
     Product productFromJson(String json);

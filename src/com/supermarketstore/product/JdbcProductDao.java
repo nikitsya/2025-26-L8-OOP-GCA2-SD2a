@@ -27,6 +27,16 @@ public class JdbcProductDao implements ProductDao, ProductJsonConverter {
     }
 
     @Override
+    public Product insertProduct(Product product) {
+        return null;
+    }
+
+    @Override
+    public Product updateProduct(int id, Product product) {
+        return null;
+    }
+
+    @Override
     public List<Product> findProductsByFilter(Predicate<Product> filter) {
         return List.of();
     }
