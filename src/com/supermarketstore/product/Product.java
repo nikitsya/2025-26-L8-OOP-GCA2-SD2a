@@ -7,7 +7,7 @@ public class Product {
     private boolean onSale;
     private Double discountPrice;
     private int stock;
-    private int departmentId;
+    private final int departmentId;
 
     public Product(String name, double price, boolean onSale, Double discountPrice, int stock, int departmentId) {
         this.name = name;
