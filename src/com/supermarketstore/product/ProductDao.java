@@ -2,6 +2,7 @@ package com.supermarketstore.product;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * TODO
@@ -18,4 +19,6 @@ public interface ProductDao {
     Product insertProduct(Product product);
 
     Product updateProduct(int id, Product product);
+
+    List<Product> findProductsByFilter(Predicate<Product> filter);
 }
