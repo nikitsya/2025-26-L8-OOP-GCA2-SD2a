@@ -11,11 +11,11 @@ public class Product {
     private int departmentId;
 
     public Product(String name, double price, boolean onSale, Double discountPrice, int stock, int departmentId) {
-        this.name = name;
-        this.price = price;
+        setName(name);
+        setPrice(price);
         this.onSale = onSale;
-        this.discountPrice = discountPrice;
-        this.stock = stock;
+        setDiscountPrice(discountPrice);
+        setStock(stock);
         this.departmentId = departmentId;
     }
 
