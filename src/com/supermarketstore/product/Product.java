@@ -69,6 +69,9 @@ public class Product {
         this.stock = stock;
     }
     public void setDepartmentId(int departmentId) {
+        if (departmentId <= 0) {
+            throw new IllegalArgumentException("Department id cannot be less than 0");
+        }
         this.departmentId = departmentId;
     }
 }
