@@ -42,18 +42,30 @@ public class Product {
     }
 
     public void setName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Product name cannot be empty");
+        }
         this.name = name;
     }
     public void setPrice(double price) {
+        if (price <= 0) {
+            throw new IllegalArgumentException("Product price cannot be less than 0");
+        }
         this.price = price;
     }
     public void setOnSale(boolean onSale) {
         this.onSale = onSale;
     }
     public void setDiscountPrice(Double discountPrice) {
+        if (discountPrice <= 0) {
+            throw new IllegalArgumentException("Product discount price cannot be less than 0");
+        }
         this.discountPrice = discountPrice;
     }
     public void setStock(int stock) {
+        if (stock <= 0) {
+            throw new IllegalArgumentException("Product stock cannot be less than 0");
+        }
         this.stock = stock;
     }
     public void setDepartmentId(int departmentId) {
