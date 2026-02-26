@@ -17,7 +17,7 @@ public class Product {
     public Product(String name, double price, boolean onSale, Double discountPrice, int stock, int departmentId) {
         setName(name);
         setPrice(price);
-        this.onSale = onSale;
+        setOnSale(onSale);
         setDiscountPrice(discountPrice);
         setStock(stock);
         setDepartmentId(departmentId);
@@ -57,6 +57,7 @@ public class Product {
     }
     public void setOnSale(boolean onSale) {
         this.onSale = onSale;
+        if (!onSale) discountPrice = null;
     }
     public void setDiscountPrice(Double discountPrice) {
         if (!onSale) {
