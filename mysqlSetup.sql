@@ -1,6 +1,6 @@
-DROP DATABASE IF EXISTS SupermarketStoreSystem;
-CREATE DATABASE SupermarketStoreSystem;
-USE SupermarketStoreSystem;
+DROP DATABASE IF EXISTS supermarket_store_system;
+CREATE DATABASE supermarket_store_system;
+USE supermarket_store_system;
 
 CREATE TABLE department(
     department_id INT AUTO_INCREMENT PRIMARY KEY
