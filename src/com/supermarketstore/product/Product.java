@@ -5,13 +5,13 @@ import java.math.BigDecimal;
 public class Product {
     private int productId;
     private String name;
-    private BigDecimal price;
+    private double price;
     private boolean onSale;
-    private BigDecimal discountPrice;
+    private Double discountPrice;
     private int stock;
     private int departmentId;
 
-    public Product(String name, BigDecimal price, boolean onSale, BigDecimal discountPrice, int stock, int departmentId) {
+    public Product(String name, double price, boolean onSale, Double discountPrice, int stock, int departmentId) {
         this.name = name;
         this.price = price;
         this.onSale = onSale;
