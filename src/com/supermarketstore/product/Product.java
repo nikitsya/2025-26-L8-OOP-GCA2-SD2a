@@ -16,7 +16,7 @@ public class Product {
         this.onSale = onSale;
         setDiscountPrice(discountPrice);
         setStock(stock);
-        this.departmentId = departmentId;
+        setDepartmentId(departmentId);
     }
 
     public int getProductId() {
@@ -43,13 +43,13 @@ public class Product {
 
     public void setName(String name) {
         if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("Product name cannot be empty");
+            throw new IllegalArgumentException("Product name must not be null or blank");
         }
         this.name = name.trim();
     }
     public void setPrice(double price) {
         if (price <= 0) {
-            throw new IllegalArgumentException("Product price cannot be less than 0");
+            throw new IllegalArgumentException("Product price must be greater than 0");
         }
         this.price = price;
     }
@@ -58,7 +58,7 @@ public class Product {
     }
     public void setDiscountPrice(Double discountPrice) {
         if (discountPrice != null && discountPrice < 0) {
-            throw new IllegalArgumentException("Discount price cannot be negative");
+            throw new IllegalArgumentException("Discount price must be 0 or greater");
         }
         this.discountPrice = discountPrice;
     }
@@ -70,7 +70,7 @@ public class Product {
     }
     public void setDepartmentId(int departmentId) {
         if (departmentId <= 0) {
-            throw new IllegalArgumentException("Department id cannot be less than 0");
+            throw new IllegalArgumentException("Department id must be greater than 0");
         }
         this.departmentId = departmentId;
     }
