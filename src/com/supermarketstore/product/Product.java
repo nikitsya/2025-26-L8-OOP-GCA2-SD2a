@@ -1,5 +1,6 @@
 package com.supermarketstore.product;
 
+/** Represents a product entity in the supermarket system. */
 public class Product {
     private int productId;
     private String name;
