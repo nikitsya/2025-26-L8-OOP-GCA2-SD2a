@@ -10,8 +10,4 @@ public interface ProductDao {
     boolean deleteProductById(int id);
     // TODO insertProduct(Product product);
     // TODO updateProduct(int id, Product product);
-    List<Product> findProductsByFilter(Predicate<Product> filter);
-    String productToJson(Product entity);
-    Product productFromJson(String json);
-    String productListToJson(List<Product> list);
 }
