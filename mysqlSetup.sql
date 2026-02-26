@@ -4,6 +4,7 @@ USE supermarket_store_system;
 
 CREATE TABLE department(
     department_id INT AUTO_INCREMENT PRIMARY KEY
+    # TODO: Hanna
 );
 
 CREATE TABLE product (
@@ -16,3 +17,5 @@ CREATE TABLE product (
      department_id INT,
      FOREIGN KEY (department_id) REFERENCES department(department_id)
 );
+
+# TODO: Inserts
