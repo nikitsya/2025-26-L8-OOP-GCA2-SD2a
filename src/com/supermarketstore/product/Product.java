@@ -53,6 +53,9 @@ public class Product {
     }
     public void setPrice(double price) {
         if (price <= 0) throw new IllegalArgumentException("Product price must be greater than 0");
+        if (onSale && discountPrice != null && discountPrice >= price) {
+            throw new IllegalArgumentException("Discount price must be less than product price");
+        }
         this.price = price;
     }
     public void setOnSale(boolean onSale) {
