@@ -15,7 +15,7 @@ public interface ProductDao {
 
     boolean deleteProductById(int id);
 
-    // TODO insertProduct(Product product);
+    Product insertProduct(Product product);
 
-    // TODO updateProduct(int id, Product product);
+    Product updateProduct(int id, Product product);
 }
