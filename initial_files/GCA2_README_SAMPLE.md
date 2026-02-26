@@ -4,24 +4,22 @@ subtitle: "README"
 description: "Project overview, setup, protocol, architecture, testing evidence, and contribution matrix for GCA2."
 module: "COMP C8Z03 Object-Oriented Programming"
 stage: "2 (Group Project)"
-generated_at: "2026-02-20 09:00 Europe/Dublin"
 ---
 
-# 2025-26 - OOP - L8 - GCA2 — N-tier System
+# 2026 - OOP - L8 - GCA2 — N-tier System
 
 ## 1. Project Overview
 
 ### Domain summary (150–200 words)
-> **Replace this text** with your approved domain description.  
-> Include: what the system does, who it is for, and what the core “things” are (entities).  
-> Mention what binary file storage represents in your domain (e.g., profile images, evidence photos, receipts, audio clips, etc.).
+> Our project domain is a Supermarket Store System that models how a modern grocery store is organised and how it handles both in-store stock and online orders. The supermarket is structured into Departments such as Meat, Bakery, Dairy, Produce, and Household. Each department contains a set of Products, and every product belongs to one department, reflecting real store layout and responsibility areas.
+> In addition to managing departments and products, the system supports Online Orders. A customer order contains a list of requested products and quantities. When an order is received, the store can check current stock levels and determine whether the full order can be fulfilled. If items are unavailable, the order can be marked as partially fulfillable, with missing items clearly identified. This mirrors the real process where staff pick items from shelves and stock levels change constantly.
+> The system provides a clear view of how departments, products, and orders connect inside a supermarket and supports day-to-day store operations such as maintaining inventory and processing customer orders.
 
 ### Team
-- **Group ID:** `2025-26-L8-OOP-GCA2-GroupXX`
+- **Group ID:** `2025-26-L8-OOP-GCA2-SD2a`
 - **Members:**
-  - Student A — `C00XXXX`
-  - Student B — `C00XXXX`
-  - Student C — `C00XXXX`
+  - Hanna Bokariuk — `D00283065`
+  - Nikita Smiichyk — `D00283070`
 
 ### Key features
 - JDBC DAO layer with full CRUD (Stage 1 foundation)
