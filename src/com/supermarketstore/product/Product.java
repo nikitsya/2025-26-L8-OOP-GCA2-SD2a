@@ -63,7 +63,7 @@ public class Product {
         this.discountPrice = discountPrice;
     }
     public void setStock(int stock) {
-        if (stock <= 0) {
+        if (stock < 0) {
             throw new IllegalArgumentException("Product stock cannot be less than 0");
         }
         this.stock = stock;
