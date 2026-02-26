@@ -57,8 +57,8 @@ public class Product {
         this.onSale = onSale;
     }
     public void setDiscountPrice(Double discountPrice) {
-        if (discountPrice <= 0) {
-            throw new IllegalArgumentException("Product discount price cannot be less than 0");
+        if (discountPrice != null && discountPrice < 0) {
+            throw new IllegalArgumentException("Discount price cannot be negative");
         }
         this.discountPrice = discountPrice;
     }
