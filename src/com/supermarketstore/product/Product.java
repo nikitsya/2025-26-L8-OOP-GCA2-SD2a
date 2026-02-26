@@ -52,9 +52,7 @@ public class Product {
         this.name = name.trim();
     }
     public void setPrice(double price) {
-        if (price <= 0) {
-            throw new IllegalArgumentException("Product price must be greater than 0");
-        }
+        if (price <= 0) throw new IllegalArgumentException("Product price must be greater than 0");
         this.price = price;
     }
     public void setOnSale(boolean onSale) {
@@ -64,22 +62,18 @@ public class Product {
         if (!onSale) {
             this.discountPrice = null;
         } else {
-            if (discountPrice < 0) {
-                throw new IllegalArgumentException("Discount price must be 0 or greater");
-            }
+            if (discountPrice == null) throw new IllegalArgumentException("Discount price is required when product is on sale");
+            if (discountPrice < 0) throw new IllegalArgumentException("Discount price must be 0 or greater");
             this.discountPrice = discountPrice;
         }
+
     }
     public void setStock(int stock) {
-        if (stock < 0) {
-            throw new IllegalArgumentException("Stock cannot be negative");
-        }
+        if (stock < 0) throw new IllegalArgumentException("Stock cannot be negative");
         this.stock = stock;
     }
     public void setDepartmentId(int departmentId) {
-        if (departmentId <= 0) {
-            throw new IllegalArgumentException("Department id must be greater than 0");
-        }
+        if (departmentId <= 0) throw new IllegalArgumentException("Department id must be greater than 0");
         this.departmentId = departmentId;
     }
 }
