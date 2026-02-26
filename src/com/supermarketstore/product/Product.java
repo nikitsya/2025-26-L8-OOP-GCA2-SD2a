@@ -61,10 +61,14 @@ public class Product {
         this.onSale = onSale;
     }
     public void setDiscountPrice(Double discountPrice) {
-        if (discountPrice != null && discountPrice < 0) {
-            throw new IllegalArgumentException("Discount price must be 0 or greater");
+        if (!onSale) {
+            this.discountPrice = null;
+        } else {
+            if (discountPrice < 0) {
+                throw new IllegalArgumentException("Discount price must be 0 or greater");
+            }
+            this.discountPrice = discountPrice;
         }
-        this.discountPrice = discountPrice;
     }
     public void setStock(int stock) {
         if (stock < 0) {
