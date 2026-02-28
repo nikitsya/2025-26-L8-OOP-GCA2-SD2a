@@ -1,5 +1,5 @@
 # Supermarket Store System
-Лише для зручності | Потім замінимо на фінальне README.md
+Temporary tracking version of README (to be replaced by final version)
 
 ## Project Stage Plan
 
@@ -13,18 +13,19 @@
 ### Stage 1 (F1-F9)
 
 | Feature | Hanna | Nikita |
-| --- | --- |--------|
-| F1 |  | 50%    |
-| F2 |  | ✅      |
-| F3 |  |        |
-| F4 |  |        |
-| F5 |  |        |
-| F6 |  |        |
-| F7 |  |        |
-| F8 |  |        |
-| F9 |  |        |
+| --- | --- | --- |
+| F1 |  | 50% |
+| F2 |  | ✅ |
+| F3 |  |  |
+| F4 |  |  |
+| F5 |  |  |
+| F6 |  |  |
+| F7 |  |  |
+| F8 |  |  |
+| F9 |  |  |
 
-### Stage 2 (F10-F16)
+<details>
+<summary><strong>Stage 2 (F10-F16)</strong></summary>
 
 | Feature | Hanna | Nikita |
 | --- | --- | --- |
@@ -36,7 +37,10 @@
 | F15 |  |  |
 | F16 |  |  |
 
-### Stage 3 (F17-F22)
+</details>
+
+<details>
+<summary><strong>Stage 3 (F17-F22)</strong></summary>
 
 | Feature | Hanna | Nikita |
 | --- | --- | --- |
@@ -47,9 +51,15 @@
 | F21 |  |  |
 | F22 |  |  |
 
-### Stage 4 (F23-F24)
+</details>
+
+<details>
+<summary><strong>Stage 4 (F23-F24)</strong></summary>
 
 | Feature | Hanna | Nikita |
 | --- | --- | --- |
 | F23 |  |  |
 | F24 |  |  |
+
+</details>
+
