@@ -1,2 +1,3 @@
 /target/
 *.class
+src/main/java/com/supermarketstore/product/ProductMain.java
