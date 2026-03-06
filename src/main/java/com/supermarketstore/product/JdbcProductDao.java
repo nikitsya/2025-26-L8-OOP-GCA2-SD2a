@@ -19,6 +19,13 @@ public class JdbcProductDao implements ProductDao, ProductJsonConverter {
     private String _user;
     private String _pass;
 
+    public JdbcProductDao(String url, String user, String pass) {
+        if (url == null || url.isBlank()) throw new IllegalArgumentException("url is required");
+        _url = url.trim();
+        _user = user;
+        _pass = pass;
+    }
+
     @Override
     public List<Product> getAllProducts() {
         return List.of();
