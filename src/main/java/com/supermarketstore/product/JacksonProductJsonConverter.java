@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author Nikita Smiichyk (primary)
  */
-public class JacksonProductJsonConverter implements  ProductJsonConverter {
+public class JacksonProductJsonConverter implements ProductJsonConverter {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -27,7 +27,8 @@ public class JacksonProductJsonConverter implements  ProductJsonConverter {
 
     @Override
     public Product productFromJson(String json) {
-        if (json == null || json.isBlank()) throw new IllegalArgumentException("Product JSON must not be null or blank");
+        if (json == null || json.isBlank())
+            throw new IllegalArgumentException("Product JSON must not be null or blank");
         try {
             return MAPPER.readValue(json, Product.class);
         } catch (IOException e) {

@@ -11,6 +11,7 @@ import java.util.function.Predicate;
  * @author Nikita Smiichyk (primary)
  */
 public interface ProductDao {
+
     List<Product> getAllProducts();
 
     Optional<Product> getProductById(int id);

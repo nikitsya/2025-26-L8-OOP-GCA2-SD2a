@@ -9,6 +9,7 @@ import java.util.List;
  * @author Nikita Smiichyk (primary)
  */
 public interface ProductJsonConverter {
+
     String productToJson(Product entity);
 
     Product productFromJson(String json);
