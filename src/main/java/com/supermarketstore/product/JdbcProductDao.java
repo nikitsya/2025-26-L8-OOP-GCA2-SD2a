@@ -103,6 +103,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
 
     @Override
     public String productToJson(Product entity) {
+        if (entity == null) throw new IllegalArgumentException("Product must not be null");
         try {
             return MAPPER.writeValueAsString(entity);
         } catch (IOException e) {
@@ -112,7 +113,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
 
     @Override
     public Product productFromJson(String json) {
-        if (json == null || json.isBlank()) throw new IllegalArgumentException("json is required");
+        if (json == null || json.isBlank()) throw new IllegalArgumentException("Product JSON must not be null or blank");
         try {
             return MAPPER.readValue(json, Product.class);
         } catch (IOException e) {
@@ -122,6 +123,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
 
     @Override
     public String productListToJson(List<Product> list) {
+        if (list == null) throw new IllegalArgumentException("Product list must not be null");
         try {
             return MAPPER.writeValueAsString(list);
         } catch (IOException e) {
