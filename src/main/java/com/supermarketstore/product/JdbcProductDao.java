@@ -36,7 +36,7 @@ public class JdbcProductDao implements ProductDao, ProductJsonConverter {
     public Optional<Product> getProductById(int id) {
         if (id <= 0) return Optional.empty();
 
-        String sql = "SELECT id, name, price, onSale, discountPrice, stock, departmentId FROM products WHERE id = ?";
+        String sql = "SELECT product_id, name, price, is_on_sale, discount_price, stock, department_id FROM products WHERE product_id = ?";
 
         try (Connection connection = open();
              PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -52,18 +52,6 @@ public class JdbcProductDao implements ProductDao, ProductJsonConverter {
         }
     }
 
-    private Product mapRow(ResultSet resultSet) throws SQLException {
-        int productId = resultSet.getInt("product_id");;
-        String name = resultSet.getString("name");
-        double price = resultSet.getDouble("price");
-        boolean onSale =  resultSet.getBoolean("onSale");
-        Double discountPrice = resultSet.getDouble("discountPrice");
-        int stock = resultSet.getInt("stock");
-        int departmentId = resultSet.getInt("department_id");
-
-        return new Product(productId, name, price, onSale, discountPrice, stock, departmentId);
-    }
-
     @Override
     public boolean deleteProductById(int id) {
         return false;
@@ -71,7 +59,6 @@ public class JdbcProductDao implements ProductDao, ProductJsonConverter {
 
     @Override
     public Product insertProduct(Product product) {
-
         return null;
     }
 
@@ -98,5 +85,17 @@ public class JdbcProductDao implements ProductDao, ProductJsonConverter {
     @Override
     public String productListToJson(List<Product> list) {
         return "";
+    }
+
+    private Product mapRow(ResultSet resultSet) throws SQLException {
+        int productId = resultSet.getInt("product_id");;
+        String name = resultSet.getString("name");
+        double price = resultSet.getDouble("price");
+        boolean onSale =  resultSet.getBoolean("onSale");
+        Double discountPrice = resultSet.getDouble("discountPrice");
+        int stock = resultSet.getInt("stock");
+        int departmentId = resultSet.getInt("department_id");
+
+        return new Product(productId, name, price, onSale, discountPrice, stock, departmentId);
     }
 }
