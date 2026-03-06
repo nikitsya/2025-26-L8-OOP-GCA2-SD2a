@@ -65,7 +65,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
     public boolean deleteProductById(int id) {
         if (id <= 0) return false;
 
-        String sql = "DELETE FROM products WHERE id = ?";
+        String sql = "DELETE FROM products WHERE product_id = ?";
 
         try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql)) {
             ps.setInt(1, id);
