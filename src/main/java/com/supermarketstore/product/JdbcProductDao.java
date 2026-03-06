@@ -32,12 +32,12 @@ public class JdbcProductDao implements ProductDao, ProductJsonConverter {
     public List<Product> getAllProducts() {
         String sql = "SELECT product_id, name, price, is_on_sale, discount_price, stock, department_id FROM products";
 
-        try (Connection connection = open();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-             ResultSet resultSet = preparedStatement.executeQuery()) {
+        try (Connection c = open();
+             PreparedStatement ps = c.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
 
             ArrayList<Product> out = new ArrayList<>();
-            while (resultSet.next()) out.add(mapRow(resultSet));
+            while (rs.next()) out.add(mapRow(rs));
             return out;
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -50,8 +50,8 @@ public class JdbcProductDao implements ProductDao, ProductJsonConverter {
 
         String sql = "SELECT product_id, name, price, is_on_sale, discount_price, stock, department_id FROM products WHERE product_id = ?";
 
-        try (Connection connection = open();
-             PreparedStatement ps = connection.prepareStatement(sql)) {
+        try (Connection c = open();
+             PreparedStatement ps = c.prepareStatement(sql)) {
 
             ps.setInt(1, id);
 
@@ -66,7 +66,16 @@ public class JdbcProductDao implements ProductDao, ProductJsonConverter {
 
     @Override
     public boolean deleteProductById(int id) {
-        return false;
+        if (id <= 0) return false;
+
+        String sql = "DELETE FROM products WHERE id = ?";
+
+        try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            return ps.executeUpdate() == 1;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
