@@ -5,6 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.List;
 
+
+/**
+ * Converts Product objects to/from JSON using Jackson.
+ *
+ * @author Nikita Smiichyk (primary)
+ */
 public class JacksonProductJsonConverter implements  ProductJsonConverter {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
