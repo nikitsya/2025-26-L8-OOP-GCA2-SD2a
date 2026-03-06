@@ -32,10 +32,7 @@ public class JdbcProductDao implements ProductDao, ProductJsonConverter {
     public List<Product> getAllProducts() {
         String sql = "SELECT product_id, name, price, is_on_sale, discount_price, stock, department_id FROM products";
 
-        try (Connection c = open();
-             PreparedStatement ps = c.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
+        try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             ArrayList<Product> out = new ArrayList<>();
             while (rs.next()) out.add(mapRow(rs));
             return out;
@@ -50,9 +47,7 @@ public class JdbcProductDao implements ProductDao, ProductJsonConverter {
 
         String sql = "SELECT product_id, name, price, is_on_sale, discount_price, stock, department_id FROM products WHERE product_id = ?";
 
-        try (Connection c = open();
-             PreparedStatement ps = c.prepareStatement(sql)) {
-
+        try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql)) {
             ps.setInt(1, id);
 
             try (ResultSet rs = ps.executeQuery()) {
@@ -109,11 +104,11 @@ public class JdbcProductDao implements ProductDao, ProductJsonConverter {
     }
 
     private Product mapRow(ResultSet resultSet) throws SQLException {
-        int productId = resultSet.getInt("product_id");;
+        int productId = resultSet.getInt("product_id");
         String name = resultSet.getString("name");
         double price = resultSet.getDouble("price");
-        boolean onSale =  resultSet.getBoolean("onSale");
-        Double discountPrice = resultSet.getDouble("discountPrice");
+        boolean onSale = resultSet.getBoolean("is_on_sale");
+        Double discountPrice = resultSet.getDouble("discount_price");
         int stock = resultSet.getInt("stock");
         int departmentId = resultSet.getInt("department_id");
 

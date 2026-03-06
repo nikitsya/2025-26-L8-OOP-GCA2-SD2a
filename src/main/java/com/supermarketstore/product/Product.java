@@ -1,7 +1,5 @@
 package com.supermarketstore.product;
 
-import java.util.Objects;
-
 /**
  * Represents a product entity in the supermarket system.
  *
@@ -31,7 +29,7 @@ public class Product {
     }
 
     public void setProductId(int productId) {
-        if(productId < 0) {
+        if (productId < 0) {
             throw new IllegalArgumentException("productId cannot be negative");
         }
         this.productId = productId;
