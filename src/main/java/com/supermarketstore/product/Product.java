@@ -15,6 +15,9 @@ public class Product {
     private Double discountPrice;
     private int stock;
 
+    public Product() {
+    }
+
     public Product(int productId, String name, double price, boolean onSale, Double discountPrice, int stock) {
         setProductId(productId);
         setName(name);
