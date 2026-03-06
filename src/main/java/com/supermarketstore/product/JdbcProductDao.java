@@ -1,6 +1,7 @@
 package com.supermarketstore.product;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -29,7 +30,18 @@ public class JdbcProductDao implements ProductDao, ProductJsonConverter {
 
     @Override
     public List<Product> getAllProducts() {
-        return List.of();
+        String sql = "SELECT product_id, name, price, is_on_sale, discount_price, stock, department_id FROM products";
+
+        try (Connection connection = open();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            ArrayList<Product> out = new ArrayList<>();
+            while (resultSet.next()) out.add(mapRow(resultSet));
+            return out;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
