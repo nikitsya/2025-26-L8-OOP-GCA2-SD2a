@@ -14,16 +14,14 @@ public class Product {
     private boolean onSale;
     private Double discountPrice;
     private int stock;
-    private int departmentId;
 
-    public Product(int productId, String name, double price, boolean onSale, Double discountPrice, int stock, int departmentId) {
+    public Product(int productId, String name, double price, boolean onSale, Double discountPrice, int stock) {
         setProductId(productId);
         setName(name);
         setPrice(price);
         setOnSale(onSale);
         setDiscountPrice(discountPrice);
         setStock(stock);
-        setDepartmentId(departmentId);
     }
 
     @JsonProperty("product_id")
@@ -107,17 +105,6 @@ public class Product {
         this.stock = stock;
     }
 
-    @JsonProperty("department_id")
-    public int getDepartmentId() {
-        return departmentId;
-    }
-
-    @JsonProperty("department_id")
-    public void setDepartmentId(int departmentId) {
-        if (departmentId <= 0) throw new IllegalArgumentException("Department id must be greater than 0");
-        this.departmentId = departmentId;
-    }
-
     @Override
     public String toString() {
         return "Product{" +
@@ -127,7 +114,6 @@ public class Product {
                 ", onSale=" + onSale +
                 ", discountPrice=" + discountPrice +
                 ", stock=" + stock +
-                ", departmentId=" + departmentId +
                 '}';
     }
 }
