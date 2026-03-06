@@ -17,13 +17,13 @@ Temporary tracking version of README (to be replaced by final version)
 |---------|-------|--------|
 | F1      |       | 50%    |
 | F2      |       | ✅      |
-| F3      |       |        |
-| F4      |       |        |
-| F5      |       |        |
+| F3      |       | ✅      |
+| F4      |       | ✅      |
+| F5      |       | ✅      |
 | F6      |       |        |
 | F7      |       |        |
 | F8      |       |        |
-| F9      |       |        |
+| F9      |       | ✅      |
 
 #### Required Features
 
