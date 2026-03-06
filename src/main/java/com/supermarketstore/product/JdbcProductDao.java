@@ -11,17 +11,13 @@ import java.util.function.Predicate;
  *
  * @author Nikita Smiichyk (primary)
  */
-public class JdbcProductDao implements ProductDao, ProductJsonConverter {
+public record JdbcProductDao(String _url, String _user, String _pass) implements ProductDao, ProductJsonConverter {
 
-    private String _url;
-    private String _user;
-    private String _pass;
-
-    public JdbcProductDao(String url, String user, String pass) {
-        if (url == null || url.isBlank()) throw new IllegalArgumentException("url is required");
-        _url = url.trim();
-        _user = user;
-        _pass = pass;
+    public JdbcProductDao(String _url, String _user, String _pass) {
+        if (_url == null || _url.isBlank()) throw new IllegalArgumentException("url is required");
+        this._url = _url.trim();
+        this._user = _user;
+        this._pass = _pass;
     }
 
     private Connection open() throws SQLException {
