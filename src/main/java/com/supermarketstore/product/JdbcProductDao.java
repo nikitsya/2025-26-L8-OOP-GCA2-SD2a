@@ -1,8 +1,5 @@
 package com.supermarketstore.product;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,9 +11,7 @@ import java.util.function.Predicate;
  *
  * @author Nikita Smiichyk (primary)
  */
-public record JdbcProductDao(String _url, String _user, String _pass) implements ProductDao, ProductJsonConverter {
-
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+public record JdbcProductDao(String _url, String _user, String _pass) implements ProductDao {
 
     public JdbcProductDao(String _url, String _user, String _pass) {
         if (_url == null || _url.isBlank()) throw new IllegalArgumentException("url is required");
@@ -99,35 +94,5 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         int stock = resultSet.getInt("stock");
 
         return new Product(productId, name, price, onSale, discountPrice, stock);
-    }
-
-    @Override
-    public String productToJson(Product entity) {
-        if (entity == null) throw new IllegalArgumentException("Product must not be null");
-        try {
-            return MAPPER.writeValueAsString(entity);
-        } catch (IOException e) {
-            throw new IllegalArgumentException("Failed to serialize Product to JSON", e);
-        }
-    }
-
-    @Override
-    public Product productFromJson(String json) {
-        if (json == null || json.isBlank()) throw new IllegalArgumentException("Product JSON must not be null or blank");
-        try {
-            return MAPPER.readValue(json, Product.class);
-        } catch (IOException e) {
-            throw new IllegalArgumentException("Failed to deserialize Product from JSON: ", e);
-        }
-    }
-
-    @Override
-    public String productListToJson(List<Product> list) {
-        if (list == null) throw new IllegalArgumentException("Product list must not be null");
-        try {
-            return MAPPER.writeValueAsString(list);
-        } catch (IOException e) {
-            throw new IllegalArgumentException("Failed to serialize Product list to JSON", e);
-        }
     }
 }
