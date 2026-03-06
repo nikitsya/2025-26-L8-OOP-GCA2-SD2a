@@ -2,6 +2,7 @@ package com.supermarketstore.product;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -96,7 +97,12 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
 
     @Override
     public Product productFromJson(String json) {
-        return null;
+        if (json == null || json.isBlank()) throw new IllegalArgumentException("json is required");
+        try {
+            return MAPPER.readValue(json, Product.class);
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Invalid product JSON", e);
+        }
     }
 
     @Override
