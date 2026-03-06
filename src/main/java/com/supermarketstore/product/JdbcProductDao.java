@@ -15,6 +15,10 @@ import java.sql.ResultSet;
  */
 public class JdbcProductDao implements ProductDao, ProductJsonConverter {
 
+    private String _url;
+    private String _user;
+    private String _pass;
+
     @Override
     public List<Product> getAllProducts() {
         return List.of();
