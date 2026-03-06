@@ -1,5 +1,7 @@
 package com.supermarketstore.product;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,8 @@ import java.util.function.Predicate;
  * @author Nikita Smiichyk (primary)
  */
 public record JdbcProductDao(String _url, String _user, String _pass) implements ProductDao, ProductJsonConverter {
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     public JdbcProductDao(String _url, String _user, String _pass) {
         if (_url == null || _url.isBlank()) throw new IllegalArgumentException("url is required");
