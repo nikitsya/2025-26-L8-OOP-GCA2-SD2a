@@ -53,7 +53,15 @@ public class JdbcProductDao implements ProductDao, ProductJsonConverter {
     }
 
     private Product mapRow(ResultSet resultSet) throws SQLException {
+        int productId = resultSet.getInt("product_id");;
+        String name = resultSet.getString("name");
+        double price = resultSet.getDouble("price");
+        boolean onSale =  resultSet.getBoolean("onSale");
+        Double discountPrice = resultSet.getDouble("discountPrice");
+        int stock = resultSet.getInt("stock");
+        int departmentId = resultSet.getInt("department_id");
 
+        return new Product(productId, name, price, onSale, discountPrice, stock, departmentId);
     }
 
     @Override
