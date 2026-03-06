@@ -1,5 +1,7 @@
 package com.supermarketstore.product;
 
+import java.util.Objects;
+
 /**
  * Represents a product entity in the supermarket system.
  *
@@ -92,5 +94,18 @@ public class Product {
     public void setDepartmentId(int departmentId) {
         if (departmentId <= 0) throw new IllegalArgumentException("Department id must be greater than 0");
         this.departmentId = departmentId;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productId=" + productId +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", onSale=" + onSale +
+                ", discountPrice=" + discountPrice +
+                ", stock=" + stock +
+                ", departmentId=" + departmentId +
+                '}';
     }
 }
