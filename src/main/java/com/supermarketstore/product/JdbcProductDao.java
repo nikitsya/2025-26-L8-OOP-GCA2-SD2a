@@ -103,7 +103,11 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
 
     @Override
     public String productToJson(Product entity) {
-        return "";
+        try {
+            return MAPPER.writeValueAsString(entity);
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Invalid product JSON", e);
+        }
     }
 
     @Override
