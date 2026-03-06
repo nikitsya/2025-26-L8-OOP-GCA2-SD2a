@@ -51,12 +51,13 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
             ps.setInt(1, id);
 
             try (ResultSet rs = ps.executeQuery()) {
-                if (!rs.next()) return Optional.empty();
-                return Optional.of(mapRow(rs));
+                if (rs.next()) return Optional.of(mapRow(rs));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+
+        return Optional.empty();
     }
 
     @Override
