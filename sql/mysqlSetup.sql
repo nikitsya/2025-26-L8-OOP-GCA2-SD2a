@@ -8,9 +8,6 @@ CREATE TABLE departments
     # TODO: (Hanna)
 );
 
-
-# drop table if exists products;
-
 CREATE TABLE products
 (
     product_id     INT AUTO_INCREMENT PRIMARY KEY,
@@ -21,7 +18,16 @@ CREATE TABLE products
     stock          INT          NOT NULL
 );
 
-# TODO: (Hanna) department Insert > 10 seed rows
+CREATE TABLE department_products
+(
+    department_id INT NOT NULL,
+    product_id    INT NOT NULL,
+    PRIMARY KEY (department_id, product_id),
+    FOREIGN KEY (department_id) REFERENCES departments (department_id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products (product_id) ON DELETE CASCADE
+);
+
+# TODO: (Hanna) departments Insert > 10 seed rows
 
 INSERT INTO products (name, price, is_on_sale, discount_price, stock)
 VALUES ('Heinz Turkish Style Garlic Sauce 420G', 3.45, TRUE, 2.50, 60),
