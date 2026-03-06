@@ -34,7 +34,26 @@ public class JdbcProductDao implements ProductDao, ProductJsonConverter {
 
     @Override
     public Optional<Product> getProductById(int id) {
-        return Optional.empty();
+        if (id <= 0) return Optional.empty();
+
+        String sql = "SELECT id, name, price, onSale, discountPrice, stock, departmentId FROM products WHERE id = ?";
+
+        try (Connection connection = open();
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (!rs.next()) return Optional.empty();
+                return Optional.of(mapRow(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Product mapRow(ResultSet resultSet) throws SQLException {
+
     }
 
     @Override
@@ -44,6 +63,7 @@ public class JdbcProductDao implements ProductDao, ProductJsonConverter {
 
     @Override
     public Product insertProduct(Product product) {
+
         return null;
     }
 
