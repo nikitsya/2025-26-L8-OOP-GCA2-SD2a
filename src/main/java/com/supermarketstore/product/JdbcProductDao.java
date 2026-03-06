@@ -106,7 +106,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         try {
             return MAPPER.writeValueAsString(entity);
         } catch (IOException e) {
-            throw new IllegalArgumentException("Invalid product JSON", e);
+            throw new IllegalArgumentException("Failed to serialize Product to JSON", e);
         }
     }
 
@@ -116,7 +116,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         try {
             return MAPPER.readValue(json, Product.class);
         } catch (IOException e) {
-            throw new IllegalArgumentException("Invalid product JSON", e);
+            throw new IllegalArgumentException("Failed to deserialize Product from JSON: ", e);
         }
     }
 
@@ -125,7 +125,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         try {
             return MAPPER.writeValueAsString(list);
         } catch (IOException e) {
-            throw new IllegalArgumentException("Invalid product JSON", e);
+            throw new IllegalArgumentException("Failed to serialize Product list to JSON", e);
         }
     }
 }
