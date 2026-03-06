@@ -17,7 +17,7 @@ public class Product {
     private int departmentId;
 
     public Product(int productId, String name, double price, boolean onSale, Double discountPrice, int stock, int departmentId) {
-        this.productId = productId;
+        setProductId(productId);
         setName(name);
         setPrice(price);
         setOnSale(onSale);
