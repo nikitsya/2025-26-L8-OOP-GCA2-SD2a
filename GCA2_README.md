@@ -1,4 +1,7 @@
 ---
+title: "GCA2 — N-tier System"
+subtitle: "README"
+description: "Project overview, setup, protocol, architecture, testing evidence, and contribution matrix for GCA2."
 module: "COMP C8Z03 Object-Oriented Programming"
 stage: "2 (Group Project)"
 ---
