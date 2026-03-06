@@ -1,5 +1,7 @@
 package com.supermarketstore.product;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Represents a product entity in the supermarket system.
  *
@@ -24,10 +26,12 @@ public class Product {
         setDepartmentId(departmentId);
     }
 
+    @JsonProperty("product_id")
     public int getProductId() {
         return productId;
     }
 
+    @JsonProperty("product_id")
     public void setProductId(int productId) {
         if (productId < 0) {
             throw new IllegalArgumentException("productId cannot be negative");
@@ -35,10 +39,12 @@ public class Product {
         this.productId = productId;
     }
 
+    @JsonProperty("name")
     public String getName() {
         return name;
     }
 
+    @JsonProperty("name")
     public void setName(String name) {
         if (name == null || name.trim().isEmpty()) {
             throw new IllegalArgumentException("Product name must not be null or blank");
@@ -46,10 +52,12 @@ public class Product {
         this.name = name.trim();
     }
 
+    @JsonProperty("price")
     public double getPrice() {
         return price;
     }
 
+    @JsonProperty("price")
     public void setPrice(double price) {
         if (price <= 0) throw new IllegalArgumentException("Product price must be greater than 0");
         if (onSale && discountPrice != null && discountPrice >= price) {
@@ -58,19 +66,23 @@ public class Product {
         this.price = price;
     }
 
+    @JsonProperty("is_on_sale")
     public boolean isOnSale() {
         return onSale;
     }
 
+    @JsonProperty("is_on_sale")
     public void setOnSale(boolean onSale) {
         this.onSale = onSale;
         if (!onSale) discountPrice = null;
     }
 
+    @JsonProperty("discount_price")
     public Double getDiscountPrice() {
         return discountPrice;
     }
 
+    @JsonProperty("discount_price")
     public void setDiscountPrice(Double discountPrice) {
         if (!onSale) {
             this.discountPrice = null;
@@ -84,19 +96,23 @@ public class Product {
         }
     }
 
+    @JsonProperty("stock")
     public int getStock() {
         return stock;
     }
 
+    @JsonProperty("stock")
     public void setStock(int stock) {
         if (stock < 0) throw new IllegalArgumentException("Stock cannot be negative");
         this.stock = stock;
     }
 
+    @JsonProperty("department_id")
     public int getDepartmentId() {
         return departmentId;
     }
 
+    @JsonProperty("department_id")
     public void setDepartmentId(int departmentId) {
         if (departmentId <= 0) throw new IllegalArgumentException("Department id must be greater than 0");
         this.departmentId = departmentId;
