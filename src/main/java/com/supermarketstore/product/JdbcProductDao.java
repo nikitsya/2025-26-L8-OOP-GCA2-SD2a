@@ -7,7 +7,10 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
- * TODO
+ * JDBC implementation of ProductDao for MySQL.
+ * Provides data access operations for Product entities:
+ * retrieving all products, retrieving a product by ID, and deleting by ID.
+ * Maps each SQL ResultSet row to a Product domain object.
  *
  * @author Nikita Smiichyk (primary)
  */
@@ -18,10 +21,6 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         this._url = _url.trim();
         this._user = _user;
         this._pass = _pass;
-    }
-
-    private Connection open() throws SQLException {
-        return DriverManager.getConnection(_url, _user, _pass);
     }
 
     @Override
@@ -83,6 +82,10 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
     @Override
     public List<Product> findProductsByFilter(Predicate<Product> filter) {
         return List.of();
+    }
+
+    private Connection open() throws SQLException {
+        return DriverManager.getConnection(_url, _user, _pass);
     }
 
     private Product mapRow(ResultSet resultSet) throws SQLException {
