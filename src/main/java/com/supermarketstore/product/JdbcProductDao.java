@@ -1,12 +1,9 @@
 package com.supermarketstore.product;
 
+import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
 /**
  * TODO
@@ -24,6 +21,10 @@ public class JdbcProductDao implements ProductDao, ProductJsonConverter {
         _url = url.trim();
         _user = user;
         _pass = pass;
+    }
+
+    private Connection open() throws SQLException {
+        return DriverManager.getConnection(_url, _user, _pass);
     }
 
     @Override
