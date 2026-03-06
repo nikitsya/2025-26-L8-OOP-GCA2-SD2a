@@ -16,7 +16,8 @@ public class Product {
     private int stock;
     private int departmentId;
 
-    public Product(String name, double price, boolean onSale, Double discountPrice, int stock, int departmentId) {
+    public Product(int productId, String name, double price, boolean onSale, Double discountPrice, int stock, int departmentId) {
+        this.productId = productId;
         setName(name);
         setPrice(price);
         setOnSale(onSale);
@@ -27,6 +28,13 @@ public class Product {
 
     public int getProductId() {
         return productId;
+    }
+
+    public void setProductId(int productId) {
+        if(productId < 0) {
+            throw new IllegalArgumentException("productId cannot be negative");
+        }
+        this.productId = productId;
     }
 
     public String getName() {
