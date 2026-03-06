@@ -14,10 +14,12 @@ stage: "2 (Group Project)"
 
 > Our project domain is a Supermarket Store System that models how a modern grocery store is organised and how it
 > handles both in-store stock and online orders. The supermarket is structured into Departments such as Meat, Bakery,
-> Dairy, Produce, and Household. Each department contains a set of Products, and every product belongs to one department,
+> Dairy, Produce, and Household. Each department contains a set of Products, and every product belongs to one
+> department,
 > reflecting real store layout and responsibility areas.
 > In addition to managing departments and products, the system supports Online Orders. A customer order contains a list
-> of requested products and quantities. When an order is received, the store can check current stock levels and determine
+> of requested products and quantities. When an order is received, the store can check current stock levels and
+> determine
 > whether the full order can be fulfilled. If items are unavailable, the order can be marked as partially fulfillable,
 > with missing items clearly identified. This mirrors the real process where staff pick items from shelves and stock
 > levels change constantly.
