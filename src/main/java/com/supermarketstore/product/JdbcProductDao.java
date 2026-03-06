@@ -90,6 +90,17 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         return List.of();
     }
 
+    private Product mapRow(ResultSet resultSet) throws SQLException {
+        int productId = resultSet.getInt("product_id");
+        String name = resultSet.getString("name");
+        double price = resultSet.getDouble("price");
+        boolean onSale = resultSet.getBoolean("is_on_sale");
+        Double discountPrice = resultSet.getDouble("discount_price");
+        int stock = resultSet.getInt("stock");
+
+        return new Product(productId, name, price, onSale, discountPrice, stock);
+    }
+
     @Override
     public String productToJson(Product entity) {
         return "";
@@ -107,18 +118,10 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
 
     @Override
     public String productListToJson(List<Product> list) {
-        return "";
-    }
-
-    private Product mapRow(ResultSet resultSet) throws SQLException {
-        int productId = resultSet.getInt("product_id");
-        String name = resultSet.getString("name");
-        double price = resultSet.getDouble("price");
-        boolean onSale = resultSet.getBoolean("is_on_sale");
-        Double discountPrice = resultSet.getDouble("discount_price");
-        int stock = resultSet.getInt("stock");
-        int departmentId = resultSet.getInt("department_id");
-
-        return new Product(productId, name, price, onSale, discountPrice, stock, departmentId);
+        try {
+            return MAPPER.writeValueAsString(list);
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Invalid product JSON", e);
+        }
     }
 }
