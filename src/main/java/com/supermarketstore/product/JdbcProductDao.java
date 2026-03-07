@@ -76,6 +76,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         String sql = "INSERT INTO products (name, price, is_on_sale, discount_price, stock) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql)) {
+            // TODO
             return new Product();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to insert product", e);

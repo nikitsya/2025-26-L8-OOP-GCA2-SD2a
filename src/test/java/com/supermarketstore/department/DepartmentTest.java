@@ -2,7 +2,8 @@ package com.supermarketstore.department;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class DepartmentTest {
 
@@ -14,9 +15,9 @@ public class DepartmentTest {
     }
 
     @Test
-    void shouldRejectBlankDepartmentName(){
+    void shouldRejectBlankDepartmentName() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
-            new Department(1, " ", 0, 2, 12000.0, 5, false)
+                new Department(1, " ", 0, 2, 12000.0, 5, false)
         );
         assertEquals("Department name must not be null or blank", exception.getMessage());
     }
