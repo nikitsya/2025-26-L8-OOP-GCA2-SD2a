@@ -1,7 +1,9 @@
+-- Reset and recreate the development database from scratch.
 DROP DATABASE IF EXISTS supermarket_store_system;
 CREATE DATABASE supermarket_store_system;
 USE supermarket_store_system;
 
+-- Store departments available in the supermarket.
 CREATE TABLE departments
 (
     department_id   INT AUTO_INCREMENT PRIMARY KEY,
@@ -14,6 +16,7 @@ CREATE TABLE departments
 
 );
 
+-- Store products that can be sold in the supermarket.
 CREATE TABLE products
 (
     product_id     INT AUTO_INCREMENT PRIMARY KEY,
@@ -24,6 +27,7 @@ CREATE TABLE products
     stock          INT          NOT NULL
 );
 
+-- Bridge table for the many-to-many relationship between departments and products.
 CREATE TABLE department_products
 (
     department_id INT NOT NULL,
@@ -33,6 +37,7 @@ CREATE TABLE department_products
     FOREIGN KEY (product_id) REFERENCES products (product_id) ON DELETE CASCADE
 );
 
+-- Seed initial list of departments.
 INSERT INTO departments (name, floor, zone, budget, employee_count, is_refrigerated)
 VALUES ('Fresh Produce', 0, 1, 15000.00, 8, FALSE),
        ('Bakery', 0, 2, 12000.00, 5, FALSE),
@@ -47,6 +52,7 @@ VALUES ('Fresh Produce', 0, 1, 15000.00, 8, FALSE),
        ('Baby & Toddler', 2, 9, 11000.00, 4, FALSE),
        ('International Foods', 1, 10, 14000.00, 6, FALSE);
 
+-- Seed initial product catalog with price, sale status, and stock levels.
 INSERT INTO products (name, price, is_on_sale, discount_price, stock)
 VALUES ('Heinz Turkish Style Garlic Sauce 420G', 3.45, TRUE, 2.50, 60),
        ('Large Sweet Potatoes Loose Class 1', 0.42, FALSE, NULL, 120),
