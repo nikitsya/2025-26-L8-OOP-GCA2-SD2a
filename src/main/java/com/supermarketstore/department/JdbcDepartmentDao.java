@@ -122,7 +122,40 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
 
     @Override
     public Department updateDepartment(int id, Department department) {
-        return null;
+        if (id <= 0) throw new IllegalArgumentException("id must be greater than 0");
+        if (department == null) throw new IllegalArgumentException("department is required");
+
+        String sql = "UPDATE departments SET name = ?, floor = ?, zone = ?, budget = ?, employee_count = ?, is_refrigerated = ? WHERE department_id = ?";
+
+        try (Connection c = open();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setString(1, department.getName());
+            ps.setInt(2, department.getFloor());
+            ps.setInt(3, department.getZone());
+            ps.setDouble(4, department.getBudget());
+            ps.setInt(5, department.getEmployeeCount());
+            ps.setBoolean(6, department.isRefrigerated());
+            ps.setInt(7, id);
+
+            int rows = ps.executeUpdate();
+            if (rows != 1) {
+                throw new RuntimeException("Update department failed or department not found");
+            }
+
+            return new Department(
+                    id,
+                    department.getName(),
+                    department.getFloor(),
+                    department.getZone(),
+                    department.getBudget(),
+                    department.getEmployeeCount(),
+                    department.isRefrigerated()
+            );
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to update department", e);
+        }
     }
 
     @Override
