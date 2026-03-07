@@ -6,13 +6,13 @@ Client -> JSON Protocol Layer -> Server -> DAO -> Database.
 ```mermaid
 flowchart LR
     C["Client (Console/GUI)"]
-    J["JSON Protocol Layer\n(Request/Response DTOs)"]
-    S["Server Layer\n(Socket Listener + Request Handlers)"]
-    D["DAO Layer\n(XxxDao Interfaces + JdbcXxxDao Implementations)"]
-    DB[("MySQL Database\n(supermarket_store_system)")]
+    J["JSON Protocol Layer<br/>Request/Response DTOs"]
+    S["Server Layer<br/>Socket Listener + Request Handlers"]
+    D["DAO Layer<br/>XxxDao Interfaces + JdbcXxxDao Implementations"]
+    DB[("MySQL Database<br/>supermarket_store_system")]
 
-    C <--> J
-    J <--> S
+    C --> J
+    J --> S
     S --> D
     D --> DB
 ```
