@@ -80,10 +80,7 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
     public Department insertDepartment(Department department) {
         if (department == null) throw new IllegalArgumentException("department is required");
 
-        String sql = """
-            INSERT INTO departments (name, floor, zone, budget, employee_count, is_refrigerated)
-            VALUES (?, ?, ?, ?, ?, ?)
-            """;
+        String sql = "INSERT INTO departments (name, floor, zone, budget, employee_count, is_refrigerated) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection c = open();
              PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
