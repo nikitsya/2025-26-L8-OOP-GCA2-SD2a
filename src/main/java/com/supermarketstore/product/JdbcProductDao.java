@@ -76,12 +76,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         String sql = "INSERT INTO products (name, price, is_on_sale, discount_price, stock) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setString(1, product.getName());
-            ps.setDouble(2, product.getPrice());
-            ps.setBoolean(3, product.isOnSale());
-            if (product.getDiscountPrice() == null) ps.setNull(4, Types.DOUBLE);
-            else ps.setDouble(4, product.getDiscountPrice());
-            ps.setInt(5, product.getStock());
+            bindProductParams(ps, product);
 
             int rows = ps.executeUpdate();
             if (rows != 1) throw new IllegalStateException("insert failed, rows=" + rows);
@@ -106,12 +101,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
                 "WHERE product_id = ?";
 
         try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setString(1, product.getName());
-            ps.setDouble(2, product.getPrice());
-            ps.setBoolean(3, product.isOnSale());
-            if (product.getDiscountPrice() == null) ps.setNull(4, Types.DOUBLE);
-            else ps.setDouble(4, product.getDiscountPrice());
-            ps.setInt(5, product.getStock());
+            bindProductParams(ps, product);
             ps.setInt(6, id);
             int rows = ps.executeUpdate();
             if (rows != 1) throw new IllegalStateException("update failed, rows=" + rows);
@@ -142,5 +132,14 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         int stock = resultSet.getInt("stock");
 
         return new Product(productId, name, price, onSale, discountPrice, stock);
+    }
+
+    private void bindProductParams(PreparedStatement ps, Product product) throws SQLException {
+        ps.setString(1, product.getName());
+        ps.setDouble(2, product.getPrice());
+        ps.setBoolean(3, product.isOnSale());
+        if (product.getDiscountPrice() == null) ps.setNull(4, Types.DOUBLE);
+        else ps.setDouble(4, product.getDiscountPrice());
+        ps.setInt(5, product.getStock());
     }
 }
