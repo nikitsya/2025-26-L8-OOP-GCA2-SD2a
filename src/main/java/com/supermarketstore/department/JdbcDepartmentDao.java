@@ -78,7 +78,49 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
 
     @Override
     public Department insertDepartment(Department department) {
-        return null;
+        if (department == null) throw new IllegalArgumentException("department is required");
+
+        String sql = """
+            INSERT INTO departments (name, floor, zone, budget, employee_count, is_refrigerated)
+            VALUES (?, ?, ?, ?, ?, ?)
+            """;
+
+        try (Connection c = open();
+             PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            ps.setString(1, department.getName());
+            ps.setInt(2, department.getFloor());
+            ps.setInt(3, department.getZone());
+            ps.setDouble(4, department.getBudget());
+            ps.setInt(5, department.getEmployeeCount());
+            ps.setBoolean(6, department.isRefrigerated());
+
+            int rows = ps.executeUpdate();
+            if (rows != 1) {
+                throw new RuntimeException("Insert department failed");
+            }
+
+            try (ResultSet keys = ps.getGeneratedKeys()) {
+                if (keys.next()) {
+                    int generatedId = keys.getInt(1);
+
+                    return new Department(
+                            generatedId,
+                            department.getName(),
+                            department.getFloor(),
+                            department.getZone(),
+                            department.getBudget(),
+                            department.getEmployeeCount(),
+                            department.isRefrigerated()
+                    );
+                }
+            }
+
+            throw new RuntimeException("Insert department failed, no ID returned");
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to insert department", e);
+        }
     }
 
     @Override
