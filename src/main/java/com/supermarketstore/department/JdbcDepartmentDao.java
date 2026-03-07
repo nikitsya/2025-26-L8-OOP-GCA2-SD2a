@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-public class JdbcDepartmentDao implements DepartmentDao {
+public record JdbcDepartmentDao (String _url, String _user, String _pass) implements DepartmentDao {
     @Override
     public List<Department> getAllDepartments() {
         return List.of();
