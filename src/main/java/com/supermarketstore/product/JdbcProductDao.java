@@ -90,24 +90,37 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
                 if (!keys.next()) throw new IllegalStateException("no generated key returned");
                 product.setProductId(keys.getInt(1));
             }
-            return product;
         } catch (SQLException e) {
             throw new RuntimeException("Failed to insert product", e);
         }
+
+        return product;
     }
 
     @Override
     public Product updateProduct(int id, Product product) {
-        if (product == null) throw new IllegalArgumentException("");
+        if (product == null) throw new IllegalArgumentException("product is required");
+        if (id <= 0) throw new IllegalArgumentException("id must be positive");
 
-        String sql = "INSERT INTO products (name, price, is_on_sale, discount_price, stock) VALUES (?, ?, ?, ?, ?) WHERE product_id = ?";
+        String sql = "UPDATE products SET name = ?, price = ?, is_on_sale = ?, discount_price = ?, stock = ? " +
+                "WHERE product_id = ?";
 
         try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql)) {
-            // TODO
-            return new Product();
+            ps.setString(1, product.getName());
+            ps.setDouble(2, product.getPrice());
+            ps.setBoolean(3, product.isOnSale());
+            if (product.getDiscountPrice() == null) ps.setNull(4, Types.DOUBLE);
+            else ps.setDouble(4, product.getDiscountPrice());
+            ps.setInt(5, product.getStock());
+            ps.setInt(6, id);
+            int rows = ps.executeUpdate();
+            if (rows != 1) throw new IllegalStateException("update failed, rows=" + rows);
+            product.setProductId(id);
         } catch (SQLException e) {
-            throw new RuntimeException("", e);
+            throw new RuntimeException("Failed to update product", e);
         }
+
+        return product;
     }
 
     @Override
