@@ -38,4 +38,13 @@ public class DepartmentTest {
 
         assertEquals("Employee count cannot be negative", exception.getMessage());
     }
+
+    @Test
+    void constructorShouldRejectInvalidZone() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                new Department(1, "Bakery", 0, -1, 12000.0, 5, false)
+        );
+
+        assertEquals("Zone must be greater than 0", exception.getMessage());
+    }
 }

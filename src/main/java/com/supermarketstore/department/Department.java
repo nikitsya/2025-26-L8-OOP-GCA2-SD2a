@@ -71,7 +71,7 @@ public class Department {
 
     @JsonProperty("zone")
     public void setZone(int zone) {
-        if (zone <= 0) {
+        if (zone < 0) {
             throw new IllegalArgumentException("Zone must be greater than 0");
         }
         this.zone = zone;
