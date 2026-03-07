@@ -48,4 +48,17 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
     public List<Department> findDepartmentsByFilter(Predicate<Department> filter) {
         return List.of();
     }
+
+    // Maps: a single SQL ResultSet row to a Department object
+    private Department mapRow(ResultSet resultSet) throws SQLException {
+        int departmentId = resultSet.getInt("department_id");
+        String name = resultSet.getString("name");
+        int floor = resultSet.getInt("floor");
+        int zone = resultSet.getInt("zone");
+        double budget = resultSet.getDouble("budget");
+        int employeeCount = resultSet.getInt("employee_count");
+        boolean refrigerated = resultSet.getBoolean("is_refrigerated");
+
+        return new Department(departmentId, name, floor, zone, budget, employeeCount, refrigerated);
+    }
 }
