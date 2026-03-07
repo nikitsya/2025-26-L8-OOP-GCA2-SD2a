@@ -4,8 +4,14 @@ USE supermarket_store_system;
 
 CREATE TABLE departments
 (
-    department_id INT AUTO_INCREMENT PRIMARY KEY
-    # TODO: (Hanna)
+    department_id   INT AUTO_INCREMENT PRIMARY KEY
+    name            VARCHAR(100) NOT NULL,
+    floor           INT          NOT NULL,
+    zone            INT          NOT NULL,
+    budget          DOUBLE       NOT NULL,
+    employee_count  INT          NOT NULL,
+    is_refrigerated BOOLEAN      NOT NULL DEFAULT FALSE
+
 );
 
 CREATE TABLE products
@@ -27,7 +33,20 @@ CREATE TABLE department_products
     FOREIGN KEY (product_id) REFERENCES products (product_id) ON DELETE CASCADE
 );
 
-# TODO: (Hanna) departments Insert > 10 seed rows
+INSERT INTO departments (name, floor, zone, budget, employee_count, is_refrigerated)
+VALUES ('Fresh Produce', 0, 1, 15000.00, 8, FALSE),
+       ('Bakery', 0, 2, 12000.00, 5, FALSE),
+       ('Dairy & Eggs', 1, 3, 18000.00, 6, TRUE),
+       ('Meat & Seafood', 1, 4, 25000.00, 10, TRUE),
+       ('Frozen Foods', 1, 5, 20000.00, 7, TRUE),
+       ('Beverages', 0, 6, 22000.00, 6, FALSE),
+       ('Snacks & Confectionery', 0, 13, 17000.00, 5, FALSE),
+       ('Snacks & Confectionery Near Checkout', 0, 1, 8000.00, 3, FALSE),
+       ('Household & Cleaning', 2, 7, 13000.00, 4, FALSE),
+       ('Health & Beauty', 2, 8, 16000.00, 5, FALSE),
+       ('Baby & Toddler', 2, 9, 11000.00, 4, FALSE),
+       ('International Foods', 1, 10, 14000.00, 6, FALSE);
+
 
 INSERT INTO products (name, price, is_on_sale, discount_price, stock)
 VALUES ('Heinz Turkish Style Garlic Sauce 420G', 3.45, TRUE, 2.50, 60),
