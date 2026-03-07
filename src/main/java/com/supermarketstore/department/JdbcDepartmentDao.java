@@ -5,7 +5,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.sql.*;
 
-public record JdbcDepartmentDao (String _url, String _user, String _pass) implements DepartmentDao {
+public record JdbcDepartmentDao(String _url, String _user, String _pass) implements DepartmentDao {
 
     public JdbcDepartmentDao(String _url, String _user, String _pass) {
         if (_url == null || _url.isBlank()) throw new IllegalArgumentException("url is required");
