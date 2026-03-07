@@ -1,5 +1,6 @@
 package com.supermarketstore.department;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -21,7 +22,19 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
 
     @Override
     public List<Department> getAllDepartments() {
-        return List.of();
+        String sql = "SELECT department_id, name, floor, zone, budget, employee_count, is_refrigerated FROM departments";
+
+        try (Connection c = open();
+             PreparedStatement ps = c.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            ArrayList<Department> out = new ArrayList<>();
+            while (rs.next()) out.add(mapRow(rs));
+            return out;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to fetch all departments", e);
+        }
     }
 
     @Override
