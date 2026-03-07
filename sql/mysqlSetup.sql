@@ -4,7 +4,7 @@ USE supermarket_store_system;
 
 CREATE TABLE departments
 (
-    department_id   INT AUTO_INCREMENT PRIMARY KEY
+    department_id   INT AUTO_INCREMENT PRIMARY KEY,
     name            VARCHAR(100) NOT NULL,
     floor           INT          NOT NULL,
     zone            INT          NOT NULL,
