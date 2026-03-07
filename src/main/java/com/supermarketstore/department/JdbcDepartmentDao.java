@@ -61,7 +61,19 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
 
     @Override
     public boolean deleteDepartmentById(int id) {
-        return false;
+        if (id <= 0) return false;
+
+        String sql = "DELETE FROM departments WHERE department_id = ?";
+
+        try (Connection c = open();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+            return ps.executeUpdate() == 1;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to delete department by id", e);
+        }
     }
 
     @Override
