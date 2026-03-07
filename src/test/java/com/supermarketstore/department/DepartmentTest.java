@@ -29,4 +29,13 @@ public class DepartmentTest {
 
         assertEquals("Budget cannot be negative", exception.getMessage());
     }
+
+    @Test
+    void shouldRejectNegativeEmployeeCount() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                new Department(1, "Bakery", 0, 2, 12000.0, -1, false)
+        );
+
+        assertEquals("Employee count cannot be negative", exception.getMessage());
+    }
 }
