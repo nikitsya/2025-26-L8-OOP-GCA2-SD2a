@@ -73,7 +73,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
     public Product insertProduct(Product product) {
         if (product == null) throw new IllegalArgumentException("product is required");
 
-        String sql = "";
+        String sql = "INSERT INTO products (name, price, is_on_sale, discount_price, stock) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql)) {
             return new Product();
