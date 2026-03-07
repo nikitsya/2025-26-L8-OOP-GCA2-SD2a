@@ -79,7 +79,8 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
             ps.setString(1, product.getName());
             ps.setDouble(2, product.getPrice());
             ps.setBoolean(3, product.isOnSale());
-            ps.setDouble(4, product.getDiscountPrice());
+            if (product.getDiscountPrice() == null) ps.setNull(4, Types.DOUBLE);
+            else ps.setDouble(4, product.getDiscountPrice());
             ps.setInt(5, product.getStock());
 
             int rows = ps.executeUpdate();
