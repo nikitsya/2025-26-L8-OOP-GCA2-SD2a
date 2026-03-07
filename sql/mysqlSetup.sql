@@ -47,7 +47,6 @@ VALUES ('Fresh Produce', 0, 1, 15000.00, 8, FALSE),
        ('Baby & Toddler', 2, 9, 11000.00, 4, FALSE),
        ('International Foods', 1, 10, 14000.00, 6, FALSE);
 
-
 INSERT INTO products (name, price, is_on_sale, discount_price, stock)
 VALUES ('Heinz Turkish Style Garlic Sauce 420G', 3.45, TRUE, 2.50, 60),
        ('Large Sweet Potatoes Loose Class 1', 0.42, FALSE, NULL, 120),

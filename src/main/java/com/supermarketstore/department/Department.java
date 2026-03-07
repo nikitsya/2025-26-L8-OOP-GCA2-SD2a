@@ -112,6 +112,7 @@ public class Department {
     public void setRefrigerated(boolean refrigerated) {
         this.isRefrigerated = refrigerated;
     }
+
     @Override
     public String toString() {
         return "Department{" +
