@@ -71,6 +71,10 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
 
     @Override
     public Product insertProduct(Product product) {
+        if (product == null) throw new IllegalArgumentException("product is required");
+
+
+
         return null;
     }
 
