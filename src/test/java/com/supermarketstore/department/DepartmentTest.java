@@ -12,4 +12,13 @@ public class DepartmentTest {
 
         assertEquals("Bakery", department.getName());
     }
+
+    @Test
+    void shouldRejectBlankDepartmentName(){
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Department(1, " ", 0, 2, 12000.0, 5, false);
+        });
+        assertEquals("Department name must not be null or blank", exception.getMessage());
+    }
+
 }
