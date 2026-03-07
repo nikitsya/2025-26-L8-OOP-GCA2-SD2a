@@ -76,7 +76,12 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         String sql = "INSERT INTO products (name, price, is_on_sale, discount_price, stock) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql)) {
-            // TODO
+            ps.setString(1, product.getName());
+            ps.setDouble(2, product.getPrice());
+            ps.setBoolean(3, product.isOnSale());
+            ps.setDouble(4, product.getDiscountPrice());
+            ps.setInt(5, product.getStock());
+
             return new Product();
         } catch (SQLException e) {
             throw new RuntimeException("Failed to insert product", e);
@@ -99,6 +104,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
 
     @Override
     public List<Product> findProductsByFilter(Predicate<Product> filter) {
+        // TODO
         return List.of();
     }
 
