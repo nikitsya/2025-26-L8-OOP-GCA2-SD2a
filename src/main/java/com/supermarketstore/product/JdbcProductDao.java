@@ -85,7 +85,11 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
             int rows = ps.executeUpdate();
             if (rows != 1) throw new IllegalStateException("insert failed, rows=" + rows);
 
-            return new Product();
+            try (ResultSet keys = ps.getGeneratedKeys()) {
+                if (!keys.next()) throw new IllegalStateException("no generated key returned");
+                product.setProductId(keys.getInt(1));
+            }
+            return product;
         } catch (SQLException e) {
             throw new RuntimeException("Failed to insert product", e);
         }
