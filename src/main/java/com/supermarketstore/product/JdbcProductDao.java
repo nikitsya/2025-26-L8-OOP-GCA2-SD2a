@@ -75,12 +75,15 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
 
         String sql = "INSERT INTO products (name, price, is_on_sale, discount_price, stock) VALUES (?, ?, ?, ?, ?)";
 
-        try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql)) {
+        try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, product.getName());
             ps.setDouble(2, product.getPrice());
             ps.setBoolean(3, product.isOnSale());
             ps.setDouble(4, product.getDiscountPrice());
             ps.setInt(5, product.getStock());
+
+            int rows = ps.executeUpdate();
+            if (rows != 1) throw new IllegalStateException("insert failed, rows=" + rows);
 
             return new Product();
         } catch (SQLException e) {
