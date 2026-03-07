@@ -39,6 +39,23 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
 
     @Override
     public Optional<Department> getDepartmentById(int id) {
+        if (id <= 0) return Optional.empty();
+
+        String sql = "SELECT department_id, name, floor, zone, budget, employee_count, is_refrigerated FROM departments WHERE department_id = ?";
+
+        try (Connection c = open();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return Optional.of(mapRow(rs));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to fetch department by id", e);
+        }
+
         return Optional.empty();
     }
 
