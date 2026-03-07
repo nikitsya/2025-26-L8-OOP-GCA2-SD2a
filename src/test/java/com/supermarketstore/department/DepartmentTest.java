@@ -15,10 +15,18 @@ public class DepartmentTest {
 
     @Test
     void shouldRejectBlankDepartmentName(){
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            new Department(1, " ", 0, 2, 12000.0, 5, false);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+            new Department(1, " ", 0, 2, 12000.0, 5, false)
+        );
         assertEquals("Department name must not be null or blank", exception.getMessage());
     }
 
+    @Test
+    void shouldRejectNegativeDepartmentBudget() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                new Department(1, "Bakery", 0, 2, -1.0, 5, false)
+        );
+
+        assertEquals("Budget cannot be negative", exception.getMessage());
+    }
 }
