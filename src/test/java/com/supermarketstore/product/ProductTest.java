@@ -82,6 +82,14 @@ class ProductTest {
     }
 
     @Test
+    void setDiscountPriceOnSaleFalse() {
+        product.setOnSale(true);
+        product.setDiscountPrice(15.0);
+        product.setOnSale(false);
+        assertNull(product.getDiscountPrice());
+    }
+
+    @Test
     void getStock() {
         assertEquals(45, product.getStock());
     }
