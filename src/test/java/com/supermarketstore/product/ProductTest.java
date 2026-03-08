@@ -167,6 +167,15 @@ class ProductTest {
     }
 
     @Test
+    void constructor_whenProductIsNotOnSaleAndDiscountPriceProvided_throwsIllegalArgumentException() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> new Product(1, "Product", 20.0, false, 15.0, 45)
+        );
+        assertEquals("Discount price must be null when product is not on sale", ex.getMessage());
+    }
+
+    @Test
     void setOnSale_whenFalse_clearsDiscountPrice() {
         product.setOnSale(true);
         product.setDiscountPrice(15.0);
