@@ -6,6 +6,12 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.sql.*;
 
+/**
+ * JDBC implementation of DepartmentDao using MySQL.
+ * Provides database operations for Department entities.
+ * @author Hanna Bokariuk
+ */
+
 public record JdbcDepartmentDao(String _url, String _user, String _pass) implements DepartmentDao {
 
     public JdbcDepartmentDao(String _url, String _user, String _pass) {
