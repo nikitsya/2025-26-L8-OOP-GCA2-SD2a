@@ -1,11 +1,8 @@
-package com.supermarketstore;
-
-import com.supermarketstore.department.Department;
-import com.supermarketstore.department.JdbcDepartmentDao;
+package com.supermarketstore.department;
 
 import java.util.List;
 
-public class Main {
+public class DepartmentMain {
 
     public static void main(String[] args) {
 
