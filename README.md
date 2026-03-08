@@ -28,8 +28,7 @@ Temporary tracking version of README (to be replaced by final version)
 
 </details>
 
-<details>
-<summary><strong>Stage 2 (F10-F16)</strong></summary>
+### Stage 2 (F10-F16)
 
 | Feature | Hanna | Nikita |
 |---------|-------|--------|
@@ -40,8 +39,6 @@ Temporary tracking version of README (to be replaced by final version)
 | F14     |       |        |
 | F15     |       |        |
 | F16     |       |        |
-
-</details>
 
 <details>
 <summary><strong>Stage 3 (F17-F22)</strong></summary>
