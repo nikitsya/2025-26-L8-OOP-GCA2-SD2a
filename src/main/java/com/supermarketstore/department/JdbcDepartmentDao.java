@@ -160,7 +160,11 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
 
     @Override
     public List<Department> findDepartmentsByFilter(Predicate<Department> filter) {
-        return List.of();
+        if (filter == null) throw new IllegalArgumentException("filter is required");
+
+        return getAllDepartments().stream()
+                .filter(filter)
+                .toList();
     }
 
     // Maps: a single SQL ResultSet row to a Department object
