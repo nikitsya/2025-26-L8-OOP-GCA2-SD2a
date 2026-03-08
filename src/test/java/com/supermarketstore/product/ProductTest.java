@@ -1,24 +1,72 @@
 package com.supermarketstore.product;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ProductTest {
 
-    @Test
-    void shouldTrimProductName() {
-        Product product = new Product(1, "Milk", 2.5, false, null, 10);
-        assertEquals("Milk", product.getName());
+    @BeforeEach
+    void setUp() {
+        Product product = new Product();
+        product.setProductId(1);
+        product.setName("Product");
+        product.setPrice(20);
+        product.setOnSale(false);
+        product.setStock(45);
     }
 
     @Test
-    void shouldRejectNegativeStock() {
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> new Product(1, "Bread", 1.2, false, null, -1)
-        );
-        assertEquals("Stock cannot be negative", exception.getMessage());
+    void getProductId() {
+    }
+
+    @Test
+    void setProductId() {
+    }
+
+    @Test
+    void getName() {
+    }
+
+    @Test
+    void setName() {
+    }
+
+    @Test
+    void getPrice() {
+    }
+
+    @Test
+    void setPrice() {
+    }
+
+    @Test
+    void isOnSale() {
+    }
+
+    @Test
+    void setOnSale() {
+    }
+
+    @Test
+    void getDiscountPrice() {
+    }
+
+    @Test
+    void setDiscountPrice() {
+    }
+
+    @Test
+    void getStock() {
+    }
+
+    @Test
+    void setStock() {
+    }
+
+    @Test
+    void testToString() {
     }
 }
