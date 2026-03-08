@@ -25,7 +25,6 @@ class ProductTest {
         assertEquals(2, product.getProductId());
     }
 
-
     @Test
     void setProductId_withNegativeValue_throwsIllegalArgumentException() {
         IllegalArgumentException ex = assertThrows(
