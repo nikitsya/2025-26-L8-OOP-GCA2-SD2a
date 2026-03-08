@@ -6,6 +6,12 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.sql.*;
 
+/**
+ * JDBC implementation of DepartmentDao using MySQL.
+ * Provides database operations for Department entities.
+ * @author Hanna Bokariuk
+ */
+
 public record JdbcDepartmentDao(String _url, String _user, String _pass) implements DepartmentDao {
 
     public JdbcDepartmentDao(String _url, String _user, String _pass) {
@@ -160,7 +166,9 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
 
     @Override
     public List<Department> findDepartmentsByFilter(Predicate<Department> filter) {
-        return List.of();
+        if (filter == null) throw new IllegalArgumentException("filter is required");
+
+        return getAllDepartments().stream().filter(filter).toList();
     }
 
     // Maps: a single SQL ResultSet row to a Department object

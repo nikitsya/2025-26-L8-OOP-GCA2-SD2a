@@ -4,6 +4,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
+/**
+ * Data Access Object interface for Department entities.
+ * Defines CRUD operations for accessing departments stored in the database.
+ * @author Hanna Bokariuk
+ */
+
 public interface DepartmentDao {
 
     // Gets: all departments from the data store

@@ -2,6 +2,12 @@ package com.supermarketstore.department;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Represents a department in the supermarket.
+ * Contains information about its location, budget, staffing, and refrigeration requirements.
+ *  @author Hanna Bokariuk
+ */
+
 public class Department {
     private int departmentId;
     private String name;
@@ -71,7 +77,7 @@ public class Department {
 
     @JsonProperty("zone")
     public void setZone(int zone) {
-        if (zone < 0) {
+        if (zone <= 0) {
             throw new IllegalArgumentException("Zone must be greater than 0");
         }
         this.zone = zone;
