@@ -1,6 +1,5 @@
 package com.supermarketstore.product;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,9 +7,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ProductTest {
 
+    Product product;
+
     @BeforeEach
     void setUp() {
-        Product product = new Product();
+        product = new Product();
         product.setProductId(1);
         product.setName("Product");
         product.setPrice(20);
@@ -20,6 +21,7 @@ class ProductTest {
 
     @Test
     void getProductId() {
+        assertEquals(1, product.getProductId());
     }
 
     @Test
@@ -28,6 +30,7 @@ class ProductTest {
 
     @Test
     void getName() {
+        assertEquals("Product", product.getName());
     }
 
     @Test
@@ -36,6 +39,7 @@ class ProductTest {
 
     @Test
     void getPrice() {
+        assertEquals(20, product.getPrice());
     }
 
     @Test
@@ -44,6 +48,7 @@ class ProductTest {
 
     @Test
     void isOnSale() {
+        assertFalse(product.isOnSale());
     }
 
     @Test
@@ -52,6 +57,7 @@ class ProductTest {
 
     @Test
     void getDiscountPrice() {
+        assertNull(product.getDiscountPrice());
     }
 
     @Test
@@ -60,6 +66,7 @@ class ProductTest {
 
     @Test
     void getStock() {
+        assertEquals(45, product.getStock());
     }
 
     @Test
