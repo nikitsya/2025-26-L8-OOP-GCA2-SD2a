@@ -85,16 +85,14 @@ public class Product {
 
     @JsonProperty("discount_price")
     public void setDiscountPrice(Double discountPrice) {
-        if (!onSale) {
-            this.discountPrice = null;
-        } else {
-            if (discountPrice == null)
-                throw new IllegalArgumentException("Discount price is required when product is on sale");
-            if (discountPrice < 0) throw new IllegalArgumentException("Discount price must be 0 or greater");
-            if (discountPrice >= price)
-                throw new IllegalArgumentException("Discount price must be less than product price");
-            this.discountPrice = discountPrice;
-        }
+        if (!onSale) throw new IllegalStateException("Cannot set discount price when product is not on sale");
+        if (discountPrice == null)
+            throw new IllegalArgumentException("Discount price is required when product is on sale");
+        if (discountPrice < 0) throw new IllegalArgumentException("Discount price must be 0 or greater");
+        if (price <= 0) throw new IllegalStateException("Price must be set before discount price");
+        if (discountPrice >= price)
+            throw new IllegalArgumentException("Discount price must be less than product price");
+        this.discountPrice = discountPrice;
     }
 
     @JsonProperty("stock")
