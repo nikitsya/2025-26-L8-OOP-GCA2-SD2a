@@ -25,6 +25,7 @@ class ProductTest {
         assertEquals(2, product.getProductId());
     }
 
+
     @Test
     void setProductId_withNegativeValue_throwsIllegalArgumentException() {
         IllegalArgumentException ex = assertThrows(
@@ -42,6 +43,12 @@ class ProductTest {
     @Test
     void setName_withValidValue_updatesName() {
         product.setName("New Product");
+        assertEquals("New Product", product.getName());
+    }
+
+    @Test
+    void setName_withValidValueAndWhitespace_trimsAndUpdatesName() {
+        product.setName("   New Product ");
         assertEquals("New Product", product.getName());
     }
 
