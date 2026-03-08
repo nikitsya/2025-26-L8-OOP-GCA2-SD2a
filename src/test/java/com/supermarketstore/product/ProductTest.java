@@ -26,6 +26,8 @@ class ProductTest {
 
     @Test
     void setProductId() {
+        product.setProductId(2);
+        assertEquals(2, product.getProductId());
     }
 
     @Test
@@ -35,6 +37,8 @@ class ProductTest {
 
     @Test
     void setName() {
+        product.setName("New Product");
+        assertEquals("New Product", product.getName());
     }
 
     @Test
@@ -44,6 +48,8 @@ class ProductTest {
 
     @Test
     void setPrice() {
+        product.setPrice(30);
+        assertEquals(30, product.getPrice());
     }
 
     @Test
@@ -53,6 +59,14 @@ class ProductTest {
 
     @Test
     void setOnSale() {
+        product.setOnSale(true);
+        assertTrue(product.isOnSale());
+    }
+
+    @Test
+    void setOnSaleDiscountPrice() {
+        product.setOnSale(true);
+        assertNull(product.getDiscountPrice());
     }
 
     @Test
@@ -62,6 +76,9 @@ class ProductTest {
 
     @Test
     void setDiscountPrice() {
+        product.setOnSale(true);
+        product.setDiscountPrice(15.0);
+        assertEquals(15.0, product.getDiscountPrice());
     }
 
     @Test
@@ -71,6 +88,8 @@ class ProductTest {
 
     @Test
     void setStock() {
+        product.setStock(100);
+        assertEquals(100, product.getStock());
     }
 
     @Test
