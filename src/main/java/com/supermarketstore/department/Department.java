@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Represents a department in the supermarket.
  * Contains information about its location, budget, staffing, and refrigeration requirements.
- *  @author Hanna Bokariuk
+ *
+ * @author Hanna Bokariuk
  */
 
 public class Department {

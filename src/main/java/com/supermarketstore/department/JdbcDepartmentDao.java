@@ -1,14 +1,15 @@
 package com.supermarketstore.department;
 
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
-import java.sql.*;
 
 /**
  * JDBC implementation of DepartmentDao using MySQL.
  * Provides database operations for Department entities.
+ *
  * @author Hanna Bokariuk
  */
 

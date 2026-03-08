@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 /**
  * Data Access Object interface for Department entities.
  * Defines CRUD operations for accessing departments stored in the database.
+ *
  * @author Hanna Bokariuk
  */
 

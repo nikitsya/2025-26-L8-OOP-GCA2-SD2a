@@ -14,16 +14,16 @@ Temporary tracking version of README (to be replaced by final version)
 ### Stage 1 (F1-F9)
 
 | Feature | Hanna | Nikita |
-|---------|------|--------|
-| F1      | ✅    | 50%    |
-| F2      | ✅    | ✅      |
-| F3      | ✅    | ✅      |
-| F4      | ✅    | ✅      |
-| F5      | ✅    | ✅      |
-| F6      | ✅    | ✅      |
-| F7      | ✅    | ✅      |
-| F8      | ✅    |        |
-| F9      | ✅    | ✅      |
+|---------|-------|--------|
+| F1      | ✅     | 50%    |
+| F2      | ✅     | ✅      |
+| F3      | ✅     | ✅      |
+| F4      | ✅     | ✅      |
+| F5      | ✅     | ✅      |
+| F6      | ✅     | ✅      |
+| F7      | ✅     | ✅      |
+| F8      | ✅     |        |
+| F9      | ✅     | ✅      |
 
 #### Required Features
 
