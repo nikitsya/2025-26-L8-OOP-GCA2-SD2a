@@ -2,6 +2,10 @@ package com.supermarketstore.department;
 
 import java.util.List;
 
+/**
+ * Temporary manual runner.
+ * Used only for local testing of Department JDBC operations.
+ */
 public class DepartmentMain {
 
     public static void main(String[] args) {
