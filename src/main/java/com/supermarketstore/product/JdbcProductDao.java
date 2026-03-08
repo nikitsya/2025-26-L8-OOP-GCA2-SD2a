@@ -115,8 +115,8 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
 
     @Override
     public List<Product> findProductsByFilter(Predicate<Product> filter) {
-        // TODO
-        return List.of();
+        if (filter == null) throw new IllegalArgumentException("filter is required");
+        return getAllProducts().stream().filter(filter).toList();
     }
 
     private Connection open() throws SQLException {
