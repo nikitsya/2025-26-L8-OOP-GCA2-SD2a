@@ -2,6 +2,12 @@ package com.supermarketstore.department;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Represents a department in the supermarket.
+ * Contains information about its location, budget, staffing, and refrigeration requirements.
+ *  @author Hanna Bokariuk
+ */
+
 public class Department {
     private int departmentId;
     private String name;
