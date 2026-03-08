@@ -22,9 +22,12 @@ public class Product {
         setProductId(productId);
         setName(name);
         setPrice(price);
-        setOnSale(onSale);
-        setDiscountPrice(discountPrice);
         setStock(stock);
+        setOnSale(onSale);
+        if (onSale) setDiscountPrice(discountPrice);
+        else if (discountPrice != null) {
+            throw new IllegalArgumentException("Discount price must be null when product is not on sale");
+        }
     }
 
     @JsonProperty("product_id")

@@ -11,12 +11,7 @@ class ProductTest {
 
     @BeforeEach
     void setUp() {
-        product = new Product();
-        product.setProductId(1);
-        product.setName("Product");
-        product.setPrice(20);
-        product.setOnSale(false);
-        product.setStock(45);
+        product = new Product(1, "Product", 20, false, null, 45);
     }
 
     @Test
