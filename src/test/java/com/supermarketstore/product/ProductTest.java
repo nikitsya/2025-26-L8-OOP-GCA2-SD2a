@@ -78,6 +78,16 @@ class ProductTest {
     }
 
     @Test
+    void setPrice_whenOnSaleAndDiscountIsLessThanNewPrice_updatesPrice() {
+        product.setOnSale(true);
+        product.setDiscountPrice(10.0);
+
+        product.setPrice(20.0);
+
+        assertEquals(20.0, product.getPrice());
+    }
+
+    @Test
     void setPrice_withNegativeValue_throwsIllegalArgumentException() {
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
