@@ -176,6 +176,17 @@ class ProductTest {
     }
 
     @Test
+    void constructor_whenProductIsOnSaleAndDiscountPriceProvided_setsDiscountPrice() {
+        Product saleProduct = new Product(2, "Sale Product", 30.0, true, 20.0, 10);
+
+        assertAll(
+                () -> assertTrue(saleProduct.isOnSale()),
+                () -> assertEquals(20.0, saleProduct.getDiscountPrice()),
+                () -> assertEquals(30.0, saleProduct.getPrice())
+        );
+    }
+
+    @Test
     void setOnSale_whenFalse_clearsDiscountPrice() {
         product.setOnSale(true);
         product.setDiscountPrice(15.0);
