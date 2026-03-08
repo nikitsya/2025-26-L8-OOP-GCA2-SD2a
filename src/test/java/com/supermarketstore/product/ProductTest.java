@@ -87,12 +87,13 @@ class ProductTest {
     }
 
     @Test
-    void setDiscountPrice_whenGreaterThanPrice_throwsIllegalArgumentException() {
+    void setPrice_whenLessThanDiscountPrice_throwsIllegalArgumentException() {
         product.setOnSale(true);
-        product.setPrice(25);
+        product.setPrice(30);
+        product.setDiscountPrice(28.00);
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> product.setDiscountPrice(28.00)
+                () -> product.setPrice(25)
         );
         assertEquals("Discount price must be less than product price", ex.getMessage());
     }
@@ -164,6 +165,17 @@ class ProductTest {
                 () -> product.setDiscountPrice(23.00)
         );
         assertEquals("Price must be set before discount price", ex.getMessage());
+    }
+
+    @Test
+    void setDiscountPrice_whenGreaterThanPrice_throwsIllegalArgumentException() {
+        product.setOnSale(true);
+        product.setPrice(25);
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> product.setDiscountPrice(28.00)
+        );
+        assertEquals("Discount price must be less than product price", ex.getMessage());
     }
 
     @Test
