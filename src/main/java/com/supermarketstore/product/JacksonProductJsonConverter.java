@@ -16,10 +16,10 @@ public class JacksonProductJsonConverter implements ProductJsonConverter {
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     @Override
-    public String productToJson(Product entity) {
-        if (entity == null) throw new IllegalArgumentException("Product must not be null");
+    public String productToJson(Product product) {
+        if (product == null) throw new IllegalArgumentException("Product must not be null");
         try {
-            return MAPPER.writeValueAsString(entity);
+            return MAPPER.writeValueAsString(product);
         } catch (IOException e) {
             throw new IllegalArgumentException("Failed to serialize Product to JSON", e);
         }
@@ -37,10 +37,10 @@ public class JacksonProductJsonConverter implements ProductJsonConverter {
     }
 
     @Override
-    public String productListToJson(List<Product> list) {
-        if (list == null) throw new IllegalArgumentException("Product list must not be null");
+    public String productListToJson(List<Product> products) {
+        if (products == null) throw new IllegalArgumentException("Product list must not be null");
         try {
-            return MAPPER.writeValueAsString(list);
+            return MAPPER.writeValueAsString(products);
         } catch (IOException e) {
             throw new IllegalArgumentException("Failed to serialize Product list to JSON", e);
         }
