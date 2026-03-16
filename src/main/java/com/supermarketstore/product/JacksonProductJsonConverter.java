@@ -1,5 +1,6 @@
 package com.supermarketstore.product;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
@@ -45,4 +46,16 @@ public class JacksonProductJsonConverter implements ProductJsonConverter {
             throw new IllegalArgumentException("Failed to serialize Product list to JSON", e);
         }
     }
+
+    @Override
+    public List<Product> productListFromJson(String json) {
+        if (json == null || json.isBlank())
+            throw new IllegalArgumentException("Product JSON must not be null or blank");
+        try {
+            return MAPPER.readValue(json, new TypeReference<>() {});
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Failed to deserialize Product list from JSON", e);
+        }
+    }
+
 }
