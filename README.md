@@ -40,9 +40,7 @@ Temporary tracking version of README (to be replaced by final version)
 | F15 | Update Entity                 | Client sends updated field data. Server calls updateXxx() and returns the updated entity.                                                                                                      |       |        |
 | F16 | Error Handling and Protocol   | Structured error responses returned for all failure cases - exceptions are not propagated to the client. Protocol documented in README: each request type, payload fields, and response shape. |       |        |
 
-### Stage 2 Study Notes and Action Checklist
-
-Checklist to prepare for discussions and implementation work.
+### Checklist to prepare for discussions and implementation work.
 
 1. Explain this method line by line:
 
