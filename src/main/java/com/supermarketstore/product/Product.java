@@ -88,7 +88,7 @@ public class Product {
 
     @JsonProperty("discount_price")
     public void setDiscountPrice(Double discountPrice) {
-        if (!onSale) throw new IllegalStateException("Cannot set discount price when product is not on sale");
+        if (!onSale && discountPrice != null) throw new IllegalStateException("Cannot set discount price when product is not on sale");
         if (discountPrice == null)
             throw new IllegalArgumentException("Discount price is required when product is on sale");
         if (discountPrice < 0) throw new IllegalArgumentException("Discount price must be 0 or greater");
