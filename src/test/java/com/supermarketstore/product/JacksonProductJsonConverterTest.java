@@ -70,4 +70,13 @@ class JacksonProductJsonConverterTest {
     void productListFromJson() {
         assertEquals(products, converter.productListFromJson(products_json));
     }
+
+    @Test
+    void productListFromJson_whenJsonIsNull_throwsIllegalArgumentException() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> converter.productListFromJson(null)
+        );
+        assertEquals("Product JSON must not be null or blank", ex.getMessage());
+    }
 }
