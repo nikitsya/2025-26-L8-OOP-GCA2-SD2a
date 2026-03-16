@@ -88,4 +88,13 @@ class JacksonProductJsonConverterTest {
         );
         assertEquals("Product JSON must not be null or blank", ex.getMessage());
     }
+
+    @Test
+    void productFromJson_whenJsonIsMalformed_throwsIllegalArgumentException() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> converter.productFromJson("{bad json}")
+        );
+        assertEquals("Failed to deserialize Product from JSON: ", ex.getMessage());
+    }
 }
