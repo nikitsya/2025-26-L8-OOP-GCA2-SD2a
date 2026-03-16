@@ -99,6 +99,12 @@ class JacksonProductJsonConverterTest {
     }
 
     @Test
+    void productListFromJson_whenJsonIsEmptyArray_returnsEmptyList() {
+        List<Product> result = converter.productListFromJson("[]");
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
     void productListFromJson_whenJsonIsMalformed_throwsIllegalArgumentException() {
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
