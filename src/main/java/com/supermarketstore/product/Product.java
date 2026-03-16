@@ -90,10 +90,12 @@ public class Product {
     public void setDiscountPrice(Double discountPrice) {
         if (!onSale && discountPrice != null)
             throw new IllegalStateException("Cannot set discount price when product is not on sale");
-        else if (discountPrice == null)
+        if ( onSale && discountPrice == null)
             throw new IllegalArgumentException("Discount price is required when product is on sale");
-        if (discountPrice < 0) throw new IllegalArgumentException("Discount price must be 0 or greater");
-        if (price <= 0) throw new IllegalStateException("Price must be set before discount price");
+        if (discountPrice < 0)
+            throw new IllegalArgumentException("Discount price must be 0 or greater");
+        if (price <= 0)
+            throw new IllegalStateException("Price must be set before discount price");
         if (discountPrice >= price)
             throw new IllegalArgumentException("Discount price must be less than product price");
         this.discountPrice = discountPrice;
