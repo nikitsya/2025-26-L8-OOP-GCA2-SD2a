@@ -1,6 +1,7 @@
 package com.supermarketstore.product;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Objects;
 
 /**
