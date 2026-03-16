@@ -53,6 +53,15 @@ class JacksonProductJsonConverterTest {
     }
 
     @Test
+    void productFromJson_whenJsonIsMalformed_throwsIllegalArgumentException() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> converter.productFromJson("{bad json}")
+        );
+        assertEquals("Failed to deserialize Product from JSON: ", ex.getMessage());
+    }
+
+    @Test
     void productListToJson() {
         assertEquals(products_json, converter.productListToJson(products));
     }
@@ -90,11 +99,11 @@ class JacksonProductJsonConverterTest {
     }
 
     @Test
-    void productFromJson_whenJsonIsMalformed_throwsIllegalArgumentException() {
+    void productListFromJson_whenJsonIsMalformed_throwsIllegalArgumentException() {
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> converter.productFromJson("{bad json}")
+                () -> converter.productListFromJson("[{bad json}]")
         );
-        assertEquals("Failed to deserialize Product from JSON: ", ex.getMessage());
+        assertEquals("Failed to deserialize Product list from JSON", ex.getMessage());
     }
 }
