@@ -4,8 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class JacksonProductJsonConverterTest {
 
@@ -19,6 +18,15 @@ class JacksonProductJsonConverterTest {
     @Test
     void productToJson() {
         assertEquals(product_json, converter.productToJson(product));
+    }
+
+    @Test
+    void productToJson_whenProductIsNull_throwsIllegalArgumentException() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> converter.productToJson(null)
+        );
+        assertEquals("Product must not be null", ex.getMessage());
     }
 
     @Test
