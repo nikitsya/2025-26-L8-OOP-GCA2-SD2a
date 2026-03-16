@@ -15,4 +15,6 @@ public interface ProductJsonConverter {
     Product productFromJson(String json);
 
     String productListToJson(List<Product> list);
+
+    List<Product> productListFromJson(String json);
 }
