@@ -1,6 +1,5 @@
 package com.supermarketstore.product;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,7 +18,7 @@ class JacksonProductJsonConverterTest {
 
     @Test
     void productFromJson() {
-
+        assertEquals(converter.productFromJson(jsonString), product);
     }
 
     @Test
