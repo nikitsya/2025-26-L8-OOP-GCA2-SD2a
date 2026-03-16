@@ -2,7 +2,6 @@ package com.supermarketstore.product;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -11,17 +10,20 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class JacksonProductJsonConverterTest {
 
     JacksonProductJsonConverter converter = new JacksonProductJsonConverter();
+
     Product product = new Product(1, "cucumber", 0.65, false, null, 98);
-    String jsonString = "{\"product_id\":1,\"name\":\"cucumber\",\"price\":0.65,\"is_on_sale\":false,\"discount_price\":null,\"stock\":98}";
+    List<Product> products = List.of(product, product);
+    String product_json = "{\"product_id\":1,\"name\":\"cucumber\",\"price\":0.65,\"is_on_sale\":false,\"discount_price\":null,\"stock\":98}";
+    String products_json = "[" + product_json + "," + product_json + "]";
 
     @Test
     void productToJson() {
-        assertEquals(jsonString, converter.productToJson(product));
+        assertEquals(product_json, converter.productToJson(product));
     }
 
     @Test
     void productFromJson() {
-        assertEquals(product, converter.productFromJson(jsonString));
+        assertEquals(product, converter.productFromJson(product_json));
     }
 
     @Test
@@ -44,11 +46,7 @@ class JacksonProductJsonConverterTest {
 
     @Test
     void productListToJson() {
-        List<Product> productList = new ArrayList<>();
-        productList.add(product);
-        productList.add(product);
-        String expected = "[" + jsonString + "," + jsonString + "]";
-        assertEquals(expected, converter.productListToJson(productList));
+        assertEquals(products_json, converter.productListToJson(products));
     }
 
     @Test
@@ -58,5 +56,10 @@ class JacksonProductJsonConverterTest {
                 () -> converter.productListToJson(null)
         );
         assertEquals("Product list must not be null", ex.getMessage());
+    }
+
+    @Test
+    void productListFromJson() {
+        assertEquals(products, converter.productListFromJson(products_json));
     }
 }
