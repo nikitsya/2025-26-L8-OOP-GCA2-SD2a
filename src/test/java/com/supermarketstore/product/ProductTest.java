@@ -7,12 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ProductTest {
 
-    Product product;
-
-    @BeforeEach
-    void setUp() {
-        product = new Product(1, "Product", 20, false, null, 45);
-    }
+    Product product = new Product(1, "Product", 20, false, null, 45);
 
     @Test
     void getProductId_returnsProductId() {
