@@ -1,6 +1,7 @@
 package com.supermarketstore.product;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
 
 /**
  * Represents a product entity in the supermarket system.
@@ -124,5 +125,17 @@ public class Product {
                 ", discountPrice=" + discountPrice +
                 ", stock=" + stock +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return productId == product.productId && Double.compare(price, product.price) == 0 && onSale == product.onSale && stock == product.stock && Objects.equals(name, product.name) && Objects.equals(discountPrice, product.discountPrice);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(productId, name, price, onSale, discountPrice, stock);
     }
 }
