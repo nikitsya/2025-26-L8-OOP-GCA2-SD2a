@@ -52,7 +52,8 @@ public class JacksonProductJsonConverter implements ProductJsonConverter {
         if (json == null || json.isBlank())
             throw new IllegalArgumentException("Product JSON must not be null or blank");
         try {
-            return MAPPER.readValue(json, new TypeReference<>() {});
+            return MAPPER.readValue(json, new TypeReference<>() {
+            });
         } catch (IOException e) {
             throw new IllegalArgumentException("Failed to deserialize Product list from JSON", e);
         }
