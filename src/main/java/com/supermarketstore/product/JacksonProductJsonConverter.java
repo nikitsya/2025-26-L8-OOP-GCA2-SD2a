@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.List;
 
-
 /**
  * Converts Product objects to/from JSON using Jackson.
  *

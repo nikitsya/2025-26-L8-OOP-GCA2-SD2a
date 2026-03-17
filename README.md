@@ -53,21 +53,25 @@ public List<Product> findProductsByFilter(Predicate<Product> filter) {
 ```
 
 2. Be ready to explain these Java concepts:
+
 - `Stream`: a pipeline API to process collections (map/filter/reduce) without manual loops.
 - `filter(...)`: keeps only elements that match a condition.
 - `Predicate<T>`: a functional interface with `boolean test(T value)` used for conditions.
 - `toList()`: collects stream results into a list.
 
 3. JSON converter reverse methods:
+
 - `DepartmentJsonConverter` currently has `departmentListToJson(List<Department> list)` but no reverse method.
 - Add reverse conversion for department lists:
   `List<Department> departmentListFromJson(String json);`
 
 4. Testing guidance:
+
 - Tests should focus on business behavior, not Java library internals.
 - Example: testing `String.trim()` itself is low value; keep existing tests for now, but prioritize business-rule tests.
 
 5. Add DAO integration-style tests (required):
+
 - Add a test like `daoInsertProduct()`:
 - Create a new product object.
 - Insert it with DAO.
