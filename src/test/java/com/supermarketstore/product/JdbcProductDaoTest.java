@@ -88,7 +88,9 @@ class JdbcProductDaoTest {
 
     @Test
     void insertProduct() {
-
+        Product toInsert = new Product(0, "TEST_insert_milk", 1.49, false, null, 15);
+        Product inserted = dao.insertProduct(toInsert);
+        assertTrue(inserted.getProductId() > 0);
     }
 
     @Test
