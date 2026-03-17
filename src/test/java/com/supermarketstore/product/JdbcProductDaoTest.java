@@ -8,7 +8,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 class JdbcProductDaoTest {
@@ -50,6 +52,13 @@ class JdbcProductDaoTest {
     void getProductById() {
 
     }
+
+    @Test
+    void getProductById_whenIdDoesNotExist_returnsEmpty() {
+        Optional<Product> found = dao.getProductById(999999);
+        assertTrue(found.isEmpty());
+    }
+
 
     @Test
     void deleteProductById() {
