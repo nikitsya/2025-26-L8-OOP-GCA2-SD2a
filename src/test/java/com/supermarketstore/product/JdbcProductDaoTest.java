@@ -4,12 +4,18 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 import static org.junit.jupiter.api.Assertions.fail;
 
 class JdbcProductDaoTest {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/supermarket_store_system";
     private static final String DB_USER = "root";
     private static final String DB_PASS = System.getenv("TEST_DB_PASS");
+    private static final String TEST_NAME_PATTERN = "TEST_%";
 
     static JdbcProductDao dao;
 
@@ -28,6 +34,7 @@ class JdbcProductDaoTest {
 
     @AfterAll
     static void afterAll() {
+        cleanupTestRows();
         dao = null;
     }
 
@@ -66,5 +73,17 @@ class JdbcProductDaoTest {
 
     @Test
     void _pass() {
+    }
+
+    private static void cleanupTestRows() {
+        String sql = "DELETE FROM products WHERE name LIKE ?";
+
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, TEST_NAME_PATTERN);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            fail("Failed to cleanup TEST_ products: " + e.getMessage());
+        }
     }
 }
