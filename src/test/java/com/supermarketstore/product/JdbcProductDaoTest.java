@@ -81,6 +81,9 @@ class JdbcProductDaoTest {
 
     @Test
     void deleteProductById() {
+        int id = product1.getProductId();
+        assertTrue(dao.deleteProductById(id));
+        assertFalse(dao.getProductById(id).isPresent());
     }
 
     @Test
