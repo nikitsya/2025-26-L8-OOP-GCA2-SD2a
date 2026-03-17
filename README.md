@@ -12,6 +12,20 @@ Temporary tracking version of README (to be replaced by final version)
 | 4     | Wk 12 | Sunday 3rd May    | Full test suite with coverage, all features stable         | F23-F24  | Graded                      | 50%    |
 
 <details>
+<summary><strong>Pre-Stage Requirements</strong></summary>
+
+| Requirement    | Details                                                                                                                               | Done |
+|----------------|---------------------------------------------------------------------------------------------------------------------------------------|------|
+| Primary key    | A field named `tableName_id` (for example, `player_id`) mapped to an `INT AUTO_INCREMENT` primary key.                                | ✅    |
+| Minimum fields | At least one `int`, one `double`, and one `String` field per entity.                                                                  | ✅    |
+| Encapsulation  | Use private fields; validate in setters/constructors (trim input, reject blank values, enforce numeric ranges).                       | ✅    |
+| Invalid data   | Detect, log, and skip bad inputs. Do not crash on expected validation errors.                                                         | ✅    |
+| Seed data      | Provide a `mysqlSetup.sql` file that creates and populates each table with at least 10 rows and can recreate the schema from scratch. | ✅    |
+| Ownership      | Each team member owns at least one database table and implements the full vertical slice (`DAO -> server -> GUI`) for that table.     | ✅    |
+
+</details>
+
+<details>
 <summary><strong>Stage 1 (F1-F9)</strong></summary>
 
 | Feature | Hanna | Nikita |
