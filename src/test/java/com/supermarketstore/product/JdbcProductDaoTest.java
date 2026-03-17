@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,8 +27,8 @@ class JdbcProductDaoTest {
     @BeforeAll
     static void beforeAll() {
         if (DB_PASS == null || DB_PASS.isBlank()) fail("Set TEST_DB_PASS in Run Configuration");
-
         dao = new JdbcProductDao(DB_URL, DB_USER, DB_PASS);
+        cleanupTestRows();
 
         // add test products to the database
         product1 = new Product(0, "TEST_cucumber", 0.65, false, null, 98);
@@ -38,7 +39,7 @@ class JdbcProductDaoTest {
 
     @AfterAll
     static void afterAll() {
-        // cleanupTestRows();
+        cleanupTestRows();
         dao = null;
     }
 
@@ -56,6 +57,11 @@ class JdbcProductDaoTest {
 
     @Test
     void getAllProducts() {
+        List<Product> products = dao.getAllProducts();
+        assertNotNull(products);
+        assertFalse(products.isEmpty());
+        long testCount = products.stream().filter(p -> p.getName().startsWith("TEST_")).count();
+        assertEquals(2, testCount);
 
     }
 
