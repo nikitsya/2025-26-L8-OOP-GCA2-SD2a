@@ -29,15 +29,15 @@ class JdbcProductDaoTest {
         dao = new JdbcProductDao(DB_URL, DB_USER, DB_PASS);
 
         // add test products to the database
-        product1 = new Product(300, "TEST_cucumber", 0.65, false, null, 98);
-        product2 = new Product(310, "TEST_cucumber", 0.70, true, 0.65, 126);
+        product1 = new Product(0, "TEST_cucumber", 0.65, false, null, 98);
+        product2 = new Product(0, "TEST_cucumber", 0.70, true, 0.65, 126);
         dao.insertProduct(product1);
         dao.insertProduct(product2);
     }
 
     @AfterAll
     static void afterAll() {
-        cleanupTestRows();
+        // cleanupTestRows();
         dao = null;
     }
 
