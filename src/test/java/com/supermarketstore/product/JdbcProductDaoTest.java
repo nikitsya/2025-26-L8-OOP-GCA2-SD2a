@@ -91,6 +91,11 @@ class JdbcProductDaoTest {
         Product toInsert = new Product(0, "TEST_insert_milk", 1.49, false, null, 15);
         Product inserted = dao.insertProduct(toInsert);
         assertTrue(inserted.getProductId() > 0);
+        assertEquals(toInsert, inserted);
+
+        Optional<Product> productFromDb = dao.getProductById(inserted.getProductId());
+        assertTrue(productFromDb.isPresent());
+        assertEquals("TEST_insert_milk", productFromDb.get().getName());
     }
 
     @Test
