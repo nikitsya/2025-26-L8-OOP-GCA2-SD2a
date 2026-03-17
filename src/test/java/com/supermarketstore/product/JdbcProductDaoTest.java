@@ -116,6 +116,15 @@ class JdbcProductDaoTest {
     }
 
     @Test
+    void updateProduct_whenProductIsNull_throwsIllegalArgumentException() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> dao.updateProduct(1, null)
+        );
+        assertEquals("product is required", ex.getMessage());
+    }
+
+    @Test
     void findProductsByFilter() {
     }
 }
