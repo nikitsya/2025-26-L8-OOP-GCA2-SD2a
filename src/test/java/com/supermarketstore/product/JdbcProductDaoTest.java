@@ -126,5 +126,15 @@ class JdbcProductDaoTest {
 
     @Test
     void findProductsByFilter() {
+
+    }
+
+    @Test
+    void findProductsByFilter_whenFilterIsNull_throwsIllegalArgumentException() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> dao.findProductsByFilter(null)
+        );
+        assertEquals("filter is required", ex.getMessage());
     }
 }
