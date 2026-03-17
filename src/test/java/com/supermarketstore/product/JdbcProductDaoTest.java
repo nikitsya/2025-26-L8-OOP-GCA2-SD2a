@@ -39,7 +39,6 @@ class JdbcProductDaoTest {
 
     @AfterAll
     static void afterAll() {
-        cleanupTestRows();
         dao = null;
     }
 
@@ -109,6 +108,11 @@ class JdbcProductDaoTest {
 
     @Test
     void updateProduct() {
+        int id = product2.getProductId();
+        Product toUpdate = new Product(333, "TEST_tomato", 0.35, false, null, 70);
+        Product updated = dao.updateProduct(id, toUpdate);
+        assertEquals(toUpdate.getName(), updated.getName());
+        assertEquals(toUpdate, updated);
     }
 
     @Test
