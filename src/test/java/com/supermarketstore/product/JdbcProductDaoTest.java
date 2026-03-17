@@ -7,15 +7,15 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.fail;
 
 class JdbcProductDaoTest {
-    private static final String DB_URL = System.getProperty("test.db.url", System.getenv().getOrDefault("TEST_DB_URL", "jdbc:mysql://localhost:3306/supermarket_store_system"));
-    private static final String DB_USER = System.getProperty("test.db.user", System.getenv().getOrDefault("TEST_DB_USER", "root"));
-    private static final String DB_PASS = System.getProperty("test.db.pass", System.getenv("TEST_DB_PASS"));
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/supermarket_store_system";
+    private static final String DB_USER = "root";
+    private static final String DB_PASS = System.getenv("TEST_DB_PASS");
 
     static JdbcProductDao dao;
 
     @BeforeAll
     static void beforeAll() {
-        if (DB_PASS == null || DB_PASS.isBlank()) fail("Set TEST_DB_PASS or -Dtest.db.pass for JdbcProductDaoTest");
+        if (DB_PASS == null || DB_PASS.isBlank()) fail("Set TEST_DB_PASS in Run Configuration");
 
         dao = new JdbcProductDao(DB_URL, DB_USER, DB_PASS);
 
@@ -33,6 +33,7 @@ class JdbcProductDaoTest {
 
     @Test
     void getAllProducts() {
+
     }
 
     @Test
