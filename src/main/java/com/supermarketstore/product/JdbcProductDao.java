@@ -128,7 +128,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         String name = resultSet.getString("name");
         double price = resultSet.getDouble("price");
         boolean onSale = resultSet.getBoolean("is_on_sale");
-        Double discountPrice = resultSet.getDouble("discount_price");
+        Double discountPrice = resultSet.getObject("discount_price", Double.class);
         int stock = resultSet.getInt("stock");
 
         return new Product(productId, name, price, onSale, discountPrice, stock);
