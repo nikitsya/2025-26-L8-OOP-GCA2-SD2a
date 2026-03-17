@@ -40,6 +40,7 @@ class JdbcProductDaoTest {
     @AfterAll
     static void afterAll() {
         dao = null;
+        cleanupTestRows();
     }
 
     private static void cleanupTestRows() {
