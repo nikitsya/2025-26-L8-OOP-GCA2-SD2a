@@ -126,7 +126,10 @@ class JdbcProductDaoTest {
 
     @Test
     void findProductsByFilter() {
-
+        List<Product> filtered = dao.findProductsByFilter(p -> p.getName().startsWith("TEST_") && p.getPrice() >= 0.70);
+        assertFalse(filtered.isEmpty());
+        assertTrue(filtered.stream().allMatch(p -> p.getName().startsWith("TEST_")));
+        assertTrue(filtered.stream().allMatch(p -> p.getPrice() >= 0.70));
     }
 
     @Test
