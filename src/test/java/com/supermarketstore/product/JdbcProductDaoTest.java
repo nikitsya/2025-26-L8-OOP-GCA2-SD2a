@@ -10,8 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 class JdbcProductDaoTest {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/supermarket_store_system";
@@ -43,6 +42,18 @@ class JdbcProductDaoTest {
         dao = null;
     }
 
+    private static void cleanupTestRows() {
+        String sql = "DELETE FROM products WHERE name LIKE ?";
+
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, TEST_NAME_PATTERN);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            fail("Failed to cleanup TEST_ products: " + e.getMessage());
+        }
+    }
+
     @Test
     void getAllProducts() {
 
@@ -50,7 +61,10 @@ class JdbcProductDaoTest {
 
     @Test
     void getProductById() {
-
+        int id = product1.getProductId();
+        Optional<Product> found = dao.getProductById(id);
+        assertTrue(found.isPresent());
+        assertEquals(product1, found.get());
     }
 
     @Test
@@ -58,7 +72,6 @@ class JdbcProductDaoTest {
         Optional<Product> found = dao.getProductById(999999);
         assertTrue(found.isEmpty());
     }
-
 
     @Test
     void deleteProductById() {
@@ -86,17 +99,5 @@ class JdbcProductDaoTest {
 
     @Test
     void _pass() {
-    }
-
-    private static void cleanupTestRows() {
-        String sql = "DELETE FROM products WHERE name LIKE ?";
-
-        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, TEST_NAME_PATTERN);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            fail("Failed to cleanup TEST_ products: " + e.getMessage());
-        }
     }
 }
