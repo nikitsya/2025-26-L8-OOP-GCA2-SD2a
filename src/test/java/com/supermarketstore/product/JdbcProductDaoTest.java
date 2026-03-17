@@ -88,6 +88,16 @@ class JdbcProductDaoTest {
 
     @Test
     void insertProduct() {
+
+    }
+
+    @Test
+    void insertProduct_whenProductIsNull_throwsIllegalArgumentException() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> dao.insertProduct(null)
+        );
+        assertEquals("product is required", ex.getMessage());
     }
 
     @Test
