@@ -114,16 +114,4 @@ class JdbcProductDaoTest {
     @Test
     void findProductsByFilter() {
     }
-
-    @Test
-    void _url() {
-    }
-
-    @Test
-    void _user() {
-    }
-
-    @Test
-    void _pass() {
-    }
 }
