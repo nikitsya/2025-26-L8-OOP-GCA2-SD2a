@@ -36,5 +36,14 @@ class JacksonDepartmentJsonConverterTest {
         assertEquals(department, converter.departmentFromJson(departmentJson));
     }
 
-    
+    @Test
+    void departmentListToJson_returnsExpectedJsonArray() {
+        assertEquals(departmentsJson, converter.departmentListToJson(departments));
+    }
+
+    @Test
+    void departmentListFromJson_returnsExpectedDepartments() {
+        assertEquals(departments, converter.departmentListFromJson(departmentsJson));
+    }
+
 }
