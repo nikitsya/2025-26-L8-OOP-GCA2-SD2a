@@ -25,4 +25,16 @@ class JacksonDepartmentJsonConverterTest {
                     departmentJson +
                     ",{\"department_id\":2,\"name\":\"Frozen Foods\",\"floor\":1,\"zone\":5,\"budget\":20000.0,\"employee_count\":7,\"is_refrigerated\":true}" +
                     "]";
+
+    @Test
+    void departmentToJson_returnsExpectedJson() {
+        assertEquals(departmentJson, converter.departmentToJson(department));
+    }
+
+    @Test
+    void departmentFromJson_returnsExpectedDepartment() {
+        assertEquals(department, converter.departmentFromJson(departmentJson));
+    }
+
+    
 }
