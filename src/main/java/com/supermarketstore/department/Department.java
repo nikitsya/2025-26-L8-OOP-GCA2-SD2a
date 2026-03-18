@@ -2,6 +2,8 @@ package com.supermarketstore.department;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Objects;
+
 /**
  * Represents a department in the supermarket.
  * Contains information about its location, budget, staffing, and refrigeration requirements.
@@ -132,5 +134,19 @@ public class Department {
                 ", isRefrigerated=" + isRefrigerated +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Department department = (Department) o;
+        return departmentId == department.departmentId
+                && floor == department.floor
+                && zone == department.zone
+                && Double.compare(budget, department.budget) == 0
+                && employeeCount == department.employeeCount
+                && isRefrigerated == department.isRefrigerated
+                && Objects.equals(name, department.name);
+    }
+
 
 }
