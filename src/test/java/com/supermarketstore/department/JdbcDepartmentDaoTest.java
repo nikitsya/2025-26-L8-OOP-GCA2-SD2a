@@ -75,4 +75,17 @@ class JdbcDepartmentDaoTest {
         assertEquals(5, actual.getEmployeeCount());
         assertFalse(actual.isRefrigerated());
     }
+
+    @Test
+    void deleteDepartment_shouldRemoveInsertedDepartment() {
+        Department newDepartment = new Department(0, "TEST_DeleteBakery", 1, 4, 9000.0, 3, true);
+        Department inserted = dao.insertDepartment(newDepartment);
+
+        // Delete the row we just inserted and confirm it is no longer in the table.
+        boolean deleted = dao.deleteDepartmentById(inserted.getDepartmentId());
+        Optional<Department> fetched = dao.getDepartmentById(inserted.getDepartmentId());
+
+        assertTrue(deleted);
+        assertTrue(fetched.isEmpty());
+    }
 }
