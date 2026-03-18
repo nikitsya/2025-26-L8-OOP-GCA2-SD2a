@@ -112,4 +112,11 @@ class JdbcDepartmentDaoTest {
         assertEquals(8, actual.getEmployeeCount());
         assertTrue(actual.isRefrigerated());
     }
+
+    @Test
+    void getDepartmentById_whenIdDoesNotExist_returnsEmpty() {
+        Optional<Department> fetched = dao.getDepartmentById(999999);
+
+        assertTrue(fetched.isEmpty());
+    }
 }
