@@ -46,4 +46,28 @@ class JacksonDepartmentJsonConverterTest {
         assertEquals(departments, converter.departmentListFromJson(departmentsJson));
     }
 
+    @Test
+    void departmentListFromJson_whenJsonIsBlank_throwsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> converter.departmentListFromJson(" ")
+        );
+
+        assertEquals("JSON must not be null or blank", exception.getMessage());
+    }
+
+    @Test
+    void departmentListFromJson_whenJsonIsEmptyArray_returnsEmptyList() {
+        assertTrue(converter.departmentListFromJson("[]").isEmpty());
+    }
+
+    @Test
+    void departmentListFromJson_whenJsonIsMalformed_throwsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> converter.departmentListFromJson("[{bad json}]")
+        );
+
+        assertEquals("Failed to deserialize department list from JSON", exception.getMessage());
+    }
 }
