@@ -88,4 +88,28 @@ class JdbcDepartmentDaoTest {
         assertTrue(deleted);
         assertTrue(fetched.isEmpty());
     }
+
+    @Test
+    void updateDepartment_shouldPersistUpdatedValues() {
+        Department original = new Department(0, "TEST_OriginalBakery", 0, 2, 12000.0, 5, false);
+        Department inserted = dao.insertDepartment(original);
+
+        Department changes = new Department(0, "TEST_UpdatedBakery", 1, 6, 15000.0, 8, true);
+
+        // Update the stored row, then read it back to confirm the new values were saved.
+        Department updated = dao.updateDepartment(inserted.getDepartmentId(), changes);
+        Optional<Department> fetched = dao.getDepartmentById(inserted.getDepartmentId());
+
+        assertTrue(fetched.isPresent());
+
+        Department actual = fetched.get();
+        assertEquals(inserted.getDepartmentId(), updated.getDepartmentId());
+        assertEquals(inserted.getDepartmentId(), actual.getDepartmentId());
+        assertEquals("TEST_UpdatedBakery", actual.getName());
+        assertEquals(1, actual.getFloor());
+        assertEquals(6, actual.getZone());
+        assertEquals(15000.0, actual.getBudget());
+        assertEquals(8, actual.getEmployeeCount());
+        assertTrue(actual.isRefrigerated());
+    }
 }
