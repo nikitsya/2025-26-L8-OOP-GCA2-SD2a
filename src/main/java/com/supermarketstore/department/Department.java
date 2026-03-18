@@ -148,5 +148,9 @@ public class Department {
                 && Objects.equals(name, department.name);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(departmentId, name, floor, zone, budget, employeeCount, isRefrigerated);
+    }
 
 }
