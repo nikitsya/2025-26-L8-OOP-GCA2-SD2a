@@ -1,0 +1,28 @@
+package com.supermarketstore.department;
+
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class JacksonDepartmentJsonConverterTest {
+
+    private final JacksonDepartmentJsonConverter converter = new JacksonDepartmentJsonConverter();
+
+    private final Department department = new Department(1, "Bakery", 0, 2, 12000.0, 5, false);
+    private final List<Department> departments = List.of(
+            department,
+            new Department(2, "Frozen Foods", 1, 5, 20000.0, 7, true)
+    );
+
+    private final String departmentJson =
+            "{\"department_id\":1,\"name\":\"Bakery\",\"floor\":0,\"zone\":2,\"budget\":12000.0,\"employee_count\":5,\"is_refrigerated\":false}";
+    private final String departmentsJson =
+            "[" +
+                    departmentJson +
+                    ",{\"department_id\":2,\"name\":\"Frozen Foods\",\"floor\":1,\"zone\":5,\"budget\":20000.0,\"employee_count\":7,\"is_refrigerated\":true}" +
+                    "]";
+}
