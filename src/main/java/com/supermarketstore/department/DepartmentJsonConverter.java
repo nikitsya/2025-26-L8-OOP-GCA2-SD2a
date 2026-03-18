@@ -12,4 +12,7 @@ public interface DepartmentJsonConverter {
 
     // Converts: a list of Departments to JSON
     String departmentListToJson(List<Department> list);
+
+    // Converts: JSON string to a list of Department objects
+    List<Department> departmentListFromJson(String json);
 }
