@@ -2,12 +2,17 @@ package com.supermarketstore.department;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 class JdbcDepartmentDaoTest {
@@ -47,5 +52,27 @@ class JdbcDepartmentDaoTest {
         } catch (SQLException e) {
             fail("Failed to cleanup TEST_ departments: " + e.getMessage());
         }
+    }
+
+    @Test
+    void insertDepartment_shouldPersistAndReturnMatchingDepartment() {
+        Department newDepartment = new Department(0, "TEST_Bakery", 0, 2, 12000.0, 5, false);
+
+        // Insert a new row and keep the generated id returned by the DAO.
+        Department inserted = dao.insertDepartment(newDepartment);
+
+        // Read the same row back from the database and verify the stored values.
+        Optional<Department> fetched = dao.getDepartmentById(inserted.getDepartmentId());
+
+        assertTrue(fetched.isPresent());
+
+        Department actual = fetched.get();
+        assertEquals(inserted.getDepartmentId(), actual.getDepartmentId());
+        assertEquals("TEST_Bakery", actual.getName());
+        assertEquals(0, actual.getFloor());
+        assertEquals(2, actual.getZone());
+        assertEquals(12000.0, actual.getBudget());
+        assertEquals(5, actual.getEmployeeCount());
+        assertFalse(actual.isRefrigerated());
     }
 }
