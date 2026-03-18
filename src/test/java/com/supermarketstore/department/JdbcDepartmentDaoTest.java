@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -118,5 +119,23 @@ class JdbcDepartmentDaoTest {
         Optional<Department> fetched = dao.getDepartmentById(999999);
 
         assertTrue(fetched.isEmpty());
+    }
+
+    @Test
+    void findDepartmentsByFilter_shouldReturnOnlyMatchingDepartments() {
+        Department lowBudget = new Department(0, "TEST_FilterBakery", 0, 2, 7000.0, 4, false);
+        Department highBudget = new Department(0, "TEST_FilterFrozen", 1, 5, 18000.0, 7, true);
+
+        dao.insertDepartment(lowBudget);
+        dao.insertDepartment(highBudget);
+
+        // The filter should keep only TEST_ departments that meet the budget rule.
+        List<Department> filtered = dao.findDepartmentsByFilter(
+                department -> department.getName().startsWith("TEST_") && department.getBudget() >= 10000.0
+        );
+
+        assertFalse(filtered.isEmpty());
+        assertTrue(filtered.stream().allMatch(department -> department.getName().startsWith("TEST_")));
+        assertTrue(filtered.stream().allMatch(department -> department.getBudget() >= 10000.0));
     }
 }
