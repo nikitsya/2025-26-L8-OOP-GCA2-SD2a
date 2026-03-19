@@ -57,7 +57,7 @@ public class JacksonDepartmentJsonConverter implements DepartmentJsonConverter {
         }
 
         try {
-            return JSON_MAPPER.readValue(json, new TypeReference<>() {
+            return JSON_MAPPER.readValue(json, new TypeReference<List<Department>>() {
             });
         } catch (JsonProcessingException e) {
             throw new IllegalArgumentException("Failed to deserialize department list from JSON", e);
