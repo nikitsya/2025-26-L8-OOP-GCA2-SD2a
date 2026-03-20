@@ -10,9 +10,10 @@ import java.util.List;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import static java.lang.System.out;
 
 
 public class ClientMain {
@@ -63,7 +64,8 @@ public class ClientMain {
 
             ServerResponse<Department> byIdResponse = MAPPER.readValue(
                     byIdLine,
-                    new TypeReference<ServerResponse<Department>>() {}
+                    new TypeReference<ServerResponse<Department>>() {
+                    }
             );
 
             System.out.println("Status: " + byIdResponse.getStatus());
@@ -75,6 +77,34 @@ public class ClientMain {
                 System.out.println(department);
             }
 
+            System.out.println();
+            System.out.println("Adding a new department ");
+
+            ObjectNode addPayload = MAPPER.createObjectNode();
+            addPayload.put("name", "TEST_NewDepartment");
+            addPayload.put("floor", 1);
+            addPayload.put("zone", 11);
+            addPayload.put("budget", 10000.0);
+            addPayload.put("employeeCount", 5);
+            addPayload.put("isRefrigerated", false);
+
+            ClientRequest addRequest = new ClientRequest("ADD_DEPARTMENT", addPayload);
+            out.println(MAPPER.writeValueAsString(addRequest));
+
+            String addLine = in.readLine();
+
+            ServerResponse<Department> addResponse = MAPPER.readValue(addLine, new TypeReference<ServerResponse<Department>>() {
+                    }
+            );
+
+            System.out.println("Status: " + addResponse.getStatus());
+            System.out.println("Message: " + addResponse.getMessage());
+
+            Department addedDepartment = addResponse.getData();
+
+            if (addedDepartment != null) {
+                System.out.println(addedDepartment);
+            }
         }
     }
 }
