@@ -1,5 +1,6 @@
 package com.supermarketstore.server;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.supermarketstore.protocol.ClientRequest;
 import com.supermarketstore.protocol.ServerResponse;
@@ -51,14 +52,33 @@ public class ServerMain {
                     ClientRequest request  = MAPPER.readValue(line, ClientRequest.class);
                     ServerResponse<?> response;
 
-                    // First real request: return all departments from the database.
+                    // Return all departments when no payload is needed.
                     if ("GET_ALL_DEPARTMENTS".equals(request.getType())) {
                         response = ServerResponse.success(
                                 "Departments retrieved successfully",
                                 departmentDao.getAllDepartments()
                         );
+
+                        // Return one department by id, validating the payload before reading it.
+                    } else if ("GET_DEPARTMENT_BY_ID".equals(request.getType())) {
+                        JsonNode payload = request.getPayload();
+
+                        if (payload == null || !payload.has("id")) {
+                            response = ServerResponse.failure("Missing required field: id");
                     } else {
-                        response = ServerResponse.failure(
+                            int id = payload.get("id").asInt();
+
+                            response = departmentDao.getDepartmentById(id)
+                                    .<ServerResponse<?>>map(department -> ServerResponse.success(
+                                            "Department retrieved successfully",
+                                            department
+                                    ))
+                                    .orElseGet(() -> ServerResponse.failure(
+                                            "Department not found for id: " + id
+                                    ));
+                        }
+                    } else {
+                            response = ServerResponse.failure(
                                 "Unsupported request type: " + request.getType()
                         );
                     }
