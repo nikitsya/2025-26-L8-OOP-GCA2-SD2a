@@ -1,7 +1,6 @@
 package com.supermarketstore.server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.net.httpserver.Request;
 import com.supermarketstore.protocol.ClientRequest;
 import com.supermarketstore.protocol.ServerResponse;
 
