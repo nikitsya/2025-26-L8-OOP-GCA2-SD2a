@@ -4,7 +4,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.supermarketstore.protocol.ClientRequest;
 import com.supermarketstore.protocol.ServerResponse;
 import com.supermarketstore.department.Department;
-
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.util.List;
 
 import java.io.*;
 import java.net.*;
@@ -28,7 +29,6 @@ public class ClientMain {
                      new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8))) {
 
             // Build and send a request
-            //ClientRequest request = new ClientRequest("GET_ALL", null);
             ClientRequest request = new ClientRequest("GET_ALL_DEPARTMENTS", null);
 
             out.println(MAPPER.writeValueAsString(request));
@@ -50,6 +50,31 @@ public class ClientMain {
                     System.out.println(department);
                 }
             }
+            System.out.println();
+            System.out.println("Requesting one department by id...");
+
+            ObjectNode payload = MAPPER.createObjectNode();
+            payload.put("id", 1);
+
+            ClientRequest byIdRequest = new ClientRequest("GET_DEPARTMENT_BY_ID", payload);
+            out.println(MAPPER.writeValueAsString(byIdRequest));
+
+            String byIdLine = in.readLine();
+
+            ServerResponse<Department> byIdResponse = MAPPER.readValue(
+                    byIdLine,
+                    new TypeReference<ServerResponse<Department>>() {}
+            );
+
+            System.out.println("Status: " + byIdResponse.getStatus());
+            System.out.println("Message: " + byIdResponse.getMessage());
+
+            Department department = byIdResponse.getData();
+
+            if (department != null) {
+                System.out.println(department);
+            }
+
         }
     }
 }
