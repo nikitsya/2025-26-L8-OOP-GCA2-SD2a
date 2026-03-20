@@ -8,15 +8,28 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import com.supermarketstore.department.Department;
+import com.supermarketstore.department.JdbcDepartmentDao;
+
 
 public class ServerMain {
     private static final int PORT = 9000;
+
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/supermarket_store_system";
+    private static final String DB_USER = "root";
+    private static final String DB_PASS = System.getenv("TEST_DB_PASS");
 
     // Creates: a single shared mapper — declared here so all methods in this class can use it
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     // Creates: a server that accepts one client, echoes its messages, then exits
     public static void main(String[] args) throws IOException {
+        if (DB_PASS == null || DB_PASS.isBlank()) {
+            throw new IllegalStateException("Set TEST_DB_PASS before running ServerMain");
+        }
+
+        JdbcDepartmentDao departmentDao = new JdbcDepartmentDao(DB_URL, DB_USER, DB_PASS);
+
         System.out.println("Server listening on port " + PORT);
 
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
