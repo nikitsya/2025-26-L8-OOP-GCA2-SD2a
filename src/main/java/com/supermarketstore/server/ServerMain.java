@@ -30,6 +30,7 @@ public class ServerMain {
         }
 
         JdbcDepartmentDao departmentDao = new JdbcDepartmentDao(DB_URL, DB_USER, DB_PASS);
+        RequestRouter router = new RequestRouter(departmentDao);
 
         System.out.println("Server listening on port " + PORT);
 
@@ -50,38 +51,7 @@ public class ServerMain {
 
                     // Parse the incoming request
                     ClientRequest request  = MAPPER.readValue(line, ClientRequest.class);
-                    ServerResponse<?> response;
-
-                    // Return all departments when no payload is needed.
-                    if ("GET_ALL_DEPARTMENTS".equals(request.getType())) {
-                        response = ServerResponse.success(
-                                "Departments retrieved successfully",
-                                departmentDao.getAllDepartments()
-                        );
-
-                        // Return one department by id, validating the payload before reading it.
-                    } else if ("GET_DEPARTMENT_BY_ID".equals(request.getType())) {
-                        JsonNode payload = request.getPayload();
-
-                        if (payload == null || !payload.has("id")) {
-                            response = ServerResponse.failure("Missing required field: id");
-                    } else {
-                            int id = payload.get("id").asInt();
-
-                            response = departmentDao.getDepartmentById(id)
-                                    .<ServerResponse<?>>map(department -> ServerResponse.success(
-                                            "Department retrieved successfully",
-                                            department
-                                    ))
-                                    .orElseGet(() -> ServerResponse.failure(
-                                            "Department not found for id: " + id
-                                    ));
-                        }
-                    } else {
-                            response = ServerResponse.failure(
-                                "Unsupported request type: " + request.getType()
-                        );
-                    }
+                    ServerResponse<?> response = router.route(request);
 
                     // Send the response back on one line
                     out.println(MAPPER.writeValueAsString(response));
