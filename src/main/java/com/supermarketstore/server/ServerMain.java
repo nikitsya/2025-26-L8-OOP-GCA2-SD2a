@@ -49,9 +49,20 @@ public class ServerMain {
 
                     // Parse the incoming request
                     ClientRequest request  = MAPPER.readValue(line, ClientRequest.class);
-                    ServerResponse<String> response = ServerResponse.success(
-                            "Echo: " + request.getType(), "ok"
-                    );
+                    ServerResponse<?> response;
+
+                    // First real request: return all departments from the database.
+                    if ("GET_ALL_DEPARTMENTS".equals(request.getType())) {
+                        response = ServerResponse.success(
+                                "Departments retrieved successfully",
+                                departmentDao.getAllDepartments()
+                        );
+                    } else {
+                        response = ServerResponse.failure(
+                                "Unsupported request type: " + request.getType()
+                        );
+                    }
+
                     // Send the response back on one line
                     out.println(MAPPER.writeValueAsString(response));
                 }
