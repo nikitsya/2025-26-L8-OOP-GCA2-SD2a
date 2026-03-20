@@ -1,10 +1,14 @@
 package com.supermarketstore.server;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.net.httpserver.Request;
+import com.supermarketstore.protocol.ClientRequest;
+import com.supermarketstore.protocol.ServerResponse;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 public class ServerMain {
     private static final int PORT = 9000;
@@ -21,6 +25,27 @@ public class ServerMain {
             // accept() blocks until a client connects
             Socket clientSocket = serverSocket.accept();
             System.out.println("Client connected: " + clientSocket.getInetAddress());
+
+            try (PrintWriter  out = new PrintWriter(
+                    new OutputStreamWriter(clientSocket.getOutputStream(), StandardCharsets.UTF_8), true);
+                 BufferedReader in = new BufferedReader(
+                         new InputStreamReader(clientSocket.getInputStream(), StandardCharsets.UTF_8))) {
+
+                String line;
+                while ((line = in.readLine()) != null) {
+                    System.out.println("Received: " + line);
+
+                    // Parse the incoming request
+                    ClientRequest request  = MAPPER.readValue(line, ClientRequest.class);
+                    ServerResponse<String> response = ServerResponse.success(
+                            "Echo: " + request.getType(), "ok"
+                    );
+                    // Send the response back on one line
+                    out.println(MAPPER.writeValueAsString(response));
+                }
+
+                System.out.println("Client disconnected");
+            }
         }
     }
 }
