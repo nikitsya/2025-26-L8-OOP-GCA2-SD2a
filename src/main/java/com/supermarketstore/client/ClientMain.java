@@ -25,17 +25,21 @@ public class ClientMain {
                      new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8))) {
 
             // Build and send a request
-            ClientRequest request = new ClientRequest("GET_ALL", null);
+            //ClientRequest request = new ClientRequest("GET_ALL", null);
+            ClientRequest request = new ClientRequest("GET_ALL_DEPARTMENTS", null);
+
             out.println(MAPPER.writeValueAsString(request));
 
             // Read and parse the response
             String             line     = in.readLine();
-            ServerResponse<String>   response = MAPPER.readValue(
-                    line, new TypeReference<ServerResponse<String>>() {}
-            );
+//            ServerResponse<String>   response = MAPPER.readValue(
+//                    line, new TypeReference<ServerResponse<String>>() {}
+//            );
+            // Temporarily print the raw JSON response so we can verify the server is returning departments.
+            System.out.println("Raw response: " + line);
 
-            System.out.println("Status:  " + response.getStatus());
-            System.out.println("Message: " + response.getMessage());
+//            System.out.println("Status:  " + response.getStatus());
+//            System.out.println("Message: " + response.getMessage());
         }
     }
 }
