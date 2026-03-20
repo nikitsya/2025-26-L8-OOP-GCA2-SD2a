@@ -105,6 +105,33 @@ public class ClientMain {
             if (addedDepartment != null) {
                 System.out.println(addedDepartment);
             }
+            if (addedDepartment != null) {
+                System.out.println();
+                System.out.println("Verifying the inserted department by id...");
+
+                ObjectNode verifyPayload = MAPPER.createObjectNode();
+                verifyPayload.put("id", addedDepartment.getDepartmentId());
+
+                ClientRequest verifyRequest = new ClientRequest("GET_DEPARTMENT_BY_ID", verifyPayload);
+                out.println(MAPPER.writeValueAsString(verifyRequest));
+
+                String verifyLine = in.readLine();
+
+                ServerResponse<Department> verifyResponse = MAPPER.readValue(
+                        verifyLine,
+                        new TypeReference<ServerResponse<Department>>() {}
+                );
+
+                System.out.println("Status: " + verifyResponse.getStatus());
+                System.out.println("Message: " + verifyResponse.getMessage());
+
+                Department verifiedDepartment = verifyResponse.getData();
+
+                if (verifiedDepartment != null) {
+                    System.out.println(verifiedDepartment);
+                }
+            }
+
         }
     }
 }
