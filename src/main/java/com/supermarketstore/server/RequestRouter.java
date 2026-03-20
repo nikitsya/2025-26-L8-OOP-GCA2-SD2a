@@ -25,8 +25,8 @@ public class RequestRouter {
     // Creates: a router with all handlers registered against their type constants
     public RequestRouter(JdbcDepartmentDao departmentDao) {
         fHandlers.put("GET_ALL_DEPARTMENTS", req -> handleGetAllDepartments(departmentDao));
-        fHandlers.put("GET_DEPARTMENT_BY_ID",  req -> handleGetDepartmentById(req, departmentDao));
-//        fHandlers.put("INSERT",     req -> handleInsert(req, departmentDao));
+        fHandlers.put("GET_DEPARTMENT_BY_ID", req -> handleGetDepartmentById(req, departmentDao));
+        fHandlers.put("ADD_DEPARTMENT", req -> handleAddDepartment(req, departmentDao));
 //        fHandlers.put("DELETE",     req -> handleDelete(req, departmentDao));
 //        fHandlers.put("UPDATE",     req -> handleUpdate(req, departmentDao));
 //        fHandlers.put("DISCONNECT", req -> handleDisconnect());
