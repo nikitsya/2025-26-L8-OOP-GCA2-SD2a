@@ -49,7 +49,7 @@ public class ServerMain {
                 while ((line = in.readLine()) != null) {
                     System.out.println("Received: " + line);
 
-                    // Parse the incoming request
+                    // Parse the incoming request, create object from line, and route it
                     ClientRequest request  = MAPPER.readValue(line, ClientRequest.class);
                     ServerResponse<?> response = router.route(request);
 
