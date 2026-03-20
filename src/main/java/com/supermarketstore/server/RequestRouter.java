@@ -70,5 +70,17 @@ public class RequestRouter {
                 .orElseGet(() -> ServerResponse.failure("Department not found for id: "  + id));
     }
 
+    private ServerResponse<?> handleAddDepartment(ClientRequest request, JdbcDepartmentDao departmentDao) throws Exception {
+        JsonNode payload = request.getPayload();
+
+        if (payload == null || !payload.has("name") || !payload.has("floor") || !payload.has("zone") || !payload.has("budget") || !payload.has("employeeCount") || !payload.has("isRefrigerated")) {
+
+            return ServerResponse.failure("Missing required fields: name, floor, zone, budget, employeeCount, isRefrigerated");
+        }
+        Department newDepartment = new Department(0, payload.get("name").asText(), payload.get("floor").asInt(), payload.get("zone").asInt(), payload.get("budget").asDouble(), payload.get("employeeCount").asInt(), payload.get("isRefrigerated").asBoolean()
+        );
+        Department insertDepartment = departmentDao.insertDepartment(newDepartment);
+        return ServerResponse.success("Department added successfully", insertDepartment);
+    }
     //
 }
