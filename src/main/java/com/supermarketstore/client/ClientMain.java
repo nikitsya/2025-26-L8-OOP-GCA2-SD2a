@@ -1,19 +1,17 @@
 package com.supermarketstore.client;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.supermarketstore.department.Department;
+import com.supermarketstore.product.Product;
 import com.supermarketstore.protocol.ClientRequest;
 import com.supermarketstore.protocol.ServerResponse;
-import com.supermarketstore.department.Department;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import java.util.List;
 
 import java.io.*;
-import java.net.*;
+import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import static java.lang.System.out;
+import java.util.List;
 
 
 public class ClientMain {
@@ -119,7 +117,8 @@ public class ClientMain {
 
                 ServerResponse<Department> verifyResponse = MAPPER.readValue(
                         verifyLine,
-                        new TypeReference<ServerResponse<Department>>() {}
+                        new TypeReference<ServerResponse<Department>>() {
+                        }
                 );
 
                 System.out.println("Status: " + verifyResponse.getStatus());
@@ -132,6 +131,28 @@ public class ClientMain {
                 }
             }
 
+            System.out.println();
+            System.out.println("Requesting all products...");
+
+            ClientRequest productsRequest = new ClientRequest("GET_ALL_PRODUCTS", null);
+            out.println(MAPPER.writeValueAsString(productsRequest));
+
+            String productsLine = in.readLine();
+            ServerResponse<List<Product>> productsResponse = MAPPER.readValue(
+                    productsLine,
+                    new TypeReference<>() {
+                    }
+            );
+
+            System.out.println("Status: " + productsResponse.getStatus());
+            System.out.println("Message: " + productsResponse.getMessage());
+
+            List<Product> products = productsResponse.getData();
+            if (products != null) {
+                for (Product product : products) {
+                    System.out.println(product);
+                }
+            }
         }
     }
 }
