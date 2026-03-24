@@ -7,7 +7,6 @@ import com.supermarketstore.department.Department;
 import com.supermarketstore.product.Product;
 import com.supermarketstore.protocol.ClientRequest;
 import com.supermarketstore.protocol.ServerResponse;
-
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
@@ -200,6 +199,38 @@ public class ClientMain {
 
             System.out.println("Status: " + addProductResponse.getStatus());
             System.out.println("Message: " + addProductResponse.getMessage());
+
+            Product addedProduct = addProductResponse.getData();
+            if (addedProduct != null) {
+                System.out.println(addedProduct);
+            }
+
+            if (addedProduct != null) {
+                System.out.println();
+                System.out.println("Verifying the inserted product by id...");
+
+                ObjectNode verifyProductPayload = MAPPER.createObjectNode();
+                verifyProductPayload.put("id", addedProduct.getProductId());
+
+                ClientRequest verifyProductRequest = new ClientRequest("GET_PRODUCT_BY_ID", verifyProductPayload);
+                out.println(MAPPER.writeValueAsString(verifyProductRequest));
+
+                String verifyProductLine = in.readLine();
+                ServerResponse<Product> verifyProductResponse = MAPPER.readValue(
+                        verifyProductLine,
+                        new TypeReference<ServerResponse<Product>>() {
+                        }
+                );
+
+                System.out.println("Status: " + verifyProductResponse.getStatus());
+                System.out.println("Message: " + verifyProductResponse.getMessage());
+
+                Product verifiedProduct = verifyProductResponse.getData();
+                if (verifiedProduct != null) {
+                    System.out.println(verifiedProduct);
+                }
+            }
+
         }
     }
 }
