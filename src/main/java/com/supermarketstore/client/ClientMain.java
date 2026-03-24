@@ -177,6 +177,29 @@ public class ClientMain {
             if (productById != null) {
                 System.out.println(productById);
             }
+
+            System.out.println();
+            System.out.println("Adding a new product...");
+
+            ObjectNode addProductPayload = MAPPER.createObjectNode();
+            addProductPayload.put("name", "TEST_NewProduct");
+            addProductPayload.put("price", 29.99);
+            addProductPayload.put("isOnSale", true);
+            addProductPayload.put("discountPrice", 19.99);
+            addProductPayload.put("stock", 50);
+
+            ClientRequest addProductRequest = new ClientRequest("ADD_PRODUCT", addProductPayload);
+            out.println(MAPPER.writeValueAsString(addProductRequest));
+
+            String addProductLine = in.readLine();
+            ServerResponse<Product> addProductResponse = MAPPER.readValue(
+                    addProductLine,
+                    new TypeReference<ServerResponse<Product>>() {
+                    }
+            );
+
+            System.out.println("Status: " + addProductResponse.getStatus());
+            System.out.println("Message: " + addProductResponse.getMessage());
         }
     }
 }
