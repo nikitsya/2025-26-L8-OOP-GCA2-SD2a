@@ -86,7 +86,16 @@ public class RequestRouter {
     }
 
     private ServerResponse<?> handleGetProductById(ClientRequest request, ProductDao productDao) throws Exception {
-        return null;
+        JsonNode payload = request.getPayload();
+
+        if (payload == null || !payload.has("id"))
+            return ServerResponse.failure("Missing required field: id");
+
+        int id = payload.get("id").asInt();
+
+        return productDao.getProductById(id)
+                .map(product -> ServerResponse.success("Product retrieved successfully", product))
+                .orElseGet(() -> ServerResponse.failure("Product not found for id: " + id));
     }
 
     private ServerResponse<?> handleAddProduct(ClientRequest request, ProductDao productDao) throws Exception {
