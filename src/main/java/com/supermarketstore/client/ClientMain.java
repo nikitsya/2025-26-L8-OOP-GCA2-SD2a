@@ -7,6 +7,7 @@ import com.supermarketstore.department.Department;
 import com.supermarketstore.product.Product;
 import com.supermarketstore.protocol.ClientRequest;
 import com.supermarketstore.protocol.ServerResponse;
+
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
@@ -34,7 +35,7 @@ public class ClientMain {
             // Read and parse the response
             String line = in.readLine();
             ServerResponse<List<Department>> response = MAPPER.readValue(
-                    line, new TypeReference<ServerResponse<List<Department>>>() {
+                    line, new TypeReference<>() {
                     }
             );
 
@@ -61,7 +62,7 @@ public class ClientMain {
 
             ServerResponse<Department> byIdResponse = MAPPER.readValue(
                     byIdLine,
-                    new TypeReference<ServerResponse<Department>>() {
+                    new TypeReference<>() {
                     }
             );
 
@@ -90,7 +91,7 @@ public class ClientMain {
 
             String addLine = in.readLine();
 
-            ServerResponse<Department> addResponse = MAPPER.readValue(addLine, new TypeReference<ServerResponse<Department>>() {
+            ServerResponse<Department> addResponse = MAPPER.readValue(addLine, new TypeReference<>() {
                     }
             );
 
@@ -116,7 +117,7 @@ public class ClientMain {
 
                 ServerResponse<Department> verifyResponse = MAPPER.readValue(
                         verifyLine,
-                        new TypeReference<ServerResponse<Department>>() {
+                        new TypeReference<>() {
                         }
                 );
 
@@ -139,7 +140,7 @@ public class ClientMain {
             String productsLine = in.readLine();
             ServerResponse<List<Product>> productsResponse = MAPPER.readValue(
                     productsLine,
-                    new TypeReference<ServerResponse<List<Product>>>() {
+                    new TypeReference<>() {
                     }
             );
 
@@ -165,7 +166,7 @@ public class ClientMain {
             String productByIdLine = in.readLine();
             ServerResponse<Product> productByIdResponse = MAPPER.readValue(
                     productByIdLine,
-                    new TypeReference<ServerResponse<Product>>() {
+                    new TypeReference<>() {
                     }
             );
 
@@ -193,7 +194,7 @@ public class ClientMain {
             String addProductLine = in.readLine();
             ServerResponse<Product> addProductResponse = MAPPER.readValue(
                     addProductLine,
-                    new TypeReference<ServerResponse<Product>>() {
+                    new TypeReference<>() {
                     }
             );
 
@@ -218,7 +219,7 @@ public class ClientMain {
                 String verifyProductLine = in.readLine();
                 ServerResponse<Product> verifyProductResponse = MAPPER.readValue(
                         verifyProductLine,
-                        new TypeReference<ServerResponse<Product>>() {
+                        new TypeReference<>() {
                         }
                 );
 
