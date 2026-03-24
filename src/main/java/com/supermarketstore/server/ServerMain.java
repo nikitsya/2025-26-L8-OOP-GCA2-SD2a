@@ -1,7 +1,10 @@
 package com.supermarketstore.server;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.supermarketstore.department.DepartmentDao;
+import com.supermarketstore.department.JdbcDepartmentDao;
+import com.supermarketstore.product.JdbcProductDao;
+import com.supermarketstore.product.ProductDao;
 import com.supermarketstore.protocol.ClientRequest;
 import com.supermarketstore.protocol.ServerResponse;
 
@@ -9,8 +12,6 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import com.supermarketstore.department.Department;
-import com.supermarketstore.department.JdbcDepartmentDao;
 
 
 public class ServerMain {
@@ -29,8 +30,9 @@ public class ServerMain {
             throw new IllegalStateException("Set TEST_DB_PASS before running ServerMain");
         }
 
-        JdbcDepartmentDao departmentDao = new JdbcDepartmentDao(DB_URL, DB_USER, DB_PASS);
-        RequestRouter router = new RequestRouter(departmentDao);
+        DepartmentDao departmentDao = new JdbcDepartmentDao(DB_URL, DB_USER, DB_PASS);
+        ProductDao productDao = new JdbcProductDao(DB_URL, DB_USER, DB_PASS);
+        RequestRouter router = new RequestRouter(departmentDao, productDao);
 
         System.out.println("Server listening on port " + PORT);
 
@@ -40,7 +42,7 @@ public class ServerMain {
             Socket clientSocket = serverSocket.accept();
             System.out.println("Client connected: " + clientSocket.getInetAddress());
 
-            try (PrintWriter  out = new PrintWriter(
+            try (PrintWriter out = new PrintWriter(
                     new OutputStreamWriter(clientSocket.getOutputStream(), StandardCharsets.UTF_8), true);
                  BufferedReader in = new BufferedReader(
                          new InputStreamReader(clientSocket.getInputStream(), StandardCharsets.UTF_8))) {
@@ -50,7 +52,7 @@ public class ServerMain {
                     System.out.println("Received: " + line);
 
                     // Parse the incoming request, create object from line, and route it
-                    ClientRequest request  = MAPPER.readValue(line, ClientRequest.class);
+                    ClientRequest request = MAPPER.readValue(line, ClientRequest.class);
                     ServerResponse<?> response = router.route(request);
 
                     // Send the response back on one line
