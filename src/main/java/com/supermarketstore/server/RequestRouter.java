@@ -33,18 +33,6 @@ public class RequestRouter {
         fHandlers.put("ADD_PRODUCT", req -> handleAddProduct(req, productDao));
     }
 
-    private ServerResponse<?> handleAddProduct(ClientRequest req, ProductDao productDao) {
-        return null;
-    }
-
-    private ServerResponse<?> handleGetProductById(ClientRequest req, ProductDao productDao) {
-        return null;
-    }
-
-    private ServerResponse<?> handleGetAllProducts(ProductDao productDao) {
-        return null;
-    }
-
     // === Public API ===
     public ServerResponse<?> route(ClientRequest request) {
         RequestHandler handler = fHandlers.get(request.getType());
@@ -90,5 +78,18 @@ public class RequestRouter {
         );
         Department insertDepartment = departmentDao.insertDepartment(newDepartment);
         return ServerResponse.success("Department added successfully", insertDepartment);
+    }
+
+    private ServerResponse<List<Product>> handleGetAllProducts(ProductDao productDao) throws Exception {
+        List<Product> products = productDao.getAllProducts();
+        return ServerResponse.success("Products retrieved successfully", products);
+    }
+
+    private ServerResponse<?> handleGetProductById(ClientRequest request, ProductDao productDao) throws Exception {
+        return null;
+    }
+
+    private ServerResponse<?> handleAddProduct(ClientRequest request, ProductDao productDao) throws Exception {
+        return  null;
     }
 }
