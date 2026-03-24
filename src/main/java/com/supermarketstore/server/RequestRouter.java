@@ -15,7 +15,8 @@ import java.util.Map;
 /**
  * Routes incoming requests to the appropriate handler by type.
  *
- * @author Hanna Bokariuk
+ * @author Hanna Bokariuk (primary)
+ * @author Your Name (contributor - added product routes and handlers)
  */
 public class RequestRouter {
 
