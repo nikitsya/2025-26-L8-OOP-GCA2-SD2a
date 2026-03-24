@@ -48,12 +48,12 @@ public class RequestRouter {
     }
 
     // === Helpers ===
-    private ServerResponse<List<Department>> handleGetAllDepartments(DepartmentDao departmentDao) throws Exception {
+    private ServerResponse<List<Department>> handleGetAllDepartments(DepartmentDao departmentDao) {
         List<Department> departments = departmentDao.getAllDepartments();
         return ServerResponse.success("Departments retrieved successfully", departments);
     }
 
-    private ServerResponse<?> handleGetDepartmentById(ClientRequest request, DepartmentDao departmentDao) throws Exception {
+    private ServerResponse<?> handleGetDepartmentById(ClientRequest request, DepartmentDao departmentDao) {
         JsonNode payload = request.getPayload();
 
         if (payload == null || !payload.has("id"))
@@ -67,7 +67,7 @@ public class RequestRouter {
                 .orElseGet(() -> ServerResponse.failure("Department not found for id: " + id));
     }
 
-    private ServerResponse<?> handleAddDepartment(ClientRequest request, DepartmentDao departmentDao) throws Exception {
+    private ServerResponse<?> handleAddDepartment(ClientRequest request, DepartmentDao departmentDao) {
         JsonNode payload = request.getPayload();
 
         if (payload == null || !payload.has("name") || !payload.has("floor") || !payload.has("zone") || !payload.has("budget") || !payload.has("employeeCount") || !payload.has("isRefrigerated")) {
@@ -80,12 +80,12 @@ public class RequestRouter {
         return ServerResponse.success("Department added successfully", insertDepartment);
     }
 
-    private ServerResponse<List<Product>> handleGetAllProducts(ProductDao productDao) throws Exception {
+    private ServerResponse<List<Product>> handleGetAllProducts(ProductDao productDao) {
         List<Product> products = productDao.getAllProducts();
         return ServerResponse.success("Products retrieved successfully", products);
     }
 
-    private ServerResponse<?> handleGetProductById(ClientRequest request, ProductDao productDao) throws Exception {
+    private ServerResponse<?> handleGetProductById(ClientRequest request, ProductDao productDao) {
         JsonNode payload = request.getPayload();
 
         if (payload == null || !payload.has("id"))
@@ -98,7 +98,7 @@ public class RequestRouter {
                 .orElseGet(() -> ServerResponse.failure("Product not found for id: " + id));
     }
 
-    private ServerResponse<?> handleAddProduct(ClientRequest request, ProductDao productDao) throws Exception {
+    private ServerResponse<?> handleAddProduct(ClientRequest request, ProductDao productDao) {
         JsonNode payload = request.getPayload();
         JsonNode onSaleNode = payload == null ? null : payload.get("isOnSale");
         if (onSaleNode == null && payload != null) onSaleNode = payload.get("is_on_sale");
