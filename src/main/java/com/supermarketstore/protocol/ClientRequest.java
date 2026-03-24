@@ -11,32 +11,40 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class ClientRequest {
 
     // === Fields ===
-    private String   fType;
+    private String fType;
     private JsonNode fPayload;
 
     // === Constructors ===
     // Creates: empty request — required by Jackson
     public ClientRequest() {
-        fType    = "";
+        fType = "";
         fPayload = null;
     }
 
     // Creates: request with a type and a JsonNode payload
     public ClientRequest(String type, JsonNode payload) {
-        fType    = type;
+        fType = type;
         fPayload = payload;
     }
 
     // === Public API ===
     // Gets: the operation type constant
-    public String getType() { return fType; }
+    public String getType() {
+        return fType;
+    }
 
     // Sets: the operation type constant
-    public void setType(String type) { fType = type; }
+    public void setType(String type) {
+        fType = type;
+    }
 
     // Gets: the raw JSON payload node (may be null for no-parameter requests)
-    public JsonNode getPayload() { return fPayload; }
+    public JsonNode getPayload() {
+        return fPayload;
+    }
 
     // Sets: the raw JSON payload node
-    public void setPayload(JsonNode payload) { fPayload = payload; }
+    public void setPayload(JsonNode payload) {
+        fPayload = payload;
+    }
 }
