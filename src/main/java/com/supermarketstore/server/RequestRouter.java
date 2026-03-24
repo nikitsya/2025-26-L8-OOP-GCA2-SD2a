@@ -90,6 +90,33 @@ public class RequestRouter {
     }
 
     private ServerResponse<?> handleAddProduct(ClientRequest request, ProductDao productDao) throws Exception {
-        return  null;
+        JsonNode payload = request.getPayload();
+        JsonNode onSaleNode = payload == null ? null : payload.get("isOnSale");
+        if (onSaleNode == null && payload != null) onSaleNode = payload.get("is_on_sale");
+
+        JsonNode discountNode = payload == null ? null : payload.get("discountPrice");
+        if (discountNode == null && payload != null) discountNode = payload.get("discount_price");
+
+        if (payload == null || !payload.has("name") || !payload.has("price") || onSaleNode == null || !payload.has("stock")) {
+            return ServerResponse.failure("Missing required fields: name, price, isOnSale (or is_on_sale), stock");
+        }
+
+        boolean onSale = onSaleNode.asBoolean();
+        if (onSale && (discountNode == null || discountNode.isNull())) {
+            return ServerResponse.failure("Missing required field: discountPrice (or discount_price) when product is on sale");
+        }
+
+        Double discountPrice = (discountNode == null || discountNode.isNull()) ? null : discountNode.asDouble();
+        Product newProduct = new Product(
+                0,
+                payload.get("name").asText(),
+                payload.get("price").asDouble(),
+                onSale,
+                discountPrice,
+                payload.get("stock").asInt()
+        );
+
+        Product insertedProduct = productDao.insertProduct(newProduct);
+        return ServerResponse.success("Product added successfully", insertedProduct);
     }
 }
