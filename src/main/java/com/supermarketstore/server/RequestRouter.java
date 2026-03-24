@@ -1,9 +1,10 @@
 package com.supermarketstore.server;
 
 import com.fasterxml.jackson.databind.JsonNode;
-
 import com.supermarketstore.department.Department;
-import com.supermarketstore.department.JdbcDepartmentDao;
+import com.supermarketstore.department.DepartmentDao;
+import com.supermarketstore.product.Product;
+import com.supermarketstore.product.ProductDao;
 import com.supermarketstore.protocol.ClientRequest;
 import com.supermarketstore.protocol.ServerResponse;
 
@@ -23,17 +24,28 @@ public class RequestRouter {
 
     // === Constructors ===
     // Creates: a router with all handlers registered against their type constants
-    public RequestRouter(JdbcDepartmentDao departmentDao) {
+    public RequestRouter(DepartmentDao departmentDao, ProductDao productDao) {
         fHandlers.put("GET_ALL_DEPARTMENTS", req -> handleGetAllDepartments(departmentDao));
         fHandlers.put("GET_DEPARTMENT_BY_ID", req -> handleGetDepartmentById(req, departmentDao));
         fHandlers.put("ADD_DEPARTMENT", req -> handleAddDepartment(req, departmentDao));
-//        fHandlers.put("DELETE",     req -> handleDelete(req, departmentDao));
-//        fHandlers.put("UPDATE",     req -> handleUpdate(req, departmentDao));
-//        fHandlers.put("DISCONNECT", req -> handleDisconnect());
+        fHandlers.put("GET_ALL_PRODUCTS", req -> handleGetAllProducts(productDao));
+        fHandlers.put("GET_PRODUCT_BY_ID", req -> handleGetProductById(req, productDao));
+        fHandlers.put("ADD_PRODUCT", req -> handleAddProduct(req, productDao));
+    }
+
+    private ServerResponse<?> handleAddProduct(ClientRequest req, ProductDao productDao) {
+        return null;
+    }
+
+    private ServerResponse<?> handleGetProductById(ClientRequest req, ProductDao productDao) {
+        return null;
+    }
+
+    private ServerResponse<?> handleGetAllProducts(ProductDao productDao) {
+        return null;
     }
 
     // === Public API ===
-    // Handles: routing a request to its registered handler; returns a failure response for unknown types
     public ServerResponse<?> route(ClientRequest request) {
         RequestHandler handler = fHandlers.get(request.getType());
 
@@ -42,21 +54,18 @@ public class RequestRouter {
 
         try {
             return handler.handle(request);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return ServerResponse.failure("Server error: " + e.getMessage());
         }
     }
 
     // === Helpers ===
-    // Gets: all entities from the DAO and wraps them in a success response
-    private ServerResponse<List<Department>> handleGetAllDepartments(JdbcDepartmentDao departmentDao) throws Exception {
+    private ServerResponse<List<Department>> handleGetAllDepartments(DepartmentDao departmentDao) throws Exception {
         List<Department> departments = departmentDao.getAllDepartments();
         return ServerResponse.success("Departments retrieved successfully", departments);
     }
 
-    // Gets: a single entity by id or returns a failure response if not found
-    private ServerResponse<?> handleGetDepartmentById(ClientRequest request, JdbcDepartmentDao departmentDao) throws Exception {
+    private ServerResponse<?> handleGetDepartmentById(ClientRequest request, DepartmentDao departmentDao) throws Exception {
         JsonNode payload = request.getPayload();
 
         if (payload == null || !payload.has("id"))
@@ -65,12 +74,12 @@ public class RequestRouter {
         int id = payload.get("id").asInt();
 
         return departmentDao.getDepartmentById(id)
-                .map( department -> ServerResponse.success( "Department retrieved successfully",
+                .map(department -> ServerResponse.success("Department retrieved successfully",
                         department))
-                .orElseGet(() -> ServerResponse.failure("Department not found for id: "  + id));
+                .orElseGet(() -> ServerResponse.failure("Department not found for id: " + id));
     }
 
-    private ServerResponse<?> handleAddDepartment(ClientRequest request, JdbcDepartmentDao departmentDao) throws Exception {
+    private ServerResponse<?> handleAddDepartment(ClientRequest request, DepartmentDao departmentDao) throws Exception {
         JsonNode payload = request.getPayload();
 
         if (payload == null || !payload.has("name") || !payload.has("floor") || !payload.has("zone") || !payload.has("budget") || !payload.has("employeeCount") || !payload.has("isRefrigerated")) {
@@ -82,5 +91,4 @@ public class RequestRouter {
         Department insertDepartment = departmentDao.insertDepartment(newDepartment);
         return ServerResponse.success("Department added successfully", insertDepartment);
     }
-    //
 }
