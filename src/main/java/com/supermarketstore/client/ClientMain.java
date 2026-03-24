@@ -140,7 +140,7 @@ public class ClientMain {
             String productsLine = in.readLine();
             ServerResponse<List<Product>> productsResponse = MAPPER.readValue(
                     productsLine,
-                    new TypeReference<>() {
+                    new TypeReference<ServerResponse<List<Product>>>() {
                     }
             );
 
@@ -152,6 +152,30 @@ public class ClientMain {
                 for (Product product : products) {
                     System.out.println(product);
                 }
+            }
+
+            System.out.println();
+            System.out.println("Requesting one product by id...");
+
+            ObjectNode productByIdPayload = MAPPER.createObjectNode();
+            productByIdPayload.put("id", 1);
+
+            ClientRequest productByIdRequest = new ClientRequest("GET_PRODUCT_BY_ID", productByIdPayload);
+            out.println(MAPPER.writeValueAsString(productByIdRequest));
+
+            String productByIdLine = in.readLine();
+            ServerResponse<Product> productByIdResponse = MAPPER.readValue(
+                    productByIdLine,
+                    new TypeReference<ServerResponse<Product>>() {
+                    }
+            );
+
+            System.out.println("Status: " + productByIdResponse.getStatus());
+            System.out.println("Message: " + productByIdResponse.getMessage());
+
+            Product productById = productByIdResponse.getData();
+            if (productById != null) {
+                System.out.println(productById);
             }
         }
     }
