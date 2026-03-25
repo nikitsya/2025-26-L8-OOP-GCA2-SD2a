@@ -149,7 +149,41 @@ public class RequestRouter {
         return ServerResponse.ok("Product deleted successfully", null);
     }
 
-    private  ServerResponse<?> handleUpdateProduct(ClientRequest request, ProductDao productDao) {
-        return null;
+    private ServerResponse<?> handleUpdateProduct(ClientRequest request, ProductDao productDao) {
+        JsonNode payload = request.getPayload();
+        JsonNode onSaleNode = payload == null ? null : payload.get("isOnSale");
+        if (onSaleNode == null && payload != null) onSaleNode = payload.get("is_on_sale");
+
+        JsonNode discountNode = payload == null ? null : payload.get("discountPrice");
+        if (discountNode == null && payload != null) discountNode = payload.get("discount_price");
+
+        if (payload == null || !payload.has("id") || !payload.has("name") || !payload.has("price")
+                || onSaleNode == null || !payload.has("stock")) {
+            return ServerResponse.error("Missing required fields: id, name, price, isOnSale (or is_on_sale), stock");
+        }
+
+        int id = payload.get("id").asInt();
+        if (productDao.getProductById(id).isEmpty()) {
+            return ServerResponse.error("Product not found for id: " + id);
+        }
+
+        boolean onSale = onSaleNode.asBoolean();
+        if (onSale && (discountNode == null || discountNode.isNull())) {
+            return ServerResponse.error("Missing required field: discountPrice (or discount_price) when product is on sale");
+        }
+
+        Double discountPrice = (discountNode == null || discountNode.isNull()) ? null : discountNode.asDouble();
+
+        Product updatedProduct = new Product(
+                id,
+                payload.get("name").asText(),
+                payload.get("price").asDouble(),
+                onSale,
+                discountPrice,
+                payload.get("stock").asInt()
+        );
+
+        Product savedProduct = productDao.updateProduct(id, updatedProduct);
+        return ServerResponse.ok("Product updated successfully", savedProduct);
     }
 }
