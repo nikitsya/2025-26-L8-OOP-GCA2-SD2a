@@ -89,10 +89,36 @@ public class RequestRouter {
         return ServerResponse.ok("Department deleted successfully", null);
     }
 
-    private ServerResponse<?> handleUpdateDepartment(ClientRequest req, DepartmentDao departmentDao) {
-        // TODO
-        return null;
+    private ServerResponse<?> handleUpdateDepartment(ClientRequest request, DepartmentDao departmentDao) {
+        JsonNode payload = request.getPayload();
+
+        if (payload == null
+                || !payload.has("id")
+                || !payload.has("name")
+                || !payload.has("floor")
+                || !payload.has("zone")
+                || !payload.has("budget")
+                || !payload.has("employeeCount")
+                || !payload.has("isRefrigerated")) {
+            return ServerResponse.error("Missing required department fields");
+        }
+
+        int id = payload.get("id").asInt();
+
+        Department updatedDepartment = new Department(
+                id,
+                payload.get("name").asText(),
+                payload.get("floor").asInt(),
+                payload.get("zone").asInt(),
+                payload.get("budget").asDouble(),
+                payload.get("employeeCount").asInt(),
+                payload.get("isRefrigerated").asBoolean()
+        );
+
+        Department result = departmentDao.updateDepartment(id, updatedDepartment);
+        return ServerResponse.ok("Department updated successfully", result);
     }
+
 
     private ServerResponse<?> handleAddDepartment(ClientRequest request, DepartmentDao departmentDao) {
         JsonNode payload = request.getPayload();
