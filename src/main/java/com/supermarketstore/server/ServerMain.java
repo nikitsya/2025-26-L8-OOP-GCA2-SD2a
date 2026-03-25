@@ -24,7 +24,15 @@ public class ServerMain {
     // Creates: a single shared mapper — declared here so all methods in this class can use it
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    // Creates: a server that accepts one client, echoes its messages, then exits
+    /**
+     * Starts the supermarket server.
+     *
+     * @param args command-line arguments
+     * @throws IOException           if a socket or I/O error occurs during server startup
+     *                               or client communication
+     * @throws IllegalStateException if the TEST_DB_PASS environment variable is
+     *                               missing or blank
+     */
     public static void main(String[] args) throws IOException {
         if (DB_PASS == null || DB_PASS.isBlank()) {
             throw new IllegalStateException("Set TEST_DB_PASS before running ServerMain");
