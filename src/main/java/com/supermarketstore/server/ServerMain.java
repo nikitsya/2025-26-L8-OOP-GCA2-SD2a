@@ -37,16 +37,13 @@ public class ServerMain {
         validateConfiguration();
 
         RequestRouter router = createRouter();
-
         System.out.println("Server listening on port " + PORT);
 
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
-
-            // accept() blocks until a client connects
             Socket clientSocket = serverSocket.accept();
             System.out.println("Client connected: " + clientSocket.getInetAddress());
 
-            handleClient(serverSocket, router);
+            handleClient(clientSocket, router);
         }
     }
 
