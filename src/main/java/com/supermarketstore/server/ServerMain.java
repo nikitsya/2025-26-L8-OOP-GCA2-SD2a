@@ -27,7 +27,6 @@ public class ServerMain {
     /**
      * Starts the supermarket server.
      *
-     * @param args command-line arguments
      * @throws IOException           if a socket or I/O error occurs during server startup
      *                               or client communication
      * @throws IllegalStateException if the TEST_DB_PASS environment variable is
@@ -47,17 +46,37 @@ public class ServerMain {
         }
     }
 
+    /**
+     * Validates that the database password is available in the environment.
+     *
+     * @throws IllegalStateException if the TEST_DB_PASS environment variable is
+     *                               missing or blank
+     */
     private static void validateConfiguration() {
         if (DB_PASS == null || DB_PASS.isBlank())
             throw new IllegalStateException("Set TEST_DB_PASS before running ServerMain");
     }
 
+    /**
+     * Creates the request router with JDBC-based department and product DAOs.
+     *
+     * @return a configured router for incoming client requests
+     */
     private static RequestRouter createRouter() {
         DepartmentDao departmentDao = new JdbcDepartmentDao(DB_URL, DB_USER, DB_PASS);
         ProductDao productDao = new JdbcProductDao(DB_URL, DB_USER, DB_PASS);
         return new RequestRouter(departmentDao, productDao);
     }
 
+    /**
+     * Handles communication with a connected client.
+     * Reads JSON requests line by line, routes each request, and writes
+     * the corresponding JSON response back to the client.
+     *
+     * @param clientSocket the connected client socket
+     * @param router the router used to process incoming requests
+     * @throws IOException if reading from or writing to the client fails
+     */
     private static void handleClient(Socket clientSocket, RequestRouter router) throws IOException {
         try (PrintWriter out = new PrintWriter(
                 new OutputStreamWriter(clientSocket.getOutputStream(), StandardCharsets.UTF_8), true);
