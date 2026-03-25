@@ -152,6 +152,27 @@ public class ClientMain {
                 System.out.println(verifiedDepartment);
             }
         }
+
+        if (addedDepartment != null) {
+            System.out.println();
+            System.out.println("Deleting the inserted department by id...");
+
+            ObjectNode deletePayload = MAPPER.createObjectNode();
+            deletePayload.put("id", addedDepartment.getDepartmentId());
+
+            ClientRequest deleteRequest = createRequest(RequestType.DELETE_DEPARTMENT_BY_ID, deletePayload);
+            out.println(MAPPER.writeValueAsString(deleteRequest));
+
+            String deleteLine = in.readLine();
+            ServerResponse<?> deleteResponse = MAPPER.readValue(
+                    deleteLine,
+                    new TypeReference<>() {
+                    }
+            );
+
+            System.out.println("Status: " + deleteResponse.getStatus());
+            System.out.println("Message: " + deleteResponse.getMessage());
+        }
     }
 
     /**
