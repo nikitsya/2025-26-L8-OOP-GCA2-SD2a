@@ -100,10 +100,13 @@ public class RequestRouter {
                 || !payload.has("budget")
                 || !payload.has("employeeCount")
                 || !payload.has("isRefrigerated")) {
-            return ServerResponse.error("Missing required department fields");
+            return ServerResponse.error("Missing required fields: id, name, floor, zone, budget, employeeCount, isRefrigerated");
         }
 
         int id = payload.get("id").asInt();
+        if (departmentDao.getDepartmentById(id).isEmpty()) {
+            return ServerResponse.error("Department not found for id: " + id);
+        }
 
         Department updatedDepartment = new Department(
                 id,

@@ -108,11 +108,17 @@ public class ServerMain {
             while ((line = in.readLine()) != null) {
                 System.out.println("Received: " + line);
 
-                // Parse the incoming request, create object from line, and route it
-                ClientRequest request = MAPPER.readValue(line, ClientRequest.class);
-                ServerResponse<?> response = router.route(request);
+                ServerResponse<?> response;
 
-                // Send the response back on one line
+                try {
+                    // Parse the incoming request, create object from line, and route it.
+                    ClientRequest request = MAPPER.readValue(line, ClientRequest.class);
+                    response = router.route(request);
+                } catch (Exception e) {
+                    response = ServerResponse.error("Invalid request: " + e.getMessage());
+                }
+
+                // Send the response back on one line.
                 out.println(MAPPER.writeValueAsString(response));
             }
 

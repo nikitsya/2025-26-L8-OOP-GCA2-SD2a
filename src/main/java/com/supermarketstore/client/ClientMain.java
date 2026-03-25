@@ -43,7 +43,8 @@ public class ClientMain {
     /**
      * Runs the department client demo flow.
      * Requests all departments, fetches one department by id,
-     * inserts a new department, and verifies the inserted record.
+     * inserts a new department, verifies it, updates it,
+     * verifies the update, deletes it, and confirms removal.
      *
      * @param out the socket writer used to send requests
      * @param in  the socket reader used to receive responses
@@ -155,50 +156,6 @@ public class ClientMain {
 
         if (addedDepartment != null) {
             System.out.println();
-            System.out.println("Deleting the inserted department by id...");
-
-            ObjectNode deletePayload = MAPPER.createObjectNode();
-            deletePayload.put("id", addedDepartment.getDepartmentId());
-
-            ClientRequest deleteRequest = createRequest(RequestType.DELETE_DEPARTMENT_BY_ID, deletePayload);
-            out.println(MAPPER.writeValueAsString(deleteRequest));
-
-            String deleteLine = in.readLine();
-            ServerResponse<?> deleteResponse = MAPPER.readValue(
-                    deleteLine,
-                    new TypeReference<>() {
-                    }
-            );
-
-            System.out.println("Status: " + deleteResponse.getStatus());
-            System.out.println("Message: " + deleteResponse.getMessage());
-
-            System.out.println();
-            System.out.println("Verifying the deleted department by id...");
-
-            ObjectNode verifyDeletedPayload = MAPPER.createObjectNode();
-            verifyDeletedPayload.put("id", addedDepartment.getDepartmentId());
-
-            ClientRequest verifyDeletedRequest = createRequest(RequestType.GET_DEPARTMENT_BY_ID, verifyDeletedPayload);
-            out.println(MAPPER.writeValueAsString(verifyDeletedRequest));
-
-            String verifyDeletedLine = in.readLine();
-            ServerResponse<Department> verifyDeletedResponse = MAPPER.readValue(
-                    verifyDeletedLine,
-                    new TypeReference<>() {
-                    }
-            );
-
-            System.out.println("Status: " + verifyDeletedResponse.getStatus());
-            System.out.println("Message: " + verifyDeletedResponse.getMessage());
-
-            Department deletedDepartmentCheck = verifyDeletedResponse.getData();
-            if (deletedDepartmentCheck != null) {
-                System.out.println(deletedDepartmentCheck);
-            }
-        }
-        if (addedDepartment != null) {
-            System.out.println();
             System.out.println("Updating the inserted department...");
 
             ObjectNode updatePayload = MAPPER.createObjectNode();
@@ -251,6 +208,51 @@ public class ClientMain {
             Department verifiedUpdatedDepartment = verifyUpdatedResponse.getData();
             if (verifiedUpdatedDepartment != null) {
                 System.out.println(verifiedUpdatedDepartment);
+            }
+        }
+
+        if (addedDepartment != null) {
+            System.out.println();
+            System.out.println("Deleting the updated department by id...");
+
+            ObjectNode deletePayload = MAPPER.createObjectNode();
+            deletePayload.put("id", addedDepartment.getDepartmentId());
+
+            ClientRequest deleteRequest = createRequest(RequestType.DELETE_DEPARTMENT_BY_ID, deletePayload);
+            out.println(MAPPER.writeValueAsString(deleteRequest));
+
+            String deleteLine = in.readLine();
+            ServerResponse<Void> deleteResponse = MAPPER.readValue(
+                    deleteLine,
+                    new TypeReference<>() {
+                    }
+            );
+
+            System.out.println("Status: " + deleteResponse.getStatus());
+            System.out.println("Message: " + deleteResponse.getMessage());
+
+            System.out.println();
+            System.out.println("Verifying the deleted department by id...");
+
+            ObjectNode verifyDeletedPayload = MAPPER.createObjectNode();
+            verifyDeletedPayload.put("id", addedDepartment.getDepartmentId());
+
+            ClientRequest verifyDeletedRequest = createRequest(RequestType.GET_DEPARTMENT_BY_ID, verifyDeletedPayload);
+            out.println(MAPPER.writeValueAsString(verifyDeletedRequest));
+
+            String verifyDeletedLine = in.readLine();
+            ServerResponse<Department> verifyDeletedResponse = MAPPER.readValue(
+                    verifyDeletedLine,
+                    new TypeReference<>() {
+                    }
+            );
+
+            System.out.println("Status: " + verifyDeletedResponse.getStatus());
+            System.out.println("Message: " + verifyDeletedResponse.getMessage());
+
+            Department deletedDepartmentCheck = verifyDeletedResponse.getData();
+            if (deletedDepartmentCheck != null) {
+                System.out.println(deletedDepartmentCheck);
             }
         }
 
