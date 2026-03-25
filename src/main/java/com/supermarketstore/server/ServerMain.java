@@ -33,9 +33,8 @@ public class ServerMain {
      *                               missing or blank
      */
     public static void main(String[] args) throws IOException {
-        if (DB_PASS == null || DB_PASS.isBlank()) {
-            throw new IllegalStateException("Set TEST_DB_PASS before running ServerMain");
-        }
+        validateConfiguration();
+
         RequestRouter router = createRouter();
 
         System.out.println("Server listening on port " + PORT);
@@ -65,6 +64,12 @@ public class ServerMain {
 
                 System.out.println("Client disconnected");
             }
+        }
+    }
+
+    private static void validateConfiguration() {
+        if (DB_PASS == null || DB_PASS.isBlank()) {
+            throw new IllegalStateException("Set TEST_DB_PASS before running ServerMain");
         }
     }
 
