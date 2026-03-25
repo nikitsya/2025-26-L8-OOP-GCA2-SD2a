@@ -29,7 +29,6 @@ public class ClientMain {
      * @throws IOException if client-server communication fails
      */
     public static void main(String[] args) throws IOException {
-
         try (Socket socket = new Socket(HOST, PORT);
              PrintWriter out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
              BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8))) {
@@ -143,6 +142,15 @@ public class ClientMain {
         }
     }
 
+    /**
+     * Runs the product client demo flow.
+     * Requests all products, fetches one product by id,
+     * inserts a new product, and verifies the inserted record.
+     *
+     * @param out the socket writer used to send requests
+     * @param in the socket reader used to receive responses
+     * @throws IOException if client-server communication fails
+     */
     private static void runProductDemo(PrintWriter out, BufferedReader in) throws IOException {
         System.out.println();
         System.out.println("Requesting all products...");
