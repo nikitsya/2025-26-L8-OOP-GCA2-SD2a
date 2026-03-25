@@ -38,19 +38,16 @@ public class ServerMain {
      */
     public static void main(String[] args) throws IOException {
         validateConfiguration();
-
         RequestRouter router = createRouter();
-        System.out.println("Server listening on port " + PORT);
-
-        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
-            Socket clientSocket = serverSocket.accept();
-            System.out.println("Client connected: " + clientSocket.getInetAddress());
-
-            handleClient(clientSocket, router);
-        }
+        start(router);
     }
 
-    // Starts: the accept loop — runs indefinitely until interrupted
+    /**
+     * Starts the accept loop and submits each connected client to the thread pool.
+     *
+     * @param router the router used to process incoming requests
+     * @throws IOException if the server socket cannot be opened or used
+     */
     private static void start(RequestRouter router) throws IOException {
         System.out.println("Server listening on port " + PORT);
 
