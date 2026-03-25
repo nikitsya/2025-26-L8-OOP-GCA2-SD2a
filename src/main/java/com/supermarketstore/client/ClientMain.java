@@ -197,6 +197,38 @@ public class ClientMain {
                 System.out.println(deletedDepartmentCheck);
             }
         }
+        if (addedDepartment != null) {
+            System.out.println();
+            System.out.println("Updating the inserted department...");
+
+            ObjectNode updatePayload = MAPPER.createObjectNode();
+            updatePayload.put("id", addedDepartment.getDepartmentId());
+            updatePayload.put("name", "TEST_UpdatedDepartment");
+            updatePayload.put("floor", 2);
+            updatePayload.put("zone", 12);
+            updatePayload.put("budget", 15000.0);
+            updatePayload.put("employeeCount", 8);
+            updatePayload.put("isRefrigerated", true);
+
+            ClientRequest updateRequest = createRequest(RequestType.UPDATE_DEPARTMENT, updatePayload);
+            out.println(MAPPER.writeValueAsString(updateRequest));
+
+            String updateLine = in.readLine();
+            ServerResponse<Department> updateResponse = MAPPER.readValue(
+                    updateLine,
+                    new TypeReference<>() {
+                    }
+            );
+
+            System.out.println("Status: " + updateResponse.getStatus());
+            System.out.println("Message: " + updateResponse.getMessage());
+
+            Department updatedDepartment = updateResponse.getData();
+            if (updatedDepartment != null) {
+                System.out.println(updatedDepartment);
+            }
+        }
+
     }
 
     /**
