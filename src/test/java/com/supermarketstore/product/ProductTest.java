@@ -4,6 +4,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for {@link Product}.
+ *
+ * @author Nikita Smechik
+ */
 class ProductTest {
 
     Product product = new Product(1, "Product", 20, false, null, 45);

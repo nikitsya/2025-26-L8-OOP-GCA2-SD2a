@@ -13,6 +13,11 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Integration tests for {@link JdbcProductDao}.
+ *
+ * @author Nikita Smechik
+ */
 class JdbcProductDaoTest {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/supermarket_store_system";
     private static final String DB_USER = "root";

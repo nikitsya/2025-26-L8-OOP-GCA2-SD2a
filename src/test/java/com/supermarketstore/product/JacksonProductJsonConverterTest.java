@@ -6,6 +6,11 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for {@link JacksonProductJsonConverter}.
+ *
+ * @author Nikita Smechik
+ */
 class JacksonProductJsonConverterTest {
 
     JacksonProductJsonConverter converter = new JacksonProductJsonConverter();
