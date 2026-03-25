@@ -6,6 +6,7 @@ import com.supermarketstore.department.JdbcDepartmentDao;
 import com.supermarketstore.product.JdbcProductDao;
 import com.supermarketstore.product.ProductDao;
 import com.supermarketstore.protocol.ClientRequest;
+import com.supermarketstore.protocol.RequestType;
 import com.supermarketstore.protocol.ServerResponse;
 
 import java.io.*;
@@ -45,25 +46,7 @@ public class ServerMain {
             Socket clientSocket = serverSocket.accept();
             System.out.println("Client connected: " + clientSocket.getInetAddress());
 
-            try (PrintWriter out = new PrintWriter(
-                    new OutputStreamWriter(clientSocket.getOutputStream(), StandardCharsets.UTF_8), true);
-                 BufferedReader in = new BufferedReader(
-                         new InputStreamReader(clientSocket.getInputStream(), StandardCharsets.UTF_8))) {
-
-                String line;
-                while ((line = in.readLine()) != null) {
-                    System.out.println("Received: " + line);
-
-                    // Parse the incoming request, create object from line, and route it
-                    ClientRequest request = MAPPER.readValue(line, ClientRequest.class);
-                    ServerResponse<?> response = router.route(request);
-
-                    // Send the response back on one line
-                    out.println(MAPPER.writeValueAsString(response));
-                }
-
-                System.out.println("Client disconnected");
-            }
+            handleClient(serverSocket, router);
         }
     }
 
@@ -77,5 +60,27 @@ public class ServerMain {
         DepartmentDao departmentDao = new JdbcDepartmentDao(DB_URL, DB_USER, DB_PASS);
         ProductDao productDao = new JdbcProductDao(DB_URL, DB_USER, DB_PASS);
         return new RequestRouter(departmentDao, productDao);
+    }
+
+    private static void handleClient(Socket clientSocket, RequestRouter router) throws IOException {
+        try (PrintWriter out = new PrintWriter(
+                new OutputStreamWriter(clientSocket.getOutputStream(), StandardCharsets.UTF_8), true);
+             BufferedReader in = new BufferedReader(
+                     new InputStreamReader(clientSocket.getInputStream(), StandardCharsets.UTF_8))) {
+
+            String line;
+            while ((line = in.readLine()) != null) {
+                System.out.println("Received: " + line);
+
+                // Parse the incoming request, create object from line, and route it
+                ClientRequest request = MAPPER.readValue(line, ClientRequest.class);
+                ServerResponse<?> response = router.route(request);
+
+                // Send the response back on one line
+                out.println(MAPPER.writeValueAsString(response));
+            }
+
+            System.out.println("Client disconnected");
+        }
     }
 }
