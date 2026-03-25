@@ -22,6 +22,8 @@ public class ClientMain {
     private static final int PORT = 9000;
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
+    // === Methods ===
+
     /**
      * Runs the supermarket client demo.
      *
@@ -38,6 +40,15 @@ public class ClientMain {
         }
     }
 
+    /**
+     * Runs the department client demo flow.
+     * Requests all departments, fetches one department by id,
+     * inserts a new department, and verifies the inserted record.
+     *
+     * @param out the socket writer used to send requests
+     * @param in the socket reader used to receive responses
+     * @throws IOException if client-server communication fails
+     */
     private static void runDepartmentDemo(PrintWriter out, BufferedReader in) throws IOException {
         ClientRequest request = createRequest(RequestType.GET_ALL_DEPARTMENTS, null);
         out.println(MAPPER.writeValueAsString(request));
