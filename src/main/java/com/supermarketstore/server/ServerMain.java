@@ -36,10 +36,7 @@ public class ServerMain {
         if (DB_PASS == null || DB_PASS.isBlank()) {
             throw new IllegalStateException("Set TEST_DB_PASS before running ServerMain");
         }
-
-        DepartmentDao departmentDao = new JdbcDepartmentDao(DB_URL, DB_USER, DB_PASS);
-        ProductDao productDao = new JdbcProductDao(DB_URL, DB_USER, DB_PASS);
-        RequestRouter router = new RequestRouter(departmentDao, productDao);
+        RequestRouter router = createRouter();
 
         System.out.println("Server listening on port " + PORT);
 
@@ -69,5 +66,11 @@ public class ServerMain {
                 System.out.println("Client disconnected");
             }
         }
+    }
+
+    private static RequestRouter createRouter() {
+        DepartmentDao departmentDao = new JdbcDepartmentDao(DB_URL, DB_USER, DB_PASS);
+        ProductDao productDao = new JdbcProductDao(DB_URL, DB_USER, DB_PASS);
+        return new RequestRouter(departmentDao, productDao);
     }
 }
