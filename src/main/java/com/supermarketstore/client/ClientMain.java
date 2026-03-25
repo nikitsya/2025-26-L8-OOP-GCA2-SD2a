@@ -31,116 +31,115 @@ public class ClientMain {
     public static void main(String[] args) throws IOException {
 
         try (Socket socket = new Socket(HOST, PORT);
-             PrintWriter out = new PrintWriter(
-                     new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
-             BufferedReader in = new BufferedReader(
-                     new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8))) {
+             PrintWriter out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
+             BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8))) {
 
-            // Build and send a request
-            ClientRequest request = createRequest(RequestType.GET_ALL_DEPARTMENTS, null);
-            out.println(MAPPER.writeValueAsString(request));
+            runDepartmentDemo(out, in);
+            runProductDemo(out, in);
+        }
+    }
 
-            // Read and parse the response
-            String line = in.readLine();
-            ServerResponse<List<Department>> response = MAPPER.readValue(
-                    line, new TypeReference<>() {
-                    }
-            );
+    private static void runDepartmentDemo(PrintWriter out, BufferedReader in) throws IOException {
+        ClientRequest request = createRequest(RequestType.GET_ALL_DEPARTMENTS, null);
+        out.println(MAPPER.writeValueAsString(request));
 
-            System.out.println("Status:  " + response.getStatus());
-            System.out.println("Message: " + response.getMessage());
-
-            List<Department> departments = response.getData();
-
-            if (departments != null) {
-                for (Department department : departments) {
-                    System.out.println(department);
+        // Read and parse the response
+        String line = in.readLine();
+        ServerResponse<List<Department>> response = MAPPER.readValue(
+                line, new TypeReference<>() {
                 }
+        );
+
+        System.out.println("Status:  " + response.getStatus());
+        System.out.println("Message: " + response.getMessage());
+
+        List<Department> departments = response.getData();
+
+        if (departments != null) {
+            for (Department department : departments) {
+                System.out.println(department);
             }
+        }
+        System.out.println();
+        System.out.println("Requesting one department by id...");
+
+        ObjectNode payload = MAPPER.createObjectNode();
+        payload.put("id", 1);
+
+        ClientRequest byIdRequest = createRequest(RequestType.GET_DEPARTMENT_BY_ID, payload);
+        out.println(MAPPER.writeValueAsString(byIdRequest));
+
+        String byIdLine = in.readLine();
+
+        ServerResponse<Department> byIdResponse = MAPPER.readValue(
+                byIdLine,
+                new TypeReference<>() {
+                }
+        );
+
+        System.out.println("Status: " + byIdResponse.getStatus());
+        System.out.println("Message: " + byIdResponse.getMessage());
+
+        Department department = byIdResponse.getData();
+
+        if (department != null) {
+            System.out.println(department);
+        }
+
+        System.out.println();
+        System.out.println("Adding a new department ");
+
+        ObjectNode addPayload = MAPPER.createObjectNode();
+        addPayload.put("name", "TEST_NewDepartment");
+        addPayload.put("floor", 1);
+        addPayload.put("zone", 11);
+        addPayload.put("budget", 10000.0);
+        addPayload.put("employeeCount", 5);
+        addPayload.put("isRefrigerated", false);
+
+        ClientRequest addRequest = createRequest(RequestType.ADD_DEPARTMENT, addPayload);
+        out.println(MAPPER.writeValueAsString(addRequest));
+
+        String addLine = in.readLine();
+
+        ServerResponse<Department> addResponse = MAPPER.readValue(addLine, new TypeReference<>() {
+                }
+        );
+
+        System.out.println("Status: " + addResponse.getStatus());
+        System.out.println("Message: " + addResponse.getMessage());
+
+        Department addedDepartment = addResponse.getData();
+
+        if (addedDepartment != null) {
+            System.out.println(addedDepartment);
+        }
+        if (addedDepartment != null) {
             System.out.println();
-            System.out.println("Requesting one department by id...");
+            System.out.println("Verifying the inserted department by id...");
 
-            ObjectNode payload = MAPPER.createObjectNode();
-            payload.put("id", 1);
+            ObjectNode verifyPayload = MAPPER.createObjectNode();
+            verifyPayload.put("id", addedDepartment.getDepartmentId());
 
-            ClientRequest byIdRequest = createRequest(RequestType.GET_DEPARTMENT_BY_ID, payload);
-            out.println(MAPPER.writeValueAsString(byIdRequest));
+            ClientRequest verifyRequest = createRequest(RequestType.GET_DEPARTMENT_BY_ID, verifyPayload);
+            out.println(MAPPER.writeValueAsString(verifyRequest));
 
-            String byIdLine = in.readLine();
+            String verifyLine = in.readLine();
 
-            ServerResponse<Department> byIdResponse = MAPPER.readValue(
-                    byIdLine,
+            ServerResponse<Department> verifyResponse = MAPPER.readValue(
+                    verifyLine,
                     new TypeReference<>() {
                     }
             );
 
-            System.out.println("Status: " + byIdResponse.getStatus());
-            System.out.println("Message: " + byIdResponse.getMessage());
+            System.out.println("Status: " + verifyResponse.getStatus());
+            System.out.println("Message: " + verifyResponse.getMessage());
 
-            Department department = byIdResponse.getData();
+            Department verifiedDepartment = verifyResponse.getData();
 
-            if (department != null) {
-                System.out.println(department);
+            if (verifiedDepartment != null) {
+                System.out.println(verifiedDepartment);
             }
-
-            System.out.println();
-            System.out.println("Adding a new department ");
-
-            ObjectNode addPayload = MAPPER.createObjectNode();
-            addPayload.put("name", "TEST_NewDepartment");
-            addPayload.put("floor", 1);
-            addPayload.put("zone", 11);
-            addPayload.put("budget", 10000.0);
-            addPayload.put("employeeCount", 5);
-            addPayload.put("isRefrigerated", false);
-
-            ClientRequest addRequest = createRequest(RequestType.ADD_DEPARTMENT, addPayload);
-            out.println(MAPPER.writeValueAsString(addRequest));
-
-            String addLine = in.readLine();
-
-            ServerResponse<Department> addResponse = MAPPER.readValue(addLine, new TypeReference<>() {
-                    }
-            );
-
-            System.out.println("Status: " + addResponse.getStatus());
-            System.out.println("Message: " + addResponse.getMessage());
-
-            Department addedDepartment = addResponse.getData();
-
-            if (addedDepartment != null) {
-                System.out.println(addedDepartment);
-            }
-            if (addedDepartment != null) {
-                System.out.println();
-                System.out.println("Verifying the inserted department by id...");
-
-                ObjectNode verifyPayload = MAPPER.createObjectNode();
-                verifyPayload.put("id", addedDepartment.getDepartmentId());
-
-                ClientRequest verifyRequest = createRequest(RequestType.GET_DEPARTMENT_BY_ID, verifyPayload);
-                out.println(MAPPER.writeValueAsString(verifyRequest));
-
-                String verifyLine = in.readLine();
-
-                ServerResponse<Department> verifyResponse = MAPPER.readValue(
-                        verifyLine,
-                        new TypeReference<>() {
-                        }
-                );
-
-                System.out.println("Status: " + verifyResponse.getStatus());
-                System.out.println("Message: " + verifyResponse.getMessage());
-
-                Department verifiedDepartment = verifyResponse.getData();
-
-                if (verifiedDepartment != null) {
-                    System.out.println(verifiedDepartment);
-                }
-            }
-
-            runProductDemo(out, in);
-
         }
     }
 
@@ -250,7 +249,7 @@ public class ClientMain {
     /**
      * Creates a client request using the supplied protocol type and JSON payload.
      *
-     * @param type the protocol request type
+     * @param type    the protocol request type
      * @param payload the optional JSON payload, or null when no payload is needed
      * @return a populated ClientRequest ready to be serialized and sent
      */
