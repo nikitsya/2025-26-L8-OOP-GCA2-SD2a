@@ -244,6 +244,13 @@ public class ClientMain {
         }
     }
 
+    /**
+     * Creates a client request using the supplied protocol type and JSON payload.
+     *
+     * @param type the protocol request type
+     * @param payload the optional JSON payload, or null when no payload is needed
+     * @return a populated ClientRequest ready to be serialized and sent
+     */
     private static ClientRequest createRequest(RequestType type, JsonNode payload) {
         return new ClientRequest(type.name(), payload);
     }
