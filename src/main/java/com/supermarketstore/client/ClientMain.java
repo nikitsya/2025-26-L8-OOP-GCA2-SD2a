@@ -21,7 +21,12 @@ public class ClientMain {
     private static final int PORT = 9000;
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    // Creates: a client that connects, sends one request, reads one response, then exits
+    /**
+     * Runs the supermarket client demo.
+     *
+     * @param args command-line arguments
+     * @throws IOException if client-server communication fails
+     */
     public static void main(String[] args) throws IOException {
 
         try (Socket socket = new Socket(HOST, PORT);
