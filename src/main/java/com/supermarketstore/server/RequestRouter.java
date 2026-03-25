@@ -39,8 +39,7 @@ public class RequestRouter {
     public ServerResponse<?> route(ClientRequest request) {
         RequestHandler handler = _handlers.get(request.getType());
 
-        if (handler == null)
-            return ServerResponse.error("Unknown request type: " + request.getType());
+        if (handler == null) return ServerResponse.error("Unknown request type: " + request.getType());
 
         try {
             return handler.handle(request);
