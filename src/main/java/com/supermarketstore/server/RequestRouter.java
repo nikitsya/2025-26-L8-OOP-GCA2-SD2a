@@ -39,33 +39,33 @@ public class RequestRouter {
         RequestHandler handler = fHandlers.get(request.getType());
 
         if (handler == null)
-            return ServerResponse.failure("Unknown request type: " + request.getType());
+            return ServerResponse.error("Unknown request type: " + request.getType());
 
         try {
             return handler.handle(request);
         } catch (Exception e) {
-            return ServerResponse.failure("Server error: " + e.getMessage());
+            return ServerResponse.error("Server error: " + e.getMessage());
         }
     }
 
     // === Helpers ===
     private ServerResponse<List<Department>> handleGetAllDepartments(DepartmentDao departmentDao) {
         List<Department> departments = departmentDao.getAllDepartments();
-        return ServerResponse.success("Departments retrieved successfully", departments);
+        return ServerResponse.ok("Departments retrieved successfully", departments);
     }
 
     private ServerResponse<?> handleGetDepartmentById(ClientRequest request, DepartmentDao departmentDao) {
         JsonNode payload = request.getPayload();
 
         if (payload == null || !payload.has("id"))
-            return ServerResponse.failure("Missing required field: id");
+            return ServerResponse.error("Missing required field: id");
 
         int id = payload.get("id").asInt();
 
         return departmentDao.getDepartmentById(id)
-                .map(department -> ServerResponse.success("Department retrieved successfully",
+                .map(department -> ServerResponse.ok("Department retrieved successfully",
                         department))
-                .orElseGet(() -> ServerResponse.failure("Department not found for id: " + id));
+                .orElseGet(() -> ServerResponse.error("Department not found for id: " + id));
     }
 
     private ServerResponse<?> handleAddDepartment(ClientRequest request, DepartmentDao departmentDao) {
@@ -73,30 +73,30 @@ public class RequestRouter {
 
         if (payload == null || !payload.has("name") || !payload.has("floor") || !payload.has("zone") || !payload.has("budget") || !payload.has("employeeCount") || !payload.has("isRefrigerated")) {
 
-            return ServerResponse.failure("Missing required fields: name, floor, zone, budget, employeeCount, isRefrigerated");
+            return ServerResponse.error("Missing required fields: name, floor, zone, budget, employeeCount, isRefrigerated");
         }
         Department newDepartment = new Department(0, payload.get("name").asText(), payload.get("floor").asInt(), payload.get("zone").asInt(), payload.get("budget").asDouble(), payload.get("employeeCount").asInt(), payload.get("isRefrigerated").asBoolean()
         );
         Department insertDepartment = departmentDao.insertDepartment(newDepartment);
-        return ServerResponse.success("Department added successfully", insertDepartment);
+        return ServerResponse.ok("Department added successfully", insertDepartment);
     }
 
     private ServerResponse<List<Product>> handleGetAllProducts(ProductDao productDao) {
         List<Product> products = productDao.getAllProducts();
-        return ServerResponse.success("Products retrieved successfully", products);
+        return ServerResponse.ok("Products retrieved successfully", products);
     }
 
     private ServerResponse<?> handleGetProductById(ClientRequest request, ProductDao productDao) {
         JsonNode payload = request.getPayload();
 
         if (payload == null || !payload.has("id"))
-            return ServerResponse.failure("Missing required field: id");
+            return ServerResponse.error("Missing required field: id");
 
         int id = payload.get("id").asInt();
 
         return productDao.getProductById(id)
-                .map(product -> ServerResponse.success("Product retrieved successfully", product))
-                .orElseGet(() -> ServerResponse.failure("Product not found for id: " + id));
+                .map(product -> ServerResponse.ok("Product retrieved successfully", product))
+                .orElseGet(() -> ServerResponse.error("Product not found for id: " + id));
     }
 
     private ServerResponse<?> handleAddProduct(ClientRequest request, ProductDao productDao) {
@@ -108,12 +108,12 @@ public class RequestRouter {
         if (discountNode == null && payload != null) discountNode = payload.get("discount_price");
 
         if (payload == null || !payload.has("name") || !payload.has("price") || onSaleNode == null || !payload.has("stock")) {
-            return ServerResponse.failure("Missing required fields: name, price, isOnSale (or is_on_sale), stock");
+            return ServerResponse.error("Missing required fields: name, price, isOnSale (or is_on_sale), stock");
         }
 
         boolean onSale = onSaleNode.asBoolean();
         if (onSale && (discountNode == null || discountNode.isNull())) {
-            return ServerResponse.failure("Missing required field: discountPrice (or discount_price) when product is on sale");
+            return ServerResponse.error("Missing required field: discountPrice (or discount_price) when product is on sale");
         }
 
         Double discountPrice = (discountNode == null || discountNode.isNull()) ? null : discountNode.asDouble();
@@ -127,6 +127,6 @@ public class RequestRouter {
         );
 
         Product insertedProduct = productDao.insertProduct(newProduct);
-        return ServerResponse.success("Product added successfully", insertedProduct);
+        return ServerResponse.ok("Product added successfully", insertedProduct);
     }
 }
