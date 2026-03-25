@@ -22,22 +22,22 @@ import java.util.Map;
 public class RequestRouter {
 
     // === Fields ===
-    private final Map<String, RequestHandler> fHandlers = new HashMap<>();
+    private final Map<String, RequestHandler> _handlers = new HashMap<>();
 
     // === Constructors ===
     // Creates: a router with all handlers registered against their type constants
     public RequestRouter(DepartmentDao departmentDao, ProductDao productDao) {
-        fHandlers.put(RequestType.GET_ALL_DEPARTMENTS.name(), req -> handleGetAllDepartments(departmentDao));
-        fHandlers.put(RequestType.GET_DEPARTMENT_BY_ID.name(), req -> handleGetDepartmentById(req, departmentDao));
-        fHandlers.put(RequestType.ADD_DEPARTMENT.name(), req -> handleAddDepartment(req, departmentDao));
-        fHandlers.put(RequestType.GET_ALL_PRODUCTS.name(), req -> handleGetAllProducts(productDao));
-        fHandlers.put(RequestType.GET_PRODUCT_BY_ID.name(), req -> handleGetProductById(req, productDao));
-        fHandlers.put(RequestType.ADD_PRODUCT.name(), req -> handleAddProduct(req, productDao));
+        _handlers.put(RequestType.GET_ALL_DEPARTMENTS.name(), req -> handleGetAllDepartments(departmentDao));
+        _handlers.put(RequestType.GET_DEPARTMENT_BY_ID.name(), req -> handleGetDepartmentById(req, departmentDao));
+        _handlers.put(RequestType.ADD_DEPARTMENT.name(), req -> handleAddDepartment(req, departmentDao));
+        _handlers.put(RequestType.GET_ALL_PRODUCTS.name(), req -> handleGetAllProducts(productDao));
+        _handlers.put(RequestType.GET_PRODUCT_BY_ID.name(), req -> handleGetProductById(req, productDao));
+        _handlers.put(RequestType.ADD_PRODUCT.name(), req -> handleAddProduct(req, productDao));
     }
 
     // === Public API ===
     public ServerResponse<?> route(ClientRequest request) {
-        RequestHandler handler = fHandlers.get(request.getType());
+        RequestHandler handler = _handlers.get(request.getType());
 
         if (handler == null)
             return ServerResponse.error("Unknown request type: " + request.getType());
