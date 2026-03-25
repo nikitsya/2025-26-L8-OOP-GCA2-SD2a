@@ -50,6 +50,26 @@ public class ServerMain {
         }
     }
 
+    // Starts: the accept loop — runs indefinitely until interrupted
+    private static void start(RequestRouter router) throws IOException {
+        System.out.println("Server listening on port " + PORT);
+
+        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
+            while (!Thread.currentThread().isInterrupted()) {
+                Socket clientSocket = serverSocket.accept();
+                System.out.println("Client connected: " + clientSocket.getInetAddress());
+
+                CLIENT_POOL.submit(() -> {
+                    try {
+                        handleClient(clientSocket, router);
+                    } catch (IOException e) {
+                        System.out.println("Client handling error: " + e.getMessage());
+                    }
+                });
+            }
+        }
+    }
+
     /**
      * Validates that the database password is available in the environment.
      *
