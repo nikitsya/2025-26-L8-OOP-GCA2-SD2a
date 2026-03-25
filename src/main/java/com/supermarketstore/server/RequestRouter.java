@@ -72,9 +72,21 @@ public class RequestRouter {
                 .orElseGet(() -> ServerResponse.error("Department not found for id: " + id));
     }
 
-    private ServerResponse<?> handleDeleteDepartmentById(ClientRequest req, DepartmentDao departmentDao) {
-        // TODO
-        return null;
+    private ServerResponse<?> handleDeleteDepartmentById(ClientRequest request, DepartmentDao departmentDao) {
+        JsonNode payload = request.getPayload();
+
+        if (payload == null || !payload.has("id")) {
+            return ServerResponse.error("Missing required field: id");
+        }
+
+        int id = payload.get("id").asInt();
+        boolean deleted = departmentDao.deleteDepartmentById(id);
+
+        if (!deleted) {
+            return ServerResponse.error("Department not found for id: " + id);
+        }
+
+        return ServerResponse.ok("Department deleted successfully", null);
     }
 
     private ServerResponse<?> handleUpdateDepartment(ClientRequest req, DepartmentDao departmentDao) {
