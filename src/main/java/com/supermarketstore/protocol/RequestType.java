@@ -2,6 +2,8 @@ package com.supermarketstore.protocol;
 
 /**
  * Enumerates the supported JSON protocol request types.
+ *
+ *  @author Nikita Smiichyk
  */
 public enum RequestType {
     GET_ALL_DEPARTMENTS,

@@ -48,6 +48,8 @@ public class ClientMain {
      * @param out the socket writer used to send requests
      * @param in the socket reader used to receive responses
      * @throws IOException if client-server communication fails
+     *
+     * @author Hanna Bokariuk
      */
     private static void runDepartmentDemo(PrintWriter out, BufferedReader in) throws IOException {
         ClientRequest request = createRequest(RequestType.GET_ALL_DEPARTMENTS, null);
@@ -161,6 +163,8 @@ public class ClientMain {
      * @param out the socket writer used to send requests
      * @param in the socket reader used to receive responses
      * @throws IOException if client-server communication fails
+     *
+     *  @author Nikita Smiichyk
      */
     private static void runProductDemo(PrintWriter out, BufferedReader in) throws IOException {
         System.out.println();
@@ -271,6 +275,8 @@ public class ClientMain {
      * @param type    the protocol request type
      * @param payload the optional JSON payload, or null when no payload is needed
      * @return a populated ClientRequest ready to be serialized and sent
+     *
+     *  @author Nikita Smiichyk
      */
     private static ClientRequest createRequest(RequestType type, JsonNode payload) {
         return new ClientRequest(type.name(), payload);
