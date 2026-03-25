@@ -1,72 +1,85 @@
 package com.supermarketstore.protocol;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
- * A generic response wrapper that standardises all server replies.
- * Carries a status string, a human-readable message, and an optional data payload.
+ * Represents a standard JSON response sent from the server to a client.
  *
- * @param <T> the type of the data payload (may be null on failure)
+ * @param <T> The type of the response data payload.
  */
 public class ServerResponse<T> {
-
     // === Fields ===
-    private String fStatus;
-    private String fMessage;
-    private T fData;
+    private String _status;
+    private String _message;
+    private T _data;
 
     // === Constructors ===
-    // Creates: empty response — required by Jackson for deserialisation
+
+    /**
+     * Creates an empty response.
+     * Required for Jackson deserialization.
+     */
     public ServerResponse() {
-        fStatus = "";
-        fMessage = "";
-        fData = null;
     }
 
-    // Creates: response with all fields set
+    /**
+     * Creates a response with a status, message, and data payload.
+     *
+     * @param status  Typically "OK" or "ERROR".
+     * @param message Human-readable response message.
+     * @param data    Optional payload data.
+     */
     public ServerResponse(String status, String message, T data) {
-        fStatus = status;
-        fMessage = message;
-        fData = data;
+        if (status == null || status.isBlank())
+            throw new IllegalArgumentException("status is required");
+
+        _status = status;
+        _message = message;
+        _data = data;
     }
 
-    // === Helpers ===
-    // Creates: a success response carrying the given data payload
-    public static <T> ServerResponse<T> success(String message, T data) {
-        return new ServerResponse<>("SUCCESS", message, data);
+    // === Methods ===
+    public static <T> ServerResponse<T> ok(String message, T data) {
+        return new ServerResponse<>("OK", message, data);
     }
 
-    // Creates: a failure response with a null data payload
-    public static <T> ServerResponse<T> failure(String message) {
-        return new ServerResponse<>("FAILURE", message, null);
+    public static <T> ServerResponse<T> error(String message) {
+        return new ServerResponse<>("ERROR", message, null);
     }
 
-    // === Public API ===
-    // Gets: the response status ("SUCCESS" or "FAILURE")
+    // === Properties ===
     public String getStatus() {
-        return fStatus;
+        return _status;
     }
 
-    // Sets: the response status
     public void setStatus(String status) {
-        fStatus = status;
+        _status = status;
     }
 
-    // Gets: the human-readable result message
     public String getMessage() {
-        return fMessage;
+        return _message;
     }
 
-    // Sets: the result message
     public void setMessage(String message) {
-        fMessage = message;
+        _message = message;
     }
 
-    // Gets: the response payload; null on failure responses
     public T getData() {
-        return fData;
+        return _data;
     }
 
-    // Sets: the response payload
     public void setData(T data) {
-        fData = data;
+        _data = data;
+    }
+
+    /**
+     * Convenience helper for Java code only.
+     * It should not appear in JSON.
+     *
+     * @return True when the status is OK.
+     */
+    @JsonIgnore
+    public boolean isOk() {
+        return "OK".equals(_status);
     }
 }
