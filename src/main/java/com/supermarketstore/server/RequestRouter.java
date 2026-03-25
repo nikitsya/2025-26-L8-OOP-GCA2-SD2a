@@ -30,8 +30,8 @@ public class RequestRouter {
         _handlers.put(RequestType.GET_ALL_DEPARTMENTS.name(), req -> handleGetAllDepartments(departmentDao));
         _handlers.put(RequestType.GET_DEPARTMENT_BY_ID.name(), req -> handleGetDepartmentById(req, departmentDao));
         _handlers.put(RequestType.ADD_DEPARTMENT.name(), req -> handleAddDepartment(req, departmentDao));
-        _handlers.put(RequestType.DELETE_DEPARTMENT_BY_ID.name(),  req -> handleDeleteDepartmentById(req, productDao));
-        _handlers.put(RequestType.UPDATE_DEPARTMENT.name(), req -> handleUpdateDepartment(req, productDao));
+        _handlers.put(RequestType.DELETE_DEPARTMENT_BY_ID.name(),  req -> handleDeleteDepartmentById(req, departmentDao));
+        _handlers.put(RequestType.UPDATE_DEPARTMENT.name(), req -> handleUpdateDepartment(req, departmentDao));
         _handlers.put(RequestType.GET_ALL_PRODUCTS.name(), req -> handleGetAllProducts(productDao));
         _handlers.put(RequestType.GET_PRODUCT_BY_ID.name(), req -> handleGetProductById(req, productDao));
         _handlers.put(RequestType.ADD_PRODUCT.name(), req -> handleAddProduct(req, productDao));
@@ -72,12 +72,12 @@ public class RequestRouter {
                 .orElseGet(() -> ServerResponse.error("Department not found for id: " + id));
     }
 
-    private ServerResponse<?> handleDeleteDepartmentById(ClientRequest req, ProductDao productDao) {
+    private ServerResponse<?> handleDeleteDepartmentById(ClientRequest req, DepartmentDao departmentDao) {
         // TODO
         return null;
     }
 
-    private ServerResponse<?> handleUpdateDepartment(ClientRequest req, ProductDao productDao) {
+    private ServerResponse<?> handleUpdateDepartment(ClientRequest req, DepartmentDao departmentDao) {
         // TODO
         return null;
     }
