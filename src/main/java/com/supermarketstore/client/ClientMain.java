@@ -16,13 +16,15 @@ import java.util.List;
 
 
 public class ClientMain {
-
+    // === Static Fields ===
+    private static final String HOST = "localhost";
+    private static final int PORT = 9000;
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     // Creates: a client that connects, sends one request, reads one response, then exits
     public static void main(String[] args) throws IOException {
 
-        try (Socket socket = new Socket("localhost", 9000);
+        try (Socket socket = new Socket(HOST, PORT);
              PrintWriter out = new PrintWriter(
                      new OutputStreamWriter(socket.getOutputStream(), StandardCharsets.UTF_8), true);
              BufferedReader in = new BufferedReader(
