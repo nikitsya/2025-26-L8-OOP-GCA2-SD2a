@@ -17,7 +17,7 @@ import java.util.Map;
  * Routes incoming requests to the appropriate handler by type.
  *
  * @author Hanna Bokariuk (primary)
- * @author Nikita Smiichyk (contributor - added product routes and handlers)
+ * @author Nikita Smiichyk (contributor - product flow, routing updates, and refactoring)
  */
 public class RequestRouter {
 
