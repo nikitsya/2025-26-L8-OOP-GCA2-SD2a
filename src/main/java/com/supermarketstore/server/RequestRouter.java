@@ -144,8 +144,9 @@ public class RequestRouter {
         JsonNode payload = request.getPayload();
         if (payload == null || !payload.has("id")) return ServerResponse.error("Missing required field: id");
         int id = payload.get("id").asInt();
-
-        return null;
+        boolean deleted = productDao.deleteProductById(id);
+        if (!deleted) return ServerResponse.error("Product not found for id: " + id);
+        return ServerResponse.ok("Product deleted successfully", null);
     }
 
     private  ServerResponse<?> handleUpdateProduct(ClientRequest request, ProductDao productDao) {
