@@ -38,7 +38,6 @@ public class ClientMain {
 
             // Build and send a request
             ClientRequest request = createRequest(RequestType.GET_ALL_DEPARTMENTS, null);
-
             out.println(MAPPER.writeValueAsString(request));
 
             // Read and parse the response
@@ -140,107 +139,111 @@ public class ClientMain {
                 }
             }
 
-            System.out.println();
-            System.out.println("Requesting all products...");
+            runProductDemo(out, in);
 
-            ClientRequest productsRequest = createRequest(RequestType.GET_ALL_PRODUCTS, null);
-            out.println(MAPPER.writeValueAsString(productsRequest));
+        }
+    }
 
-            String productsLine = in.readLine();
-            ServerResponse<List<Product>> productsResponse = MAPPER.readValue(
-                    productsLine,
-                    new TypeReference<>() {
-                    }
-            );
+    private static void runProductDemo(PrintWriter out, BufferedReader in) throws IOException {
+        System.out.println();
+        System.out.println("Requesting all products...");
 
-            System.out.println("Status: " + productsResponse.getStatus());
-            System.out.println("Message: " + productsResponse.getMessage());
+        ClientRequest productsRequest = createRequest(RequestType.GET_ALL_PRODUCTS, null);
+        out.println(MAPPER.writeValueAsString(productsRequest));
 
-            List<Product> products = productsResponse.getData();
-            if (products != null) {
-                for (Product product : products) {
-                    System.out.println(product);
+        String productsLine = in.readLine();
+        ServerResponse<List<Product>> productsResponse = MAPPER.readValue(
+                productsLine,
+                new TypeReference<>() {
                 }
+        );
+
+        System.out.println("Status: " + productsResponse.getStatus());
+        System.out.println("Message: " + productsResponse.getMessage());
+
+        List<Product> products = productsResponse.getData();
+        if (products != null) {
+            for (Product product : products) {
+                System.out.println(product);
             }
+        }
 
-            System.out.println();
-            System.out.println("Requesting one product by id...");
+        System.out.println();
+        System.out.println("Requesting one product by id...");
 
-            ObjectNode productByIdPayload = MAPPER.createObjectNode();
-            productByIdPayload.put("id", 1);
+        ObjectNode productByIdPayload = MAPPER.createObjectNode();
+        productByIdPayload.put("id", 1);
 
-            ClientRequest productByIdRequest = createRequest(RequestType.GET_PRODUCT_BY_ID, productByIdPayload);
-            out.println(MAPPER.writeValueAsString(productByIdRequest));
+        ClientRequest productByIdRequest = createRequest(RequestType.GET_PRODUCT_BY_ID, productByIdPayload);
+        out.println(MAPPER.writeValueAsString(productByIdRequest));
 
-            String productByIdLine = in.readLine();
-            ServerResponse<Product> productByIdResponse = MAPPER.readValue(
-                    productByIdLine,
-                    new TypeReference<>() {
-                    }
-            );
-
-            System.out.println("Status: " + productByIdResponse.getStatus());
-            System.out.println("Message: " + productByIdResponse.getMessage());
-
-            Product productById = productByIdResponse.getData();
-            if (productById != null) {
-                System.out.println(productById);
-            }
-
-            System.out.println();
-            System.out.println("Adding a new product...");
-
-            ObjectNode addProductPayload = MAPPER.createObjectNode();
-            addProductPayload.put("name", "TEST_NewProduct");
-            addProductPayload.put("price", 29.99);
-            addProductPayload.put("isOnSale", true);
-            addProductPayload.put("discountPrice", 19.99);
-            addProductPayload.put("stock", 50);
-
-            ClientRequest addProductRequest = createRequest(RequestType.ADD_PRODUCT, addProductPayload);
-            out.println(MAPPER.writeValueAsString(addProductRequest));
-
-            String addProductLine = in.readLine();
-            ServerResponse<Product> addProductResponse = MAPPER.readValue(
-                    addProductLine,
-                    new TypeReference<>() {
-                    }
-            );
-
-            System.out.println("Status: " + addProductResponse.getStatus());
-            System.out.println("Message: " + addProductResponse.getMessage());
-
-            Product addedProduct = addProductResponse.getData();
-            if (addedProduct != null) {
-                System.out.println(addedProduct);
-            }
-
-            if (addedProduct != null) {
-                System.out.println();
-                System.out.println("Verifying the inserted product by id...");
-
-                ObjectNode verifyProductPayload = MAPPER.createObjectNode();
-                verifyProductPayload.put("id", addedProduct.getProductId());
-
-                ClientRequest verifyProductRequest = createRequest(RequestType.GET_PRODUCT_BY_ID, verifyProductPayload);
-                out.println(MAPPER.writeValueAsString(verifyProductRequest));
-
-                String verifyProductLine = in.readLine();
-                ServerResponse<Product> verifyProductResponse = MAPPER.readValue(
-                        verifyProductLine,
-                        new TypeReference<>() {
-                        }
-                );
-
-                System.out.println("Status: " + verifyProductResponse.getStatus());
-                System.out.println("Message: " + verifyProductResponse.getMessage());
-
-                Product verifiedProduct = verifyProductResponse.getData();
-                if (verifiedProduct != null) {
-                    System.out.println(verifiedProduct);
+        String productByIdLine = in.readLine();
+        ServerResponse<Product> productByIdResponse = MAPPER.readValue(
+                productByIdLine,
+                new TypeReference<>() {
                 }
-            }
+        );
 
+        System.out.println("Status: " + productByIdResponse.getStatus());
+        System.out.println("Message: " + productByIdResponse.getMessage());
+
+        Product productById = productByIdResponse.getData();
+        if (productById != null) {
+            System.out.println(productById);
+        }
+
+        System.out.println();
+        System.out.println("Adding a new product...");
+
+        ObjectNode addProductPayload = MAPPER.createObjectNode();
+        addProductPayload.put("name", "TEST_NewProduct");
+        addProductPayload.put("price", 29.99);
+        addProductPayload.put("isOnSale", true);
+        addProductPayload.put("discountPrice", 19.99);
+        addProductPayload.put("stock", 50);
+
+        ClientRequest addProductRequest = createRequest(RequestType.ADD_PRODUCT, addProductPayload);
+        out.println(MAPPER.writeValueAsString(addProductRequest));
+
+        String addProductLine = in.readLine();
+        ServerResponse<Product> addProductResponse = MAPPER.readValue(
+                addProductLine,
+                new TypeReference<>() {
+                }
+        );
+
+        System.out.println("Status: " + addProductResponse.getStatus());
+        System.out.println("Message: " + addProductResponse.getMessage());
+
+        Product addedProduct = addProductResponse.getData();
+        if (addedProduct != null) {
+            System.out.println(addedProduct);
+        }
+
+        if (addedProduct != null) {
+            System.out.println();
+            System.out.println("Verifying the inserted product by id...");
+
+            ObjectNode verifyProductPayload = MAPPER.createObjectNode();
+            verifyProductPayload.put("id", addedProduct.getProductId());
+
+            ClientRequest verifyProductRequest = createRequest(RequestType.GET_PRODUCT_BY_ID, verifyProductPayload);
+            out.println(MAPPER.writeValueAsString(verifyProductRequest));
+
+            String verifyProductLine = in.readLine();
+            ServerResponse<Product> verifyProductResponse = MAPPER.readValue(
+                    verifyProductLine,
+                    new TypeReference<>() {
+                    }
+            );
+
+            System.out.println("Status: " + verifyProductResponse.getStatus());
+            System.out.println("Message: " + verifyProductResponse.getMessage());
+
+            Product verifiedProduct = verifyProductResponse.getData();
+            if (verifiedProduct != null) {
+                System.out.println(verifiedProduct);
+            }
         }
     }
 
