@@ -129,4 +129,12 @@ public class RequestRouter {
         Product insertedProduct = productDao.insertProduct(newProduct);
         return ServerResponse.ok("Product added successfully", insertedProduct);
     }
+
+//    private ServerResponse<?> handleDeleteProduct(ClientRequest request, ProductDao productDao) {
+//
+//    }
+//
+//    private  ServerResponse<?> handleUpdateProduct(ClientRequest request, ProductDao productDao) {
+//
+//    }
 }
