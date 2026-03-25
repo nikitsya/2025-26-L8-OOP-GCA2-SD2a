@@ -30,12 +30,12 @@ public class RequestRouter {
         _handlers.put(RequestType.GET_ALL_DEPARTMENTS.name(), req -> handleGetAllDepartments(departmentDao));
         _handlers.put(RequestType.GET_DEPARTMENT_BY_ID.name(), req -> handleGetDepartmentById(req, departmentDao));
         _handlers.put(RequestType.ADD_DEPARTMENT.name(), req -> handleAddDepartment(req, departmentDao));
-        _handlers.put(RequestType.DELETE_DEPARTMENT_BY_ID.name(),  req -> handleDeleteDepartmentById(req, departmentDao));
+        _handlers.put(RequestType.DELETE_DEPARTMENT_BY_ID.name(), req -> handleDeleteDepartmentById(req, departmentDao));
         _handlers.put(RequestType.UPDATE_DEPARTMENT.name(), req -> handleUpdateDepartment(req, departmentDao));
         _handlers.put(RequestType.GET_ALL_PRODUCTS.name(), req -> handleGetAllProducts(productDao));
         _handlers.put(RequestType.GET_PRODUCT_BY_ID.name(), req -> handleGetProductById(req, productDao));
         _handlers.put(RequestType.ADD_PRODUCT.name(), req -> handleAddProduct(req, productDao));
-        _handlers.put(RequestType.DELETE_PRODUCT_BY_ID.name(),  req -> handleDeleteProductById(req, productDao));
+        _handlers.put(RequestType.DELETE_PRODUCT_BY_ID.name(), req -> handleDeleteProductById(req, productDao));
         _handlers.put(RequestType.UPDATE_PRODUCT.name(), req -> handleUpdateProduct(req, productDao));
     }
 
@@ -100,10 +100,13 @@ public class RequestRouter {
                 || !payload.has("budget")
                 || !payload.has("employeeCount")
                 || !payload.has("isRefrigerated")) {
-            return ServerResponse.error("Missing required department fields");
+            return ServerResponse.error("Missing required fields: id, name, floor, zone, budget, employeeCount, isRefrigerated");
         }
 
         int id = payload.get("id").asInt();
+        if (departmentDao.getDepartmentById(id).isEmpty()) {
+            return ServerResponse.error("Department not found for id: " + id);
+        }
 
         Department updatedDepartment = new Department(
                 id,
@@ -118,7 +121,6 @@ public class RequestRouter {
         Department result = departmentDao.updateDepartment(id, updatedDepartment);
         return ServerResponse.ok("Department updated successfully", result);
     }
-
 
     private ServerResponse<?> handleAddDepartment(ClientRequest request, DepartmentDao departmentDao) {
         JsonNode payload = request.getPayload();

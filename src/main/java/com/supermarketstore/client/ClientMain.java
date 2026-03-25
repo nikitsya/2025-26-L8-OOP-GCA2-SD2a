@@ -43,7 +43,8 @@ public class ClientMain {
     /**
      * Runs the department client demo flow.
      * Requests all departments, fetches one department by id,
-     * inserts a new department, and verifies the inserted record.
+     * inserts a new department, verifies it, updates it,
+     * verifies the update, deletes it, and confirms removal.
      *
      * @param out the socket writer used to send requests
      * @param in  the socket reader used to receive responses
@@ -212,7 +213,7 @@ public class ClientMain {
 
         if (addedDepartment != null) {
             System.out.println();
-            System.out.println("Deleting the inserted department by id...");
+            System.out.println("Deleting the updated department by id...");
 
             ObjectNode deletePayload = MAPPER.createObjectNode();
             deletePayload.put("id", addedDepartment.getDepartmentId());
@@ -221,7 +222,7 @@ public class ClientMain {
             out.println(MAPPER.writeValueAsString(deleteRequest));
 
             String deleteLine = in.readLine();
-            ServerResponse<?> deleteResponse = MAPPER.readValue(
+            ServerResponse<Void> deleteResponse = MAPPER.readValue(
                     deleteLine,
                     new TypeReference<>() {
                     }
