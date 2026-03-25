@@ -161,6 +161,40 @@ Example failure response:
 }
 ```
 
+Example department insert request:
+
+```json
+{
+  "type": "ADD_DEPARTMENT",
+  "payload": {
+    "name": "Bakery",
+    "floor": 1,
+    "zone": 3,
+    "budget": 25000.0,
+    "employeeCount": 8,
+    "isRefrigerated": false
+  }
+}
+```
+
+Example department success response:
+
+```json
+{
+  "status": "OK",
+  "message": "Department added successfully",
+  "data": {
+    "department_id": 11,
+    "name": "Bakery",
+    "floor": 1,
+    "zone": 3,
+    "budget": 25000.0,
+    "employee_count": 8,
+    "is_refrigerated": false
+  }
+}
+```
+
 ### 4.2 Supported request types
 
 | Request Type | Payload fields | Success response data | Failure examples |
