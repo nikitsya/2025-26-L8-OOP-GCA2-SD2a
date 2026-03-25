@@ -16,12 +16,11 @@ import java.nio.charset.StandardCharsets;
 
 public class ServerMain {
     private static final int PORT = 9000;
-
     private static final String DB_URL = "jdbc:mysql://localhost:3306/supermarket_store_system";
     private static final String DB_USER = "root";
     private static final String DB_PASS = System.getenv("TEST_DB_PASS");
 
-    // Creates: a single shared mapper — declared here so all methods in this class can use it
+    /** Shared JSON mapper used for request parsing and response serialization. */
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     /**
