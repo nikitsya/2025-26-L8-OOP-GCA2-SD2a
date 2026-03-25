@@ -24,9 +24,9 @@ Stage 1 established the entity classes, validation, DAO interfaces, JDBC impleme
 and JSON conversion. Stage 2 extends that work with a multithreaded server, a shared `ServerResponse<T>` wrapper, and
 socket-based CRUD flows for the currently supported operations.
 
-At the current repository state, the implemented end-to-end protocol covers read and insert for departments, and read,
-insert, update, and delete for products. The README below documents the exact protocol and the actual project setup in
-this repository rather than the original course template.
+The project supports JSON-based read, insert, update, and delete flows through the shared client-server protocol. The
+README below documents the exact protocol and the actual project setup in this repository rather than the original
+course template.
 
 ### Team
 
@@ -95,11 +95,13 @@ Before running the server or the JDBC integration tests, set:
     - get all departments
     - get department by id
     - add department
+    - update department
+    - delete department
     - get all products
     - get product by id
     - add product
-- Product delete and update are implemented on the server side, but they are not yet demonstrated by the current
-  client flow.
+    - update product
+    - delete product
 
 ---
 
@@ -231,6 +233,8 @@ Example department success response:
 | `GET_ALL_DEPARTMENTS` | none (`payload = null`) | `data` = array of department objects | DAO or server error |
 | `GET_DEPARTMENT_BY_ID` | `id:int` | `data` = one department object | missing `id`, department not found |
 | `ADD_DEPARTMENT` | `name:string`, `floor:int`, `zone:int`, `budget:double`, `employeeCount:int`, `isRefrigerated:boolean` | `data` = inserted department with generated `department_id` | missing fields, validation error, DAO error |
+| `DELETE_DEPARTMENT_BY_ID` | `id:int` | `data` = `null`, success confirmed by message | missing `id`, department not found |
+| `UPDATE_DEPARTMENT` | `id:int`, `name:string`, `floor:int`, `zone:int`, `budget:double`, `employeeCount:int`, `isRefrigerated:boolean` | `data` = updated department object | missing fields, department not found, validation error, DAO error |
 | `GET_ALL_PRODUCTS` | none (`payload = null`) | `data` = array of product objects | DAO or server error |
 | `GET_PRODUCT_BY_ID` | `id:int` | `data` = one product object | missing `id`, product not found |
 | `ADD_PRODUCT` | `name:string`, `price:double`, `isOnSale:boolean` or `is_on_sale:boolean`, `stock:int`, optional `discountPrice:double` or `discount_price:double` | `data` = inserted product with generated `product_id` | missing fields, missing discount price for sale item, validation error, DAO error |
