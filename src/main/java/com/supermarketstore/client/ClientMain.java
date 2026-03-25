@@ -37,7 +37,7 @@ public class ClientMain {
                      new InputStreamReader(socket.getInputStream(), StandardCharsets.UTF_8))) {
 
             // Build and send a request
-            ClientRequest request = new ClientRequest(RequestType.GET_ALL_DEPARTMENTS.name(), null);
+            ClientRequest request = createRequest(RequestType.GET_ALL_DEPARTMENTS, null);
 
             out.println(MAPPER.writeValueAsString(request));
 
@@ -64,7 +64,7 @@ public class ClientMain {
             ObjectNode payload = MAPPER.createObjectNode();
             payload.put("id", 1);
 
-            ClientRequest byIdRequest = new ClientRequest(RequestType.GET_DEPARTMENT_BY_ID.name(), payload);
+            ClientRequest byIdRequest = createRequest(RequestType.GET_DEPARTMENT_BY_ID, payload);
             out.println(MAPPER.writeValueAsString(byIdRequest));
 
             String byIdLine = in.readLine();
@@ -95,7 +95,7 @@ public class ClientMain {
             addPayload.put("employeeCount", 5);
             addPayload.put("isRefrigerated", false);
 
-            ClientRequest addRequest = new ClientRequest(RequestType.ADD_DEPARTMENT.name(), addPayload);
+            ClientRequest addRequest = createRequest(RequestType.ADD_DEPARTMENT, addPayload);
             out.println(MAPPER.writeValueAsString(addRequest));
 
             String addLine = in.readLine();
@@ -119,7 +119,7 @@ public class ClientMain {
                 ObjectNode verifyPayload = MAPPER.createObjectNode();
                 verifyPayload.put("id", addedDepartment.getDepartmentId());
 
-                ClientRequest verifyRequest = new ClientRequest(RequestType.GET_DEPARTMENT_BY_ID.name(), verifyPayload);
+                ClientRequest verifyRequest = createRequest(RequestType.GET_DEPARTMENT_BY_ID, verifyPayload);
                 out.println(MAPPER.writeValueAsString(verifyRequest));
 
                 String verifyLine = in.readLine();
@@ -143,7 +143,7 @@ public class ClientMain {
             System.out.println();
             System.out.println("Requesting all products...");
 
-            ClientRequest productsRequest = new ClientRequest(RequestType.GET_ALL_PRODUCTS.name(), null);
+            ClientRequest productsRequest = createRequest(RequestType.GET_ALL_PRODUCTS, null);
             out.println(MAPPER.writeValueAsString(productsRequest));
 
             String productsLine = in.readLine();
@@ -169,7 +169,7 @@ public class ClientMain {
             ObjectNode productByIdPayload = MAPPER.createObjectNode();
             productByIdPayload.put("id", 1);
 
-            ClientRequest productByIdRequest = new ClientRequest(RequestType.GET_PRODUCT_BY_ID.name(), productByIdPayload);
+            ClientRequest productByIdRequest = createRequest(RequestType.GET_PRODUCT_BY_ID, productByIdPayload);
             out.println(MAPPER.writeValueAsString(productByIdRequest));
 
             String productByIdLine = in.readLine();
@@ -197,7 +197,7 @@ public class ClientMain {
             addProductPayload.put("discountPrice", 19.99);
             addProductPayload.put("stock", 50);
 
-            ClientRequest addProductRequest = new ClientRequest(RequestType.ADD_PRODUCT.name(), addProductPayload);
+            ClientRequest addProductRequest = createRequest(RequestType.ADD_PRODUCT, addProductPayload);
             out.println(MAPPER.writeValueAsString(addProductRequest));
 
             String addProductLine = in.readLine();
@@ -222,7 +222,7 @@ public class ClientMain {
                 ObjectNode verifyProductPayload = MAPPER.createObjectNode();
                 verifyProductPayload.put("id", addedProduct.getProductId());
 
-                ClientRequest verifyProductRequest = new ClientRequest(RequestType.GET_PRODUCT_BY_ID.name(), verifyProductPayload);
+                ClientRequest verifyProductRequest = createRequest(RequestType.GET_PRODUCT_BY_ID, verifyProductPayload);
                 out.println(MAPPER.writeValueAsString(verifyProductRequest));
 
                 String verifyProductLine = in.readLine();
