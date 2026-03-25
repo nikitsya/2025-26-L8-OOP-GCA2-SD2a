@@ -4,47 +4,50 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * A typed request envelope sent from client to server.
- * The 'type' field identifies the operation; 'payload' carries its parameters.
+ * The type field identifies the operation, and the payload carries its parameters.
  *
  * @author Hanna Bokariuk
+ * @author Nikita Smiichyk (contributor - documentation and refactoring)
  */
 public class ClientRequest {
-
     // === Fields ===
-    private String fType;
-    private JsonNode fPayload;
+    private String _type;
+    private JsonNode _payload;
 
     // === Constructors ===
-    // Creates: empty request — required by Jackson
+
+    /**
+     * Creates an empty request required for JSON deserialization.
+     */
     public ClientRequest() {
-        fType = "";
-        fPayload = null;
+        _type = "";
+        _payload = null;
     }
 
-    // Creates: request with a type and a JsonNode payload
+    /**
+     * Creates a request with an operation type and optional payload.
+     *
+     * @param type    the request type
+     * @param payload the request payload, or null if no parameters are required
+     */
     public ClientRequest(String type, JsonNode payload) {
-        fType = type;
-        fPayload = payload;
+        _type = type;
+        _payload = payload;
     }
 
-    // === Public API ===
-    // Gets: the operation type constant
     public String getType() {
-        return fType;
+        return _type;
     }
 
-    // Sets: the operation type constant
     public void setType(String type) {
-        fType = type;
+        _type = type;
     }
 
-    // Gets: the raw JSON payload node (may be null for no-parameter requests)
     public JsonNode getPayload() {
-        return fPayload;
+        return _payload;
     }
 
-    // Sets: the raw JSON payload node
     public void setPayload(JsonNode payload) {
-        fPayload = payload;
+        _payload = payload;
     }
 }
