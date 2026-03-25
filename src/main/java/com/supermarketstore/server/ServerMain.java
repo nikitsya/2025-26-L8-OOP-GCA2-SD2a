@@ -74,7 +74,7 @@ public class ServerMain {
      * the corresponding JSON response back to the client.
      *
      * @param clientSocket the connected client socket
-     * @param router the router used to process incoming requests
+     * @param router       the router used to process incoming requests
      * @throws IOException if reading from or writing to the client fails
      */
     private static void handleClient(Socket clientSocket, RequestRouter router) throws IOException {
