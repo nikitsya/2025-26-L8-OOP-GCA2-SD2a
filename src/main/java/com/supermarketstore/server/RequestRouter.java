@@ -88,12 +88,8 @@ public class RequestRouter {
 
     private ServerResponse<?> handleGetProductById(ClientRequest request, ProductDao productDao) {
         JsonNode payload = request.getPayload();
-
-        if (payload == null || !payload.has("id"))
-            return ServerResponse.error("Missing required field: id");
-
+        if (payload == null || !payload.has("id")) return ServerResponse.error("Missing required field: id");
         int id = payload.get("id").asInt();
-
         return productDao.getProductById(id)
                 .map(product -> ServerResponse.ok("Product retrieved successfully", product))
                 .orElseGet(() -> ServerResponse.error("Product not found for id: " + id));
@@ -130,11 +126,15 @@ public class RequestRouter {
         return ServerResponse.ok("Product added successfully", insertedProduct);
     }
 
-//    private ServerResponse<?> handleDeleteProduct(ClientRequest request, ProductDao productDao) {
-//
-//    }
-//
-//    private  ServerResponse<?> handleUpdateProduct(ClientRequest request, ProductDao productDao) {
-//
-//    }
+    private ServerResponse<?> handleDeleteProductById(ClientRequest request, ProductDao productDao) {
+        JsonNode payload = request.getPayload();
+        if (payload == null || !payload.has("id")) return ServerResponse.error("Missing required field: id");
+        int id = payload.get("id").asInt();
+
+        return null;
+    }
+
+    private  ServerResponse<?> handleUpdateProduct(ClientRequest request, ProductDao productDao) {
+        return null;
+    }
 }
