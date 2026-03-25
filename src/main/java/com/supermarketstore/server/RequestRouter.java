@@ -6,6 +6,7 @@ import com.supermarketstore.department.DepartmentDao;
 import com.supermarketstore.product.Product;
 import com.supermarketstore.product.ProductDao;
 import com.supermarketstore.protocol.ClientRequest;
+import com.supermarketstore.protocol.RequestType;
 import com.supermarketstore.protocol.ServerResponse;
 
 import java.util.HashMap;
@@ -26,12 +27,12 @@ public class RequestRouter {
     // === Constructors ===
     // Creates: a router with all handlers registered against their type constants
     public RequestRouter(DepartmentDao departmentDao, ProductDao productDao) {
-        fHandlers.put("GET_ALL_DEPARTMENTS", req -> handleGetAllDepartments(departmentDao));
-        fHandlers.put("GET_DEPARTMENT_BY_ID", req -> handleGetDepartmentById(req, departmentDao));
-        fHandlers.put("ADD_DEPARTMENT", req -> handleAddDepartment(req, departmentDao));
-        fHandlers.put("GET_ALL_PRODUCTS", req -> handleGetAllProducts(productDao));
-        fHandlers.put("GET_PRODUCT_BY_ID", req -> handleGetProductById(req, productDao));
-        fHandlers.put("ADD_PRODUCT", req -> handleAddProduct(req, productDao));
+        fHandlers.put(RequestType.GET_ALL_DEPARTMENTS.name(), req -> handleGetAllDepartments(departmentDao));
+        fHandlers.put(RequestType.GET_DEPARTMENT_BY_ID.name(), req -> handleGetDepartmentById(req, departmentDao));
+        fHandlers.put(RequestType.ADD_DEPARTMENT.name(), req -> handleAddDepartment(req, departmentDao));
+        fHandlers.put(RequestType.GET_ALL_PRODUCTS.name(), req -> handleGetAllProducts(productDao));
+        fHandlers.put(RequestType.GET_PRODUCT_BY_ID.name(), req -> handleGetProductById(req, productDao));
+        fHandlers.put(RequestType.ADD_PRODUCT.name(), req -> handleAddProduct(req, productDao));
     }
 
     // === Public API ===
