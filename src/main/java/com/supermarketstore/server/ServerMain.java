@@ -7,6 +7,8 @@ import com.supermarketstore.product.JdbcProductDao;
 import com.supermarketstore.product.ProductDao;
 import com.supermarketstore.protocol.ClientRequest;
 import com.supermarketstore.protocol.ServerResponse;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -21,6 +23,8 @@ public class ServerMain {
     private static final String DB_USER = "root";
     private static final String DB_PASS = System.getenv("TEST_DB_PASS");
     private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final ExecutorService CLIENT_POOL = Executors.newCachedThreadPool();
+
 
     // === Methods ===
 
