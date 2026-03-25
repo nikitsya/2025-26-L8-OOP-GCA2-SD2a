@@ -72,7 +72,7 @@ Create a local config file (do **not** commit credentials):
 ### 2.3 Run the server
 
 - Main class: `server.ServerMain`
-- Default port: `5000` (or your chosen port)
+- Default port: `9000`
 - Expected output:
     - “Server listening on …”
     - Logs for client connect/disconnect
@@ -102,31 +102,113 @@ Create a local config file (do **not** commit credentials):
 
 ## 4. JSON Protocol Documentation
 
-> **Keep this section up to date** as you add request types. Stage 2 requires the protocol to be documented in the
-> README.
+> This section documents the socket protocol currently used by the Stage 2 client and server implementation.
 
-### 4.1 Envelope format (example)
+### 4.1 Envelope format
 
 - **Request**
-    - `type`: string (e.g., `GET_ALL_PLAYERS`)
-    - `payload`: JSON object (optional)
+    - `type`: string enum from `RequestType`
+    - `payload`: JSON object or `null`
 - **Response**
-    - `status`: `SUCCESS` | `FAILURE`
-    - `message`: string
-    - `data`: object/array/null
+    - `status`: `OK` | `ERROR`
+    - `message`: human-readable result text
+    - `data`: object, array, or `null`
+
+Example request with payload:
+
+```json
+{
+  "type": "GET_PRODUCT_BY_ID",
+  "payload": {
+    "id": 1
+  }
+}
+```
+
+Example request without payload:
+
+```json
+{
+  "type": "GET_ALL_PRODUCTS",
+  "payload": null
+}
+```
+
+Example success response:
+
+```json
+{
+  "status": "OK",
+  "message": "Product retrieved successfully",
+  "data": {
+    "name": "Milk",
+    "price": 2.49,
+    "stock": 30,
+    "product_id": 1,
+    "is_on_sale": true,
+    "discount_price": 1.99
+  }
+}
+```
+
+Example failure response:
+
+```json
+{
+  "status": "ERROR",
+  "message": "Missing required field: id",
+  "data": null
+}
+```
 
 ### 4.2 Supported request types
 
-| Request Type         | Payload fields              | Success response data          | Failure examples    |
-|:---------------------|:----------------------------|:-------------------------------|:--------------------|
-| `GET_ALL_<ENTITY>`   | —                           | List of entity DTOs            | DB connection error |
-| `GET_<ENTITY>_BY_ID` | `id:int`                    | Entity DTO or empty            | invalid id          |
-| `INSERT_<ENTITY>`    | DTO fields                  | Inserted DTO with generated id | validation fail     |
-| `UPDATE_<ENTITY>`    | `id:int` + DTO fields       | Updated DTO                    | not found           |
-| `DELETE_<ENTITY>`    | `id:int`                    | boolean or message             | not found           |
-| `FILTER_<ENTITY>`    | filter params (your design) | List of matching               | invalid filter      |
+| Request Type | Payload fields | Success response data | Failure examples |
+|:--|:--|:--|:--|
+| `GET_ALL_DEPARTMENTS` | none (`payload = null`) | `data` = array of department objects | DAO or server error |
+| `GET_DEPARTMENT_BY_ID` | `id:int` | `data` = one department object | missing `id`, department not found |
+| `ADD_DEPARTMENT` | `name:string`, `floor:int`, `zone:int`, `budget:double`, `employeeCount:int`, `isRefrigerated:boolean` | `data` = inserted department with generated `department_id` | missing fields, validation error, DAO error |
+| `GET_ALL_PRODUCTS` | none (`payload = null`) | `data` = array of product objects | DAO or server error |
+| `GET_PRODUCT_BY_ID` | `id:int` | `data` = one product object | missing `id`, product not found |
+| `ADD_PRODUCT` | `name:string`, `price:double`, `isOnSale:boolean` or `is_on_sale:boolean`, `stock:int`, optional `discountPrice:double` or `discount_price:double` | `data` = inserted product with generated `product_id` | missing fields, missing discount price for sale item, validation error, DAO error |
+| `DELETE_PRODUCT_BY_ID` | `id:int` | `data` = `null`, success confirmed by message | missing `id`, product not found |
+| `UPDATE_PRODUCT` | `id:int`, `name:string`, `price:double`, `isOnSale:boolean` or `is_on_sale:boolean`, `stock:int`, optional `discountPrice:double` or `discount_price:double` | `data` = updated product object | missing fields, missing discount price for sale item, product not found, validation error, DAO error |
 
-> Note: Stage 1 filtering is via `Predicate<T>` internally; don’t implement “SQL string filters” per request.
+### 4.3 Entity JSON shapes
+
+Department objects are serialized with these JSON keys:
+
+```json
+{
+  "department_id": 1,
+  "name": "Bakery",
+  "floor": 1,
+  "zone": 3,
+  "budget": 25000.0,
+  "employee_count": 8,
+  "is_refrigerated": false
+}
+```
+
+Product objects are serialized with these JSON keys:
+
+```json
+{
+  "product_id": 1,
+  "name": "Milk",
+  "price": 2.49,
+  "is_on_sale": true,
+  "discount_price": 1.99,
+  "stock": 30
+}
+```
+
+### 4.4 Current protocol notes
+
+- Requests are sent as single-line JSON messages over a TCP socket.
+- Responses are always wrapped in `ServerResponse<T>`.
+- Unknown request types return `status = ERROR` with message `Unknown request type: ...`.
+- `DELETE_DEPARTMENT_BY_ID` and `UPDATE_DEPARTMENT` exist in `RequestType`, but their handlers are not implemented in the current router yet, so they are not listed as supported operations above.
 
 ---
 
