@@ -178,7 +178,8 @@ public class ClientMain {
     /**
      * Runs the product client demo flow.
      * Requests all products, fetches one product by id,
-     * inserts a new product, and verifies the inserted record.
+     * inserts a new product, verifies it, updates it,
+     * verifies the update, deletes it, and confirms removal.
      *
      * @param out the socket writer used to send requests
      * @param in  the socket reader used to receive responses
@@ -284,6 +285,104 @@ public class ClientMain {
             Product verifiedProduct = verifyProductResponse.getData();
             if (verifiedProduct != null) {
                 System.out.println(verifiedProduct);
+            }
+
+            System.out.println();
+            System.out.println("Updating the inserted product...");
+
+            ObjectNode updateProductPayload = MAPPER.createObjectNode();
+            updateProductPayload.put("id", addedProduct.getProductId());
+            updateProductPayload.put("name", "TEST_UpdatedProduct");
+            updateProductPayload.put("price", 24.99);
+            updateProductPayload.put("isOnSale", true);
+            updateProductPayload.put("discountPrice", 17.49);
+            updateProductPayload.put("stock", 35);
+
+            ClientRequest updateProductRequest = createRequest(RequestType.UPDATE_PRODUCT, updateProductPayload);
+            out.println(MAPPER.writeValueAsString(updateProductRequest));
+
+            String updateProductLine = in.readLine();
+            ServerResponse<Product> updateProductResponse = MAPPER.readValue(
+                    updateProductLine,
+                    new TypeReference<>() {
+                    }
+            );
+
+            System.out.println("Status: " + updateProductResponse.getStatus());
+            System.out.println("Message: " + updateProductResponse.getMessage());
+
+            Product updatedProduct = updateProductResponse.getData();
+            if (updatedProduct != null) {
+                System.out.println(updatedProduct);
+            }
+
+            System.out.println();
+            System.out.println("Verifying the updated product by id...");
+
+            ObjectNode verifyUpdatedProductPayload = MAPPER.createObjectNode();
+            verifyUpdatedProductPayload.put("id", addedProduct.getProductId());
+
+            ClientRequest verifyUpdatedProductRequest = createRequest(RequestType.GET_PRODUCT_BY_ID,
+                    verifyUpdatedProductPayload);
+            out.println(MAPPER.writeValueAsString(verifyUpdatedProductRequest));
+
+            String verifyUpdatedProductLine = in.readLine();
+            ServerResponse<Product> verifyUpdatedProductResponse = MAPPER.readValue(
+                    verifyUpdatedProductLine,
+                    new TypeReference<>() {
+                    }
+            );
+
+            System.out.println("Status: " + verifyUpdatedProductResponse.getStatus());
+            System.out.println("Message: " + verifyUpdatedProductResponse.getMessage());
+
+            Product verifiedUpdatedProduct = verifyUpdatedProductResponse.getData();
+            if (verifiedUpdatedProduct != null) {
+                System.out.println(verifiedUpdatedProduct);
+            }
+
+            System.out.println();
+            System.out.println("Deleting the updated product by id...");
+
+            ObjectNode deleteProductPayload = MAPPER.createObjectNode();
+            deleteProductPayload.put("id", addedProduct.getProductId());
+
+            ClientRequest deleteProductRequest = createRequest(RequestType.DELETE_PRODUCT_BY_ID, deleteProductPayload);
+            out.println(MAPPER.writeValueAsString(deleteProductRequest));
+
+            String deleteProductLine = in.readLine();
+            ServerResponse<Void> deleteProductResponse = MAPPER.readValue(
+                    deleteProductLine,
+                    new TypeReference<>() {
+                    }
+            );
+
+            System.out.println("Status: " + deleteProductResponse.getStatus());
+            System.out.println("Message: " + deleteProductResponse.getMessage());
+
+            System.out.println();
+            System.out.println("Confirming that the product was deleted...");
+
+            ObjectNode verifyDeletedProductPayload = MAPPER.createObjectNode();
+            verifyDeletedProductPayload.put("id", addedProduct.getProductId());
+
+            ClientRequest verifyDeletedProductRequest = createRequest(RequestType.GET_PRODUCT_BY_ID,
+                    verifyDeletedProductPayload);
+            out.println(MAPPER.writeValueAsString(verifyDeletedProductRequest));
+
+            String verifyDeletedProductLine = in.readLine();
+            ServerResponse<Product> verifyDeletedProductResponse = MAPPER.readValue(
+                    verifyDeletedProductLine,
+                    new TypeReference<>() {
+                    }
+            );
+
+            System.out.println("Status: " + verifyDeletedProductResponse.getStatus());
+            System.out.println("Message: " + verifyDeletedProductResponse.getMessage());
+
+            Product deletedProductCheck = verifyDeletedProductResponse.getData();
+            if (deletedProductCheck != null) {
+                System.out.println(deletedProductCheck);
             }
         }
     }

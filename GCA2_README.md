@@ -1,30 +1,32 @@
 ---
-title: "GCA2 — N-tier System"
+title: "Supermarket Store System"
 subtitle: "README"
-description: "Project overview, setup, protocol, architecture, testing evidence, and contribution matrix for GCA2."
+description: "Project overview, setup, protocol, architecture, testing status, and contribution matrix for the Supermarket Store System."
 module: "COMP C8Z03 Object-Oriented Programming"
 stage: "2 (Group Project)"
 ---
 
-# 2026 - OOP - L8 - GCA2 — N-tier System
+# 2026 - OOP - L8 - GCA2 — Supermarket Store System
 
 ## 1. Project Overview
 
-### Domain summary (150–200 words)
+### Domain summary
 
-> Our project domain is a Supermarket Store System that models how a modern grocery store is organised and how it
-> handles both in-store stock and online orders. The supermarket is structured into Departments such as Meat, Bakery,
-> Dairy, Produce, and Household. Each department contains a set of Products, and every product belongs to one
-> department,
-> reflecting real store layout and responsibility areas.
-> In addition to managing departments and products, the system supports Online Orders. A customer order contains a list
-> of requested products and quantities. When an order is received, the store can check current stock levels and
-> determine
-> whether the full order can be fulfilled. If items are unavailable, the order can be marked as partially fulfillable,
-> with missing items clearly identified. This mirrors the real process where staff pick items from shelves and stock
-> levels change constantly.
-> The system provides a clear view of how departments, products, and orders connect inside a supermarket and supports
-> day-to-day store operations such as maintaining inventory and processing customer orders.
+The Supermarket Store System models two core parts of a supermarket domain: store departments and the products sold in
+those departments. A department stores operational data such as its floor, zone, staffing level, budget, and whether
+it requires refrigeration. A product stores catalogue and inventory information such as price, stock, sale status, and
+optional discount price. The MySQL schema also includes a `department_products` bridge table to represent the
+relationship between departments and products.
+
+The project is implemented as an N-tier Java application. The client sends JSON requests over a socket connection, the
+server routes each request to the correct handler, and the DAO layer performs persistence through JDBC using MySQL.
+Stage 1 established the entity classes, validation, DAO interfaces, JDBC implementations, predicate-based filtering,
+and JSON conversion. Stage 2 extends that work with a multithreaded server, a shared `ServerResponse<T>` wrapper, and
+socket-based CRUD flows for the currently supported operations.
+
+At the current repository state, the implemented end-to-end protocol covers read and insert for departments, and read,
+insert, update, and delete for products. The README below documents the exact protocol and the actual project setup in
+this repository rather than the original course template.
 
 ### Team
 
@@ -35,11 +37,12 @@ stage: "2 (Group Project)"
 
 ### Key features
 
-- JDBC DAO layer with full CRUD (Stage 1 foundation)
-- Client–server (sockets) JSON protocol + `ServerResponse<T>` wrapper
-- Multithreaded server using `ExecutorService`
-- Binary file upload + retrieval stored as DB BLOB with metadata
-- JUnit 5 test suite with ≥70% line coverage evidence at final stage
+- Java 17 Maven project using Jackson, JUnit 5, and MySQL Connector/J
+- Validated `Department` and `Product` domain models
+- DAO interfaces plus JDBC implementations for both entities
+- JSON conversion utilities and socket protocol DTOs
+- Multithreaded socket server using `ExecutorService`
+- Integration tests for DAO behaviour and unit tests for entity and JSON logic
 
 ---
 
@@ -50,28 +53,35 @@ stage: "2 (Group Project)"
 - Java: `17+` (or the version used in labs)
 - IntelliJ IDEA (recommended)
 - MySQL Server (local)
-- Maven/Gradle (as per your project setup)
+- Maven
 
 ### 2.1 Database setup
 
-1. Create a database (example): `gca2_db`
-2. Run the script:
-    - `sql/mysqlSetup.sql`
-3. Verify seed data:
-    - Each table has at least 10 rows.
+1. Run `sql/mysqlSetup.sql` in MySQL.
+2. The script drops and recreates the database named `supermarket_store_system`.
+3. The script creates these tables:
+    - `departments`
+    - `products`
+    - `department_products`
+4. Seed data is inserted for both main tables and for the bridge table assignments.
 
 ### 2.2 Configure credentials
 
-Create a local config file (do **not** commit credentials):
+This project currently does **not** read database settings from a config file.
 
-- `config/db.properties` (example keys)
-    - `db.url=jdbc:mysql://localhost:3306/gca2_db`
-    - `db.user=...`
-    - `db.password=...`
+Current code defaults:
+
+- Database URL: `jdbc:mysql://localhost:3306/supermarket_store_system`
+- Database user: `root`
+- Database password: environment variable `TEST_DB_PASS`
+
+Before running the server or the JDBC integration tests, set:
+
+- `TEST_DB_PASS=<your_mysql_password>`
 
 ### 2.3 Run the server
 
-- Main class: `server.ServerMain`
+- Main class: `com.supermarketstore.server.ServerMain`
 - Default port: `9000`
 - Expected output:
     - “Server listening on …”
@@ -79,8 +89,17 @@ Create a local config file (do **not** commit credentials):
 
 ### 2.4 Run the client(s)
 
-- Main class: `client.ClientMain`
-- Run **two clients simultaneously** for Stage 2+ demonstration.
+- Main class: `com.supermarketstore.client.ClientMain`
+- The current client is a console demo that sends a fixed sequence of protocol requests.
+- It demonstrates:
+    - get all departments
+    - get department by id
+    - add department
+    - get all products
+    - get product by id
+    - add product
+- Product delete and update are implemented on the server side, but they are not yet demonstrated by the current
+  client flow.
 
 ---
 
@@ -88,15 +107,25 @@ Create a local config file (do **not** commit credentials):
 
 ### 3.1 N-tier overview
 
-- Client (UI / console)
-- Server (socket listener + request handlers + threading)
-- DAO layer (interfaces + JDBC implementations)
-- Database (MySQL)
+- Client layer:
+    - `ClientMain` serializes `ClientRequest` objects to JSON and parses `ServerResponse<T>` replies.
+- Protocol layer:
+    - `ClientRequest`, `RequestType`, and `ServerResponse<T>` define the shared request and response contract.
+- Server layer:
+    - `ServerMain` accepts socket connections and uses `ExecutorService` so each client runs on a separate thread.
+    - `RequestRouter` dispatches each request type to a matching handler.
+- DAO layer:
+    - `DepartmentDao` / `JdbcDepartmentDao`
+    - `ProductDao` / `JdbcProductDao`
+- Database layer:
+    - MySQL schema `supermarket_store_system`
+    - tables `departments`, `products`, and `department_products`
 
 ### 3.2 Architecture diagram
 
 - Path: `docs/architecture.md`
-- Diagram format: Mermaid (preferred)
+- Diagram format: Mermaid
+- The diagram already matches the current client -> protocol -> server -> DAO -> database flow.
 
 ---
 
@@ -246,27 +275,18 @@ Product objects are serialized with these JSON keys:
 
 ---
 
-## 5. Binary File Handling (Stage 3+)
+## 5. Binary File Handling Status
 
-### 5.1 What binary data represents in our domain
+Binary file handling is not implemented in the current repository state.
 
-- Example: Player profile image / Evidence photo / Receipt scan / Audio clip
+Current status:
 
-### 5.2 Storage approach
+- No BLOB columns exist in the MySQL schema.
+- No binary upload or retrieval request types exist in `RequestType`.
+- No client or server flow currently transfers files.
 
-- DB table includes:
-    - `blob_data` (BLOB)
-    - `file_name` (VARCHAR)
-    - `content_type` (VARCHAR)
-    - `file_size` (INT)
-
-### 5.3 Supported binary operations
-
-| Operation           | Request type                 | Notes                                     |
-|:--------------------|:-----------------------------|:------------------------------------------|
-| Upload file         | `UPLOAD_<ENTITY>_FILE`       | Base64 encode bytes + include metadata    |
-| Retrieve file       | `GET_<ENTITY>_FILE`          | Base64 returned, client reconstructs file |
-| Query metadata only | `GET_<ENTITY>_FILE_METADATA` | Must not fetch the BLOB payload           |
+This section is kept only to document the present status of the project. If binary handling is added in a later stage,
+this README should be extended with the exact schema, request types, and payload format used.
 
 ---
 
@@ -274,17 +294,24 @@ Product objects are serialized with these JSON keys:
 
 ### 6.1 Running tests
 
-- Command:
-    - `mvn test` (or your equivalent)
-- Location:
-    - `src/test/java/...`
+- Command: `mvn test`
+- Test source root: `src/test/java`
+- Current test classes:
+    - `DepartmentTest`
+    - `ProductTest`
+    - `JacksonDepartmentJsonConverterTest`
+    - `JacksonProductJsonConverterTest`
+    - `JdbcDepartmentDaoTest`
+    - `JdbcProductDaoTest`
+- The JDBC integration tests use the local MySQL database and also require `TEST_DB_PASS`.
 
-### 6.2 Coverage evidence (Stage 4)
+### 6.2 Current coverage status
 
-- Coverage screenshot committed to:
-    - `/reports/coverage.png`
-- Target:
-    - **≥ 70% line coverage** across DAO + JSON + binary handling classes
+- Coverage evidence is not committed in the current repository state.
+- The existing tests currently focus on:
+    - entity validation and constructor/setter rules
+    - Jackson JSON round-trip behaviour
+    - DAO insert, read, update, delete, and predicate-based filtering
 
 ---
 
@@ -292,24 +319,29 @@ Product objects are serialized with these JSON keys:
 
 ### 7.1 Patterns used (minimum 2)
 
-- Pattern 1: `<name>` — why it fits
-- Pattern 2: `<name>` — why it fits
+- DAO pattern:
+    - `DepartmentDao` and `ProductDao` separate persistence logic from the rest of the application, while
+      `JdbcDepartmentDao` and `JdbcProductDao` provide the concrete JDBC implementation.
+- Router / command-style dispatch:
+    - `RequestRouter` maps request type strings to handler functions, so the server can dispatch incoming protocol
+      messages without large conditional chains.
 
 ### 7.2 Generics usage
 
 - `ServerResponse<T>`
-- Any additional generic abstractions
+- `TypeReference<ServerResponse<List<Department>>>` and similar usages in the client when parsing JSON responses
 
 ### 7.3 Functional interfaces / lambdas
 
 - `Predicate<T>` filtering
-- Any other meaningful lambdas
+- Lambda-based request handlers registered in `RequestRouter`
 
 ---
 
-## 8. Screencast (Stage 4)
+## 8. Screencast Status
 
-- URL: [YouTube link](www.youtube.com)
+- A screencast link is not included in the current repository state.
+- This section should be updated with the final video URL before submission if the module requires it.
 
 ---
 
@@ -355,16 +387,17 @@ Product objects are serialized with these JSON keys:
 
 ## 10. References (Harvard)
 
-- [1] …
-- [2] …
+- Oracle (n.d.) *JDBC Basics*. Available at: [https://docs.oracle.com/javase/tutorial/jdbc/basics/index.html](https://docs.oracle.com/javase/tutorial/jdbc/basics/index.html)
+- FasterXML (n.d.) *Jackson Databind*. Available at: [https://github.com/FasterXML/jackson-databind](https://github.com/FasterXML/jackson-databind)
+- JUnit Team (n.d.) *JUnit 5 User Guide*. Available at: [https://junit.org/junit5/docs/current/user-guide/](https://junit.org/junit5/docs/current/user-guide/)
+- MySQL (n.d.) *MySQL Connector/J Developer Guide*. Available at: [https://dev.mysql.com/doc/connector-j/en/](https://dev.mysql.com/doc/connector-j/en/)
 
 ---
 
 ## 11. AI Tool Use Declaration
 
-- Tools used:
-    - …
-- What was generated:
-    - …
-- What was modified by the team:
-    - …
+- AI tools were used for limited support tasks such as documentation wording, README restructuring, and example
+  formatting.
+- All project-specific content in this README was reviewed and adapted to match the current repository state before it
+  was committed.
+- Code, database schema decisions, protocol behaviour, and project verification remain the responsibility of the team.
