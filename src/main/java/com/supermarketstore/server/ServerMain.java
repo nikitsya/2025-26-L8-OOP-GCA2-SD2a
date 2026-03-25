@@ -6,7 +6,6 @@ import com.supermarketstore.department.JdbcDepartmentDao;
 import com.supermarketstore.product.JdbcProductDao;
 import com.supermarketstore.product.ProductDao;
 import com.supermarketstore.protocol.ClientRequest;
-import com.supermarketstore.protocol.RequestType;
 import com.supermarketstore.protocol.ServerResponse;
 
 import java.io.*;
@@ -16,13 +15,14 @@ import java.nio.charset.StandardCharsets;
 
 
 public class ServerMain {
+    // === Static Fields ===
     private static final int PORT = 9000;
     private static final String DB_URL = "jdbc:mysql://localhost:3306/supermarket_store_system";
     private static final String DB_USER = "root";
     private static final String DB_PASS = System.getenv("TEST_DB_PASS");
-
-    /** Shared JSON mapper used for request parsing and response serialization. */
     private static final ObjectMapper MAPPER = new ObjectMapper();
+
+    // === Methods ===
 
     /**
      * Starts the supermarket server.
@@ -48,9 +48,8 @@ public class ServerMain {
     }
 
     private static void validateConfiguration() {
-        if (DB_PASS == null || DB_PASS.isBlank()) {
+        if (DB_PASS == null || DB_PASS.isBlank())
             throw new IllegalStateException("Set TEST_DB_PASS before running ServerMain");
-        }
     }
 
     private static RequestRouter createRouter() {
