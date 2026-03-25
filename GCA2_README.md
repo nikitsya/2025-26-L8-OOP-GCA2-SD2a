@@ -347,20 +347,41 @@ this README should be extended with the exact schema, request types, and payload
 
 ## 9. Contribution Matrix (Required)
 
-The matrix below reflects the current project ownership visible from the codebase and the feature tracking table.
+> One row per **major task**. “Primary” means who implemented first version. “Contributor/Reviewer” means meaningful
+> review, refactor, debugging, extension, or pair work.
 
-| Major task | Primary author | Contributor / reviewer | Notes |
-|:--|:--|:--|:--|
-| Department domain model, validation, DAO contract, and JDBC DAO | Hanna Bokariuk | Nikita Smiichyk | Based on package ownership and authorship tags |
-| Product domain model, validation, DAO contract, and JDBC DAO | Nikita Smiichyk | Hanna Bokariuk | Based on package ownership and authorship tags |
-| SQL schema and seed data for `departments`, `products`, and `department_products` | Shared | Shared | Central database setup used by both entity areas |
-| JSON request and response envelope classes | Hanna Bokariuk | Nikita Smiichyk | `ClientRequest` authored by Hanna with Nikita contributor tag |
-| Request type enum and product-side protocol constants | Nikita Smiichyk | Shared | `RequestType` currently maintained alongside product flow work |
-| Socket server and multithreaded request handling | Shared | Shared | `ServerMain` and `RequestRouter` integrate both entity areas |
-| Department client demo flow | Hanna Bokariuk | Shared | `runDepartmentDemo` is marked with Hanna authorship |
-| Product client demo flow | Nikita Smiichyk | Shared | `runProductDemo` is marked with Nikita authorship |
-| DAO integration tests and JSON/entity tests | Shared | Shared | Separate test classes exist for both department and product modules |
-| Architecture and protocol documentation | Shared | Shared | Includes Mermaid architecture diagram and this README |
+### 9.1 Matrix (example for a 3-person team)
+
+| Major task                                                              | Primary author | Contributor / reviewer | Notes                              |
+|:------------------------------------------------------------------------|:---------------|:-----------------------|:-----------------------------------|
+| Domain proposal email (150–200 words) + entity list for approval        | Student A      | Student B              | Drafted + refined before sending   |
+| Repo setup (private repo, collaborators, branch plan stage1–stage4)     | Student B      | Student C              | Created branches + README skeleton |
+| `mysqlSetup.sql` schema + seed data (10+ rows per table)                | Student C      | Student A              | Re-runnable from scratch           |
+| DTO/entity modelling + validation rules (trim/blank/range checks)       | Student A      | Student C              | Included int/double/string fields  |
+| DAO interfaces (XxxDao) for all entities                                | Student B      | Student A              | Service depends on interfaces only |
+| JDBC DAO implementation: `getAll` + `getById` using `Optional<T>`       | Student B      | Student C              | PreparedStatements throughout      |
+| JDBC DAO implementation: `insert` returning generated keys              | Student C      | Student B              | Verified `getGeneratedKeys()`      |
+| JDBC DAO implementation: `update` + `deleteById`                        | Student B      | Student A              | Consistent return semantics        |
+| Predicate filtering API (`findByFilter(Predicate<T>)`)                  | Student A      | Student B              | Lambda-based filtering             |
+| JSON conversion (toJson/fromJson/listToJson) per entity                 | Student A      | Student C              | Round-trip verified                |
+| Architecture diagram (Mermaid) + annotated tier explanation             | Student C      | Student B              | Updated as architecture evolved    |
+| Multithreaded server (`ExecutorService`, client handler per connection) | Student B      | Student C              | Clean shutdown + logging           |
+| `ServerResponse<T>` wrapper + consistent response mapping               | Student B      | Student A              | No raw types                       |
+| Protocol documentation in README (all request types + payloads)         | Student A      | Student B              | Kept current per stage             |
+| Client features: display all + display by id                            | Student C      | Student A              | Implemented for owned entity       |
+| Client features: insert/update/delete over sockets                      | Student C      | Student B              | Handles failures gracefully        |
+| Error handling: structured failures (no stack traces to client)         | Student B      | Student A              | Includes validation + DB errors    |
+| Binary schema extension (BLOB + metadata columns)                       | Student A      | Student C              | Updated `mysqlSetup.sql`           |
+| Binary upload (Base64 encode/decode + DB storage)                       | Student A      | Student B              | Stored bytes + metadata            |
+| Binary retrieval (reconstruct file on client)                           | Student A      | Student C              | Verified bytes match               |
+| Metadata-only query (no BLOB fetch)                                     | Student B      | Student A              | Separate DAO method                |
+| Disconnect protocol (`DISCONNECT`) + cleanup                            | Student C      | Student B              | Releases thread cleanly            |
+| Stage 3 core tests (DAO read, insert+id, JSON round-trip)               | Student C      | Student A              | 3+ tests each                      |
+| Stage 4 extended tests (server scenario + binary scenario + full DAO)   | Student B      | Student C              | Added 3+ more each                 |
+| Coverage evidence screenshot `/reports/coverage.png`                    | Student A      | Student B              | IntelliJ coverage runner           |
+| Screencast (8–10 min): demo + design iterations                         | Student C      | Student A              | Script + recording + export        |
+| Harvard references + AI usage declaration                               | Student A      | Student B              | All sources cited                  |
+| Final README polish (run steps, protocol, testing, evidence links)      | Student B      | Student C              | Consistent formatting              |
 
 ---
 
