@@ -43,7 +43,8 @@ Temporary tracking version of README (to be replaced by final version)
 
 </details>
 
-### Stage 2 (F10-F16)
+<details>
+<summary><strong>Stage 2 (F10-F16)</strong></summary>
 
 | #   | Feature                       | Specification                                                                                                                                                                                  | Hanna | Nikita |
 |-----|-------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------|--------|
@@ -55,8 +56,9 @@ Temporary tracking version of README (to be replaced by final version)
 | F15 | Update Entity                 | Client sends updated field data. Server calls updateXxx() and returns the updated entity.                                                                                                      |   ✅   |    ✅    |
 | F16 | Error Handling and Protocol   | Structured error responses returned for all failure cases - exceptions are not propagated to the client. Protocol documented in README: each request type, payload fields, and response shape. |   ✅   |    ✅    |
 
-<details>
-<summary><strong>Stage 3 (F17-F22)</strong></summary>
+</details>
+
+### Stage 3 (F17-F22)</strong></summary>
 
 | Feature | Hanna | Nikita |
 |---------|-------|--------|
@@ -66,8 +68,6 @@ Temporary tracking version of README (to be replaced by final version)
 | F20     |       |        |
 | F21     |       |        |
 | F22     |       |        |
-
-</details>
 
 <details>
 <summary><strong>Stage 4 (F23-F24)</strong></summary>
