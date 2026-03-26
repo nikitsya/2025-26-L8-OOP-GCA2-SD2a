@@ -1,7 +1,5 @@
 # Supermarket Store System
 
-Temporary tracking version of README (to be replaced by final version)
-
 ## Project Stage Plan
 
 | Stage | Week  | Deadline          | Focus                                                      | Features | Status                      | Weight |
