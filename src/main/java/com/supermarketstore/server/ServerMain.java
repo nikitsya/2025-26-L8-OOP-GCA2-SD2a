@@ -25,7 +25,6 @@ public class ServerMain {
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private static final ExecutorService CLIENT_POOL = Executors.newCachedThreadPool();
 
-
     // === Methods ===
 
     /**
@@ -40,6 +39,28 @@ public class ServerMain {
         validateConfiguration();
         RequestRouter router = createRouter();
         start(router);
+    }
+
+    /**
+     * Validates that the database password is available in the environment.
+     *
+     * @throws IllegalStateException if the TEST_DB_PASS environment variable is
+     *                               missing or blank
+     */
+    private static void validateConfiguration() {
+        if (DB_PASS == null || DB_PASS.isBlank())
+            throw new IllegalStateException("Set TEST_DB_PASS before running ServerMain");
+    }
+
+    /**
+     * Creates the request router with JDBC-based department and product DAOs.
+     *
+     * @return a configured router for incoming client requests
+     */
+    private static RequestRouter createRouter() {
+        DepartmentDao departmentDao = new JdbcDepartmentDao(DB_URL, DB_USER, DB_PASS);
+        ProductDao productDao = new JdbcProductDao(DB_URL, DB_USER, DB_PASS);
+        return new RequestRouter(departmentDao, productDao);
     }
 
     /**
@@ -65,28 +86,6 @@ public class ServerMain {
                 });
             }
         }
-    }
-
-    /**
-     * Validates that the database password is available in the environment.
-     *
-     * @throws IllegalStateException if the TEST_DB_PASS environment variable is
-     *                               missing or blank
-     */
-    private static void validateConfiguration() {
-        if (DB_PASS == null || DB_PASS.isBlank())
-            throw new IllegalStateException("Set TEST_DB_PASS before running ServerMain");
-    }
-
-    /**
-     * Creates the request router with JDBC-based department and product DAOs.
-     *
-     * @return a configured router for incoming client requests
-     */
-    private static RequestRouter createRouter() {
-        DepartmentDao departmentDao = new JdbcDepartmentDao(DB_URL, DB_USER, DB_PASS);
-        ProductDao productDao = new JdbcProductDao(DB_URL, DB_USER, DB_PASS);
-        return new RequestRouter(departmentDao, productDao);
     }
 
     /**

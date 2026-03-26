@@ -20,11 +20,11 @@ import java.util.Map;
  * @author Nikita Smiichyk (contributor - product flow, routing updates, and refactoring)
  */
 public class RequestRouter {
-
     // === Fields ===
     private final Map<String, RequestHandler> _handlers = new HashMap<>();
 
     // === Constructors ===
+
     // Creates: a router with all handlers registered against their type constants
     public RequestRouter(DepartmentDao departmentDao, ProductDao productDao) {
         _handlers.put(RequestType.GET_ALL_DEPARTMENTS.name(), req -> handleGetAllDepartments(departmentDao));
@@ -40,6 +40,7 @@ public class RequestRouter {
     }
 
     // === Public API ===
+
     public ServerResponse<?> route(ClientRequest request) {
         RequestHandler handler = _handlers.get(request.getType());
 
@@ -53,6 +54,7 @@ public class RequestRouter {
     }
 
     // === Helpers ===
+
     private ServerResponse<List<Department>> handleGetAllDepartments(DepartmentDao departmentDao) {
         List<Department> departments = departmentDao.getAllDepartments();
         return ServerResponse.ok("Departments retrieved successfully", departments);
