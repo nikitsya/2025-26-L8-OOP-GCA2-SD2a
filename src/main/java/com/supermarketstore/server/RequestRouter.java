@@ -25,7 +25,13 @@ public class RequestRouter {
 
     // === Constructors ===
 
-    // Creates: a router with all handlers registered against their type constants
+    /**
+     * Creates a router and registers all department and product request handlers
+     * under their corresponding request type constants.
+     *
+     * @param departmentDao data access object used by department-related handlers
+     * @param productDao data access object used by product-related handlers
+     */
     public RequestRouter(DepartmentDao departmentDao, ProductDao productDao) {
         _handlers.put(RequestType.GET_ALL_DEPARTMENTS.name(), req -> handleGetAllDepartments(departmentDao));
         _handlers.put(RequestType.GET_DEPARTMENT_BY_ID.name(), req -> handleGetDepartmentById(req, departmentDao));
