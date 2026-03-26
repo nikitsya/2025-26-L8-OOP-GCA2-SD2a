@@ -275,7 +275,11 @@ Product objects are serialized with these JSON keys:
 - Requests are sent as single-line JSON messages over a TCP socket.
 - Responses are always wrapped in `ServerResponse<T>`.
 - Unknown request types return `status = ERROR` with message `Unknown request type: ...`.
-- `DELETE_DEPARTMENT_BY_ID` and `UPDATE_DEPARTMENT` exist in `RequestType`, but their handlers are not implemented in the current router yet, so they are not listed as supported operations above.
+- Missing required payload fields return `status = ERROR` with a descriptive message.
+- `GET`, `ADD`, `UPDATE`, and `DELETE` flows are implemented for both `Department` and `Product`.
+- Delete operations return `data = null` and use the response message to confirm success or explain failure.
+- The current console client demonstrates the protocol by sending a fixed sequence of department and product requests.
+
 
 ---
 
