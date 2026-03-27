@@ -59,23 +59,14 @@ public class ClientMain {
                 }
         );
 
-        System.out.println();
-        System.out.println("Requesting one department by id...");
-        ObjectNode payload = MAPPER.createObjectNode();
-        payload.put("id", 1);
-        ServerResponse<Department> byIdResponse = sendRequest(
+        requestEntityById(
                 out, in,
-                RequestType.GET_DEPARTMENT_BY_ID, payload,
-                new TypeReference<>() {
+                1,
+                "Requesting one department by id...",
+                RequestType.GET_DEPARTMENT_BY_ID,
+                new TypeReference<ServerResponse<Department>>() {
                 }
         );
-        printResponse(byIdResponse);
-
-        Department department = byIdResponse.getData();
-
-        if (department != null) {
-            System.out.println(department);
-        }
 
         System.out.println();
         System.out.println("Adding a new department ");
@@ -219,7 +210,13 @@ public class ClientMain {
                 new TypeReference<ServerResponse<List<Product>>>() {
                 }
         );
-        requestProductById(out, in, 1, "Requesting one product by id...");
+        requestEntityById(
+                out, in, 1,
+                "Requesting one product by id...",
+                RequestType.GET_PRODUCT_BY_ID,
+                new TypeReference<ServerResponse<Product>>() {
+                }
+        );
         Product addedProduct = addDemoProduct(out, in);
 
         if (addedProduct == null) {
@@ -228,11 +225,29 @@ public class ClientMain {
 
         int productId = addedProduct.getProductId();
 
-        requestProductById(out, in, productId, "Verifying the inserted product by id...");
+        requestEntityById(
+                out, in, productId,
+                "Requesting one product by id...",
+                RequestType.GET_PRODUCT_BY_ID,
+                new TypeReference<ServerResponse<Product>>() {
+                }
+        );
         updateDemoProduct(out, in, productId, "Updating the product by id...");
-        requestProductById(out, in, productId, "Verifying the updated product by id...");
+        requestEntityById(
+                out, in, productId,
+                "Requesting one product by id...",
+                RequestType.GET_PRODUCT_BY_ID,
+                new TypeReference<ServerResponse<Product>>() {
+                }
+        );
         deleteProductById(out, in, productId, "Deleting the updated product by id...");
-        requestProductById(out, in, productId, "Confirming that the product was deleted...");
+        requestEntityById(
+                out, in, productId,
+                "Requesting one product by id...",
+                RequestType.GET_PRODUCT_BY_ID,
+                new TypeReference<ServerResponse<Product>>() {
+                }
+        );
     }
 
     // === Helpers ===
@@ -274,11 +289,7 @@ public class ClientMain {
         System.out.println();
         System.out.println(title);
 
-        ServerResponse<List<T>> response = sendRequest(
-                out, in,
-                requestType, null,
-                responseType
-        );
+        ServerResponse<List<T>> response = sendRequest(out, in, requestType, null, responseType);
         printResponse(response);
 
         List<T> items = response.getData();
@@ -289,25 +300,30 @@ public class ClientMain {
         }
     }
 
-    // === Product Helpers ===
-
-    private static void requestProductById(PrintWriter out, BufferedReader in, int productId, String title) throws IOException {
+    private static <T> void requestEntityById(
+            PrintWriter out,
+            BufferedReader in,
+            int id,
+            String title,
+            RequestType requestType,
+            TypeReference<ServerResponse<T>> responseType
+    ) throws IOException {
         System.out.println();
         System.out.println(title);
-        ObjectNode productByIdPayload = MAPPER.createObjectNode();
-        productByIdPayload.put("id", productId);
-        ServerResponse<Product> productByIdResponse = sendRequest(
-                out, in,
-                RequestType.GET_PRODUCT_BY_ID, productByIdPayload,
-                new TypeReference<>() {
-                }
-        );
-        printResponse(productByIdResponse);
-        Product productById = productByIdResponse.getData();
-        if (productById != null) {
-            System.out.println(productById);
+
+        ObjectNode payload = MAPPER.createObjectNode();
+        payload.put("id", id);
+
+        ServerResponse<T> response = sendRequest(out, in, requestType, payload, responseType);
+        printResponse(response);
+
+        T entity = response.getData();
+        if (entity != null) {
+            System.out.println(entity);
         }
     }
+
+    // === Product Helpers ===
 
     private static Product addDemoProduct(PrintWriter out, BufferedReader in) throws IOException {
         System.out.println();
