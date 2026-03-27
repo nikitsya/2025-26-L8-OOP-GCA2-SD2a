@@ -198,11 +198,6 @@ public class ClientMain {
         return MAPPER.readValue(line, responseType);
     }
 
-    private static void printResponse(ServerResponse<?> response) {
-        System.out.println("Status: " + response.getStatus());
-        System.out.println("Message: " + response.getMessage());
-    }
-
     /**
      * Requests all entities of the given type and prints the server response and returned items.
      *
@@ -281,6 +276,11 @@ public class ClientMain {
                 }
         );
         printResponse(response);
+    }
+
+    private static void printResponse(ServerResponse<?> response) {
+        System.out.println("Status: " + response.getStatus());
+        System.out.println("Message: " + response.getMessage());
     }
 
     // === Department Helpers ===
