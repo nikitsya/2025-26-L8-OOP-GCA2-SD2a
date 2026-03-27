@@ -58,9 +58,7 @@ public class ClientMain {
                 new TypeReference<>() {
                 }
         );
-
-        System.out.println("Status:  " + response.getStatus());
-        System.out.println("Message: " + response.getMessage());
+        printResponse(response);
 
         List<Department> departments = response.getData();
 
@@ -80,9 +78,7 @@ public class ClientMain {
                 new TypeReference<>() {
                 }
         );
-
-        System.out.println("Status: " + byIdResponse.getStatus());
-        System.out.println("Message: " + byIdResponse.getMessage());
+        printResponse(byIdResponse);
 
         Department department = byIdResponse.getData();
 
@@ -106,9 +102,7 @@ public class ClientMain {
                 new TypeReference<>() {
                 }
         );
-
-        System.out.println("Status: " + addResponse.getStatus());
-        System.out.println("Message: " + addResponse.getMessage());
+        printResponse(addResponse);
 
         Department addedDepartment = addResponse.getData();
 
@@ -127,9 +121,7 @@ public class ClientMain {
                     new TypeReference<>() {
                     }
             );
-
-            System.out.println("Status: " + verifyResponse.getStatus());
-            System.out.println("Message: " + verifyResponse.getMessage());
+            printResponse(verifyResponse);
 
             Department verifiedDepartment = verifyResponse.getData();
 
@@ -156,9 +148,7 @@ public class ClientMain {
                     new TypeReference<>() {
                     }
             );
-
-            System.out.println("Status: " + updateResponse.getStatus());
-            System.out.println("Message: " + updateResponse.getMessage());
+            printResponse(updateResponse);
 
             Department updatedDepartment = updateResponse.getData();
             if (updatedDepartment != null) {
@@ -177,9 +167,7 @@ public class ClientMain {
                     new TypeReference<>() {
                     }
             );
-
-            System.out.println("Status: " + verifyUpdatedResponse.getStatus());
-            System.out.println("Message: " + verifyUpdatedResponse.getMessage());
+            printResponse(verifyUpdatedResponse);
 
             Department verifiedUpdatedDepartment = verifyUpdatedResponse.getData();
             if (verifiedUpdatedDepartment != null) {
@@ -199,9 +187,7 @@ public class ClientMain {
                     new TypeReference<>() {
                     }
             );
-
-            System.out.println("Status: " + deleteResponse.getStatus());
-            System.out.println("Message: " + deleteResponse.getMessage());
+            printResponse(deleteResponse);
 
             System.out.println();
             System.out.println("Verifying the deleted department by id...");
@@ -214,9 +200,7 @@ public class ClientMain {
                     new TypeReference<>() {
                     }
             );
-
-            System.out.println("Status: " + verifyDeletedResponse.getStatus());
-            System.out.println("Message: " + verifyDeletedResponse.getMessage());
+            printResponse(verifyDeletedResponse);
 
             Department deletedDepartmentCheck = verifyDeletedResponse.getData();
             if (deletedDepartmentCheck != null) {
@@ -246,9 +230,7 @@ public class ClientMain {
                 new TypeReference<>() {
                 }
         );
-        System.out.println("Status: " + productsResponse.getStatus());
-        System.out.println("Message: " + productsResponse.getMessage());
-
+        printResponse(productsResponse);
         List<Product> products = productsResponse.getData();
         if (products != null) {
             for (Product product : products) {
@@ -266,8 +248,7 @@ public class ClientMain {
                 new TypeReference<>() {
                 }
         );
-        System.out.println("Status: " + productByIdResponse.getStatus());
-        System.out.println("Message: " + productByIdResponse.getMessage());
+        printResponse(productByIdResponse);
         Product productById = productByIdResponse.getData();
         if (productById != null) {
             System.out.println(productById);
@@ -287,8 +268,7 @@ public class ClientMain {
                 new TypeReference<>() {
                 }
         );
-        System.out.println("Status: " + addProductResponse.getStatus());
-        System.out.println("Message: " + addProductResponse.getMessage());
+        printResponse(addProductResponse);
         Product addedProduct = addProductResponse.getData();
         if (addedProduct != null) {
             System.out.println(addedProduct);
@@ -305,8 +285,7 @@ public class ClientMain {
                     new TypeReference<>() {
                     }
             );
-            System.out.println("Status: " + verifyProductResponse.getStatus());
-            System.out.println("Message: " + verifyProductResponse.getMessage());
+            printResponse(verifyProductResponse);
             Product verifiedProduct = verifyProductResponse.getData();
             if (verifiedProduct != null) {
                 System.out.println(verifiedProduct);
@@ -327,8 +306,7 @@ public class ClientMain {
                     new TypeReference<>() {
                     }
             );
-            System.out.println("Status: " + updateProductResponse.getStatus());
-            System.out.println("Message: " + updateProductResponse.getMessage());
+            printResponse(updateProductResponse);
             Product updatedProduct = updateProductResponse.getData();
             if (updatedProduct != null) {
                 System.out.println(updatedProduct);
@@ -344,8 +322,7 @@ public class ClientMain {
                     new TypeReference<>() {
                     }
             );
-            System.out.println("Status: " + verifyUpdatedProductResponse.getStatus());
-            System.out.println("Message: " + verifyUpdatedProductResponse.getMessage());
+            printResponse(verifyUpdatedProductResponse);
             Product verifiedUpdatedProduct = verifyUpdatedProductResponse.getData();
             if (verifiedUpdatedProduct != null) {
                 System.out.println(verifiedUpdatedProduct);
@@ -361,8 +338,7 @@ public class ClientMain {
                     new TypeReference<>() {
                     }
             );
-            System.out.println("Status: " + deleteProductResponse.getStatus());
-            System.out.println("Message: " + deleteProductResponse.getMessage());
+            printResponse(deleteProductResponse);
 
             System.out.println();
             System.out.println("Confirming that the product was deleted...");
@@ -374,8 +350,7 @@ public class ClientMain {
                     new TypeReference<>() {
                     }
             );
-            System.out.println("Status: " + verifyDeletedProductResponse.getStatus());
-            System.out.println("Message: " + verifyDeletedProductResponse.getMessage());
+            printResponse(verifyDeletedProductResponse);
             Product deletedProductCheck = verifyDeletedProductResponse.getData();
             if (deletedProductCheck != null) {
                 System.out.println(deletedProductCheck);
@@ -408,4 +383,12 @@ public class ClientMain {
         String line = in.readLine();
         return MAPPER.readValue(line, responseType);
     }
+
+    private static void printResponse(ServerResponse<?> response) {
+        System.out.println("Status: " + response.getStatus());
+        System.out.println("Message: " + response.getMessage());
+    }
+
+    // === Product Helpers ===
+
 }
