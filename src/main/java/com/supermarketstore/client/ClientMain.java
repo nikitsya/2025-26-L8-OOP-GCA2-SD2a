@@ -53,7 +53,8 @@ public class ClientMain {
      */
     private static void runDepartmentDemo(PrintWriter out, BufferedReader in) throws IOException {
         requestAllEntities(
-                out, in, "Requesting all departments...",
+                out, in,
+                "Requesting all departments...",
                 RequestType.GET_ALL_DEPARTMENTS,
                 new TypeReference<ServerResponse<List<Department>>>() {
                 }
@@ -68,122 +69,48 @@ public class ClientMain {
                 }
         );
 
-        System.out.println();
-        System.out.println("Adding a new department ");
+        Department addedDepartment = addDemoDepartment(out, in);
+        if (addedDepartment == null) {
+            return;
+        }
 
-        ObjectNode addPayload = MAPPER.createObjectNode();
-        addPayload.put("name", "TEST_NewDepartment");
-        addPayload.put("floor", 1);
-        addPayload.put("zone", 11);
-        addPayload.put("budget", 10000.0);
-        addPayload.put("employeeCount", 5);
-        addPayload.put("isRefrigerated", false);
-        ServerResponse<Department> addResponse = sendRequest(
+        int departmentId = addedDepartment.getDepartmentId();
+
+        requestEntityById(
                 out, in,
-                RequestType.ADD_DEPARTMENT, addPayload,
-                new TypeReference<>() {
+                departmentId,
+                "Verifying the inserted department by id...",
+                RequestType.GET_DEPARTMENT_BY_ID,
+                new TypeReference<ServerResponse<Department>>() {
                 }
         );
-        printResponse(addResponse);
 
-        Department addedDepartment = addResponse.getData();
+        updateDemoDepartment(out, in, departmentId);
 
-        if (addedDepartment != null) {
-            System.out.println(addedDepartment);
-        }
-        if (addedDepartment != null) {
-            System.out.println();
-            System.out.println("Verifying the inserted department by id...");
+        requestEntityById(
+                out, in,
+                departmentId,
+                "Verifying the updated department by id...",
+                RequestType.GET_DEPARTMENT_BY_ID,
+                new TypeReference<ServerResponse<Department>>() {
+                }
+        );
 
-            ObjectNode verifyPayload = MAPPER.createObjectNode();
-            verifyPayload.put("id", addedDepartment.getDepartmentId());
-            ServerResponse<Department> verifyResponse = sendRequest(
-                    out, in,
-                    RequestType.GET_DEPARTMENT_BY_ID, verifyPayload,
-                    new TypeReference<>() {
-                    }
-            );
-            printResponse(verifyResponse);
+        deleteEntityById(
+                out, in,
+                departmentId,
+                "Deleting the updated department by id...",
+                RequestType.DELETE_DEPARTMENT_BY_ID
+        );
 
-            Department verifiedDepartment = verifyResponse.getData();
-
-            if (verifiedDepartment != null) {
-                System.out.println(verifiedDepartment);
-            }
-        }
-
-        if (addedDepartment != null) {
-            System.out.println();
-            System.out.println("Updating the inserted department...");
-
-            ObjectNode updatePayload = MAPPER.createObjectNode();
-            updatePayload.put("id", addedDepartment.getDepartmentId());
-            updatePayload.put("name", "TEST_UpdatedDepartment");
-            updatePayload.put("floor", 2);
-            updatePayload.put("zone", 12);
-            updatePayload.put("budget", 15000.0);
-            updatePayload.put("employeeCount", 8);
-            updatePayload.put("isRefrigerated", true);
-            ServerResponse<Department> updateResponse = sendRequest(
-                    out, in,
-                    RequestType.UPDATE_DEPARTMENT, updatePayload,
-                    new TypeReference<>() {
-                    }
-            );
-            printResponse(updateResponse);
-
-            Department updatedDepartment = updateResponse.getData();
-            if (updatedDepartment != null) {
-                System.out.println(updatedDepartment);
-            }
-        }
-        if (addedDepartment != null) {
-            System.out.println();
-            System.out.println("Verifying the updated department by id...");
-
-            ObjectNode verifyUpdatedPayload = MAPPER.createObjectNode();
-            verifyUpdatedPayload.put("id", addedDepartment.getDepartmentId());
-            ServerResponse<Department> verifyUpdatedResponse = sendRequest(
-                    out, in,
-                    RequestType.GET_DEPARTMENT_BY_ID, verifyUpdatedPayload,
-                    new TypeReference<>() {
-                    }
-            );
-            printResponse(verifyUpdatedResponse);
-
-            Department verifiedUpdatedDepartment = verifyUpdatedResponse.getData();
-            if (verifiedUpdatedDepartment != null) {
-                System.out.println(verifiedUpdatedDepartment);
-            }
-        }
-
-        if (addedDepartment != null) {
-            deleteEntityById(
-                    out, in,
-                    addedDepartment.getDepartmentId(),
-                    "Deleting the updated department by id...",
-                    RequestType.DELETE_DEPARTMENT_BY_ID
-            );
-
-            System.out.println();
-            System.out.println("Verifying the deleted department by id...");
-
-            ObjectNode verifyDeletedPayload = MAPPER.createObjectNode();
-            verifyDeletedPayload.put("id", addedDepartment.getDepartmentId());
-            ServerResponse<Department> verifyDeletedResponse = sendRequest(
-                    out, in,
-                    RequestType.GET_DEPARTMENT_BY_ID, verifyDeletedPayload,
-                    new TypeReference<>() {
-                    }
-            );
-            printResponse(verifyDeletedResponse);
-
-            Department deletedDepartmentCheck = verifyDeletedResponse.getData();
-            if (deletedDepartmentCheck != null) {
-                System.out.println(deletedDepartmentCheck);
-            }
-        }
-
+        requestEntityById(
+                out, in,
+                departmentId,
+                "Verifying the deleted department by id...",
+                RequestType.GET_DEPARTMENT_BY_ID,
+                new TypeReference<ServerResponse<Department>>() {
+                }
+        );
     }
 
     /**
@@ -263,11 +190,7 @@ public class ClientMain {
      * @throws IOException if the request cannot be written or the response cannot be read or parsed
      * @author Nikita Smiichyk
      */
-    private static <T> ServerResponse<T> sendRequest(
-            PrintWriter out, BufferedReader in,
-            RequestType type, JsonNode payload,
-            TypeReference<ServerResponse<T>> responseType
-    ) throws IOException {
+    private static <T> ServerResponse<T> sendRequest(PrintWriter out, BufferedReader in, RequestType type, JsonNode payload, TypeReference<ServerResponse<T>> responseType) throws IOException {
         ClientRequest request = new ClientRequest(type.name(), payload);
         out.println(MAPPER.writeValueAsString(request));
 
@@ -280,11 +203,7 @@ public class ClientMain {
         System.out.println("Message: " + response.getMessage());
     }
 
-    private static <T> void requestAllEntities(
-            PrintWriter out, BufferedReader in,
-            String title, RequestType requestType,
-            TypeReference<ServerResponse<List<T>>> responseType
-    ) throws IOException {
+    private static <T> void requestAllEntities(PrintWriter out, BufferedReader in, String title, RequestType requestType, TypeReference<ServerResponse<List<T>>> responseType) throws IOException {
         System.out.println();
         System.out.println(title);
 
@@ -299,14 +218,7 @@ public class ClientMain {
         }
     }
 
-    private static <T> void requestEntityById(
-            PrintWriter out,
-            BufferedReader in,
-            int id,
-            String title,
-            RequestType requestType,
-            TypeReference<ServerResponse<T>> responseType
-    ) throws IOException {
+    private static <T> void requestEntityById(PrintWriter out, BufferedReader in, int id, String title, RequestType requestType, TypeReference<ServerResponse<T>> responseType) throws IOException {
         System.out.println();
         System.out.println(title);
 
@@ -322,13 +234,7 @@ public class ClientMain {
         }
     }
 
-    private static void deleteEntityById(
-            PrintWriter out,
-            BufferedReader in,
-            int id,
-            String title,
-            RequestType requestType
-    ) throws IOException {
+    private static void deleteEntityById(PrintWriter out, BufferedReader in, int id, String title, RequestType requestType) throws IOException {
         System.out.println();
         System.out.println(title);
 
@@ -342,6 +248,62 @@ public class ClientMain {
                 }
         );
         printResponse(response);
+    }
+
+    // === Department Helpers ===
+
+    private static Department addDemoDepartment(PrintWriter out, BufferedReader in) throws IOException {
+        System.out.println();
+        System.out.println("Adding a new department...");
+
+        ObjectNode addDepartmentPayload = MAPPER.createObjectNode();
+        addDepartmentPayload.put("name", "TEST_NewDepartment");
+        addDepartmentPayload.put("floor", 1);
+        addDepartmentPayload.put("zone", 11);
+        addDepartmentPayload.put("budget", 10000.0);
+        addDepartmentPayload.put("employeeCount", 5);
+        addDepartmentPayload.put("isRefrigerated", false);
+
+        ServerResponse<Department> addDepartmentResponse = sendRequest(
+                out, in,
+                RequestType.ADD_DEPARTMENT, addDepartmentPayload,
+                new TypeReference<>() {
+                }
+        );
+        printResponse(addDepartmentResponse);
+
+        Department addedDepartment = addDepartmentResponse.getData();
+        if (addedDepartment != null) {
+            System.out.println(addedDepartment);
+        }
+        return addedDepartment;
+    }
+
+    private static void updateDemoDepartment(PrintWriter out, BufferedReader in, int departmentId) throws IOException {
+        System.out.println();
+        System.out.println("Updating the department by id...");
+
+        ObjectNode updateDepartmentPayload = MAPPER.createObjectNode();
+        updateDepartmentPayload.put("id", departmentId);
+        updateDepartmentPayload.put("name", "TEST_UpdatedDepartment");
+        updateDepartmentPayload.put("floor", 2);
+        updateDepartmentPayload.put("zone", 12);
+        updateDepartmentPayload.put("budget", 15000.0);
+        updateDepartmentPayload.put("employeeCount", 8);
+        updateDepartmentPayload.put("isRefrigerated", true);
+
+        ServerResponse<Department> updateDepartmentResponse = sendRequest(
+                out, in,
+                RequestType.UPDATE_DEPARTMENT, updateDepartmentPayload,
+                new TypeReference<>() {
+                }
+        );
+        printResponse(updateDepartmentResponse);
+
+        Department updatedDepartment = updateDepartmentResponse.getData();
+        if (updatedDepartment != null) {
+            System.out.println(updatedDepartment);
+        }
     }
 
     // === Product Helpers ===
