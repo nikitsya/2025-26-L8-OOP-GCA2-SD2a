@@ -158,18 +158,12 @@ public class ClientMain {
         }
 
         if (addedDepartment != null) {
-            System.out.println();
-            System.out.println("Deleting the updated department by id...");
-
-            ObjectNode deletePayload = MAPPER.createObjectNode();
-            deletePayload.put("id", addedDepartment.getDepartmentId());
-            ServerResponse<Void> deleteResponse = sendRequest(
+            deleteEntityById(
                     out, in,
-                    RequestType.DELETE_DEPARTMENT_BY_ID, deletePayload,
-                    new TypeReference<>() {
-                    }
+                    addedDepartment.getDepartmentId(),
+                    "Deleting the updated department by id...",
+                    RequestType.DELETE_DEPARTMENT_BY_ID
             );
-            printResponse(deleteResponse);
 
             System.out.println();
             System.out.println("Verifying the deleted department by id...");
@@ -232,7 +226,7 @@ public class ClientMain {
                 new TypeReference<ServerResponse<Product>>() {
                 }
         );
-        updateDemoProduct(out, in, productId, "Updating the product by id...");
+        updateDemoProduct(out, in, productId);
         requestEntityById(
                 out, in, productId,
                 "Requesting one product by id...",
@@ -240,7 +234,12 @@ public class ClientMain {
                 new TypeReference<ServerResponse<Product>>() {
                 }
         );
-        deleteProductById(out, in, productId, "Deleting the updated product by id...");
+        deleteEntityById(
+                out, in,
+                productId,
+                "Deleting the updated product by id...",
+                RequestType.DELETE_PRODUCT_BY_ID
+        );
         requestEntityById(
                 out, in, productId,
                 "Requesting one product by id...",
@@ -323,6 +322,28 @@ public class ClientMain {
         }
     }
 
+    private static void deleteEntityById(
+            PrintWriter out,
+            BufferedReader in,
+            int id,
+            String title,
+            RequestType requestType
+    ) throws IOException {
+        System.out.println();
+        System.out.println(title);
+
+        ObjectNode payload = MAPPER.createObjectNode();
+        payload.put("id", id);
+
+        ServerResponse<Void> response = sendRequest(
+                out, in,
+                requestType, payload,
+                new TypeReference<>() {
+                }
+        );
+        printResponse(response);
+    }
+
     // === Product Helpers ===
 
     private static Product addDemoProduct(PrintWriter out, BufferedReader in) throws IOException {
@@ -348,9 +369,9 @@ public class ClientMain {
         return addedProduct;
     }
 
-    private static void updateDemoProduct(PrintWriter out, BufferedReader in, int productId, String title) throws IOException {
+    private static void updateDemoProduct(PrintWriter out, BufferedReader in, int productId) throws IOException {
         System.out.println();
-        System.out.println(title);
+        System.out.println("Updating the product by id...");
         ObjectNode updateProductPayload = MAPPER.createObjectNode();
         updateProductPayload.put("id", productId);
         updateProductPayload.put("name", "TEST_UpdatedProduct");
@@ -369,19 +390,5 @@ public class ClientMain {
         if (updatedProduct != null) {
             System.out.println(updatedProduct);
         }
-    }
-
-    private static void deleteProductById(PrintWriter out, BufferedReader in, int productId, String title) throws IOException {
-        System.out.println();
-        System.out.println(title);
-        ObjectNode deleteProductPayload = MAPPER.createObjectNode();
-        deleteProductPayload.put("id", productId);
-        ServerResponse<Void> deleteProductResponse = sendRequest(
-                out, in,
-                RequestType.DELETE_PRODUCT_BY_ID, deleteProductPayload,
-                new TypeReference<>() {
-                }
-        );
-        printResponse(deleteProductResponse);
     }
 }
