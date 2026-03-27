@@ -222,140 +222,21 @@ public class ClientMain {
      * @author Nikita Smiichyk
      */
     private static void runProductDemo(PrintWriter out, BufferedReader in) throws IOException {
-        System.out.println();
-        System.out.println("Requesting all products...");
-        ServerResponse<List<Product>> productsResponse = sendRequest(
-                out, in,
-                RequestType.GET_ALL_PRODUCTS, null,
-                new TypeReference<>() {
-                }
-        );
-        printResponse(productsResponse);
-        List<Product> products = productsResponse.getData();
-        if (products != null) {
-            for (Product product : products) {
-                System.out.println(product);
-            }
+        requestAllProducts(out, in);
+        requestProductById(out, in, 1, "Requesting one product by id...");
+        Product addedProduct = addDemoProduct(out, in);
+
+        if (addedProduct == null) {
+            return;
         }
 
-        System.out.println();
-        System.out.println("Requesting one product by id...");
-        ObjectNode productByIdPayload = MAPPER.createObjectNode();
-        productByIdPayload.put("id", 1);
-        ServerResponse<Product> productByIdResponse = sendRequest(
-                out, in,
-                RequestType.GET_PRODUCT_BY_ID, productByIdPayload,
-                new TypeReference<>() {
-                }
-        );
-        printResponse(productByIdResponse);
-        Product productById = productByIdResponse.getData();
-        if (productById != null) {
-            System.out.println(productById);
-        }
+        int productId = addedProduct.getProductId();
 
-        System.out.println();
-        System.out.println("Adding a new product...");
-        ObjectNode addProductPayload = MAPPER.createObjectNode();
-        addProductPayload.put("name", "TEST_NewProduct");
-        addProductPayload.put("price", 29.99);
-        addProductPayload.put("isOnSale", true);
-        addProductPayload.put("discountPrice", 19.99);
-        addProductPayload.put("stock", 50);
-        ServerResponse<Product> addProductResponse = sendRequest(
-                out, in,
-                RequestType.ADD_PRODUCT, addProductPayload,
-                new TypeReference<>() {
-                }
-        );
-        printResponse(addProductResponse);
-        Product addedProduct = addProductResponse.getData();
-        if (addedProduct != null) {
-            System.out.println(addedProduct);
-        }
-
-        if (addedProduct != null) {
-            System.out.println();
-            System.out.println("Verifying the inserted product by id...");
-            ObjectNode verifyProductPayload = MAPPER.createObjectNode();
-            verifyProductPayload.put("id", addedProduct.getProductId());
-            ServerResponse<Product> verifyProductResponse = sendRequest(
-                    out, in,
-                    RequestType.GET_PRODUCT_BY_ID, verifyProductPayload,
-                    new TypeReference<>() {
-                    }
-            );
-            printResponse(verifyProductResponse);
-            Product verifiedProduct = verifyProductResponse.getData();
-            if (verifiedProduct != null) {
-                System.out.println(verifiedProduct);
-            }
-
-            System.out.println();
-            System.out.println("Updating the inserted product...");
-            ObjectNode updateProductPayload = MAPPER.createObjectNode();
-            updateProductPayload.put("id", addedProduct.getProductId());
-            updateProductPayload.put("name", "TEST_UpdatedProduct");
-            updateProductPayload.put("price", 24.99);
-            updateProductPayload.put("isOnSale", true);
-            updateProductPayload.put("discountPrice", 17.49);
-            updateProductPayload.put("stock", 35);
-            ServerResponse<Product> updateProductResponse = sendRequest(
-                    out, in,
-                    RequestType.UPDATE_PRODUCT, updateProductPayload,
-                    new TypeReference<>() {
-                    }
-            );
-            printResponse(updateProductResponse);
-            Product updatedProduct = updateProductResponse.getData();
-            if (updatedProduct != null) {
-                System.out.println(updatedProduct);
-            }
-
-            System.out.println();
-            System.out.println("Verifying the updated product by id...");
-            ObjectNode verifyUpdatedProductPayload = MAPPER.createObjectNode();
-            verifyUpdatedProductPayload.put("id", addedProduct.getProductId());
-            ServerResponse<Product> verifyUpdatedProductResponse = sendRequest(
-                    out, in,
-                    RequestType.GET_PRODUCT_BY_ID, verifyUpdatedProductPayload,
-                    new TypeReference<>() {
-                    }
-            );
-            printResponse(verifyUpdatedProductResponse);
-            Product verifiedUpdatedProduct = verifyUpdatedProductResponse.getData();
-            if (verifiedUpdatedProduct != null) {
-                System.out.println(verifiedUpdatedProduct);
-            }
-
-            System.out.println();
-            System.out.println("Deleting the updated product by id...");
-            ObjectNode deleteProductPayload = MAPPER.createObjectNode();
-            deleteProductPayload.put("id", addedProduct.getProductId());
-            ServerResponse<Void> deleteProductResponse = sendRequest(
-                    out, in,
-                    RequestType.DELETE_PRODUCT_BY_ID, deleteProductPayload,
-                    new TypeReference<>() {
-                    }
-            );
-            printResponse(deleteProductResponse);
-
-            System.out.println();
-            System.out.println("Confirming that the product was deleted...");
-            ObjectNode verifyDeletedProductPayload = MAPPER.createObjectNode();
-            verifyDeletedProductPayload.put("id", addedProduct.getProductId());
-            ServerResponse<Product> verifyDeletedProductResponse = sendRequest(
-                    out, in,
-                    RequestType.GET_PRODUCT_BY_ID, verifyDeletedProductPayload,
-                    new TypeReference<>() {
-                    }
-            );
-            printResponse(verifyDeletedProductResponse);
-            Product deletedProductCheck = verifyDeletedProductResponse.getData();
-            if (deletedProductCheck != null) {
-                System.out.println(deletedProductCheck);
-            }
-        }
+        requestProductById(out, in, productId, "Verifying the inserted product by id...");
+        updateDemoProduct(out, in, productId, "Updating the product by id...");
+        requestProductById(out, in, productId, "Verifying the updated product by id...");
+        deleteProductById(out, in, productId, "Deleting the updated product by id...");
+        requestProductById(out, in, productId, "Confirming that the product was deleted...");
     }
 
     // === Helpers ===
@@ -390,5 +271,99 @@ public class ClientMain {
     }
 
     // === Product Helpers ===
+    private static void requestAllProducts(PrintWriter out, BufferedReader in) throws IOException {
+        System.out.println("Requesting all products...");
+        System.out.println();
+        ServerResponse<List<Product>> productsResponse = sendRequest(
+                out, in,
+                RequestType.GET_ALL_PRODUCTS, null,
+                new TypeReference<>() {
+                }
+        );
+        printResponse(productsResponse);
+        List<Product> products = productsResponse.getData();
+        if (products != null) {
+            for (Product product : products) {
+                System.out.println(product);
+            }
+        }
+    }
 
+    private static void requestProductById(PrintWriter out, BufferedReader in, int productId, String title) throws IOException {
+        System.out.println();
+        System.out.println(title);
+        ObjectNode productByIdPayload = MAPPER.createObjectNode();
+        productByIdPayload.put("id", productId);
+        ServerResponse<Product> productByIdResponse = sendRequest(
+                out, in,
+                RequestType.GET_PRODUCT_BY_ID, productByIdPayload,
+                new TypeReference<>() {
+                }
+        );
+        printResponse(productByIdResponse);
+        Product productById = productByIdResponse.getData();
+        if (productById != null) {
+            System.out.println(productById);
+        }
+    }
+
+    private static Product addDemoProduct(PrintWriter out, BufferedReader in) throws IOException {
+        System.out.println();
+        System.out.println("Adding a new product...");
+        ObjectNode addProductPayload = MAPPER.createObjectNode();
+        addProductPayload.put("name", "TEST_NewProduct");
+        addProductPayload.put("price", 29.99);
+        addProductPayload.put("isOnSale", true);
+        addProductPayload.put("discountPrice", 19.99);
+        addProductPayload.put("stock", 50);
+        ServerResponse<Product> addProductResponse = sendRequest(
+                out, in,
+                RequestType.ADD_PRODUCT, addProductPayload,
+                new TypeReference<>() {
+                }
+        );
+        printResponse(addProductResponse);
+        Product addedProduct = addProductResponse.getData();
+        if (addedProduct != null) {
+            System.out.println(addedProduct);
+        }
+        return addedProduct;
+    }
+
+    private static void updateDemoProduct(PrintWriter out, BufferedReader in, int productId, String title) throws IOException {
+        System.out.println();
+        System.out.println(title);
+        ObjectNode updateProductPayload = MAPPER.createObjectNode();
+        updateProductPayload.put("id", productId);
+        updateProductPayload.put("name", "TEST_UpdatedProduct");
+        updateProductPayload.put("price", 24.99);
+        updateProductPayload.put("isOnSale", true);
+        updateProductPayload.put("discountPrice", 17.49);
+        updateProductPayload.put("stock", 35);
+        ServerResponse<Product> updateProductResponse = sendRequest(
+                out, in,
+                RequestType.UPDATE_PRODUCT, updateProductPayload,
+                new TypeReference<>() {
+                }
+        );
+        printResponse(updateProductResponse);
+        Product updatedProduct = updateProductResponse.getData();
+        if (updatedProduct != null) {
+            System.out.println(updatedProduct);
+        }
+    }
+
+    private static void deleteProductById(PrintWriter out, BufferedReader in, int productId, String title) throws IOException {
+        System.out.println();
+        System.out.println(title);
+        ObjectNode deleteProductPayload = MAPPER.createObjectNode();
+        deleteProductPayload.put("id", productId);
+        ServerResponse<Void> deleteProductResponse = sendRequest(
+                out, in,
+                RequestType.DELETE_PRODUCT_BY_ID, deleteProductPayload,
+                new TypeReference<>() {
+                }
+        );
+        printResponse(deleteProductResponse);
+    }
 }
