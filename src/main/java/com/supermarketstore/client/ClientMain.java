@@ -206,12 +206,12 @@ public class ClientMain {
     /**
      * Requests all entities of the given type and prints the server response and returned items.
      *
-     * @param out the socket writer used to send requests
-     * @param in the socket reader used to receive responses
-     * @param title the message printed before sending the request
-     * @param requestType the request type used to fetch all entities
+     * @param out          the socket writer used to send requests
+     * @param in           the socket reader used to receive responses
+     * @param title        the message printed before sending the request
+     * @param requestType  the request type used to fetch all entities
      * @param responseType the type reference used to deserialize the response body
-     * @param <T> the entity type returned by the server
+     * @param <T>          the entity type returned by the server
      * @throws IOException if client-server communication fails
      */
     private static <T> void requestAllEntities(PrintWriter out, BufferedReader in, String title, RequestType requestType, TypeReference<ServerResponse<List<T>>> responseType) throws IOException {
@@ -232,13 +232,13 @@ public class ClientMain {
     /**
      * Requests one entity by id and prints the server response and returned entity.
      *
-     * @param out the socket writer used to send requests
-     * @param in the socket reader used to receive responses
-     * @param id the entity id
-     * @param title the message printed before sending the request
-     * @param requestType the request type used to fetch the entity
+     * @param out          the socket writer used to send requests
+     * @param in           the socket reader used to receive responses
+     * @param id           the entity id
+     * @param title        the message printed before sending the request
+     * @param requestType  the request type used to fetch the entity
      * @param responseType the type reference used to deserialize the response body
-     * @param <T> the entity type returned by the server
+     * @param <T>          the entity type returned by the server
      * @throws IOException if client-server communication fails
      */
     private static <T> void requestEntityById(PrintWriter out, BufferedReader in, int id, String title, RequestType requestType, TypeReference<ServerResponse<T>> responseType) throws IOException {
@@ -260,10 +260,10 @@ public class ClientMain {
     /**
      * Deletes one entity by id and prints the server response.
      *
-     * @param out the socket writer used to send requests
-     * @param in the socket reader used to receive responses
-     * @param id the entity id
-     * @param title the message printed before sending the request
+     * @param out         the socket writer used to send requests
+     * @param in          the socket reader used to receive responses
+     * @param id          the entity id
+     * @param title       the message printed before sending the request
      * @param requestType the request type used to delete the entity
      * @throws IOException if client-server communication fails
      */
