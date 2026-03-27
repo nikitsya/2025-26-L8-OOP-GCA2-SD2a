@@ -52,24 +52,15 @@ public class ClientMain {
      * @author Hanna Bokariuk
      */
     private static void runDepartmentDemo(PrintWriter out, BufferedReader in) throws IOException {
-        ServerResponse<List<Department>> response = sendRequest(
-                out, in,
-                RequestType.GET_ALL_DEPARTMENTS, null,
-                new TypeReference<>() {
+        requestAllEntities(
+                out, in, "Requesting all departments...",
+                RequestType.GET_ALL_DEPARTMENTS,
+                new TypeReference<ServerResponse<List<Department>>>() {
                 }
         );
-        printResponse(response);
 
-        List<Department> departments = response.getData();
-
-        if (departments != null) {
-            for (Department department : departments) {
-                System.out.println(department);
-            }
-        }
         System.out.println();
         System.out.println("Requesting one department by id...");
-
         ObjectNode payload = MAPPER.createObjectNode();
         payload.put("id", 1);
         ServerResponse<Department> byIdResponse = sendRequest(
@@ -222,7 +213,12 @@ public class ClientMain {
      * @author Nikita Smiichyk
      */
     private static void runProductDemo(PrintWriter out, BufferedReader in) throws IOException {
-        requestAllProducts(out, in);
+        requestAllEntities(
+                out, in, "Requesting all products...",
+                RequestType.GET_ALL_PRODUCTS,
+                new TypeReference<ServerResponse<List<Product>>>() {
+                }
+        );
         requestProductById(out, in, 1, "Requesting one product by id...");
         Product addedProduct = addDemoProduct(out, in);
 
@@ -270,24 +266,30 @@ public class ClientMain {
         System.out.println("Message: " + response.getMessage());
     }
 
-    // === Product Helpers ===
-    private static void requestAllProducts(PrintWriter out, BufferedReader in) throws IOException {
-        System.out.println("Requesting all products...");
+    private static <T> void requestAllEntities(
+            PrintWriter out, BufferedReader in,
+            String title, RequestType requestType,
+            TypeReference<ServerResponse<List<T>>> responseType
+    ) throws IOException {
         System.out.println();
-        ServerResponse<List<Product>> productsResponse = sendRequest(
+        System.out.println(title);
+
+        ServerResponse<List<T>> response = sendRequest(
                 out, in,
-                RequestType.GET_ALL_PRODUCTS, null,
-                new TypeReference<>() {
-                }
+                requestType, null,
+                responseType
         );
-        printResponse(productsResponse);
-        List<Product> products = productsResponse.getData();
-        if (products != null) {
-            for (Product product : products) {
-                System.out.println(product);
+        printResponse(response);
+
+        List<T> items = response.getData();
+        if (items != null) {
+            for (T item : items) {
+                System.out.println(item);
             }
         }
     }
+
+    // === Product Helpers ===
 
     private static void requestProductById(PrintWriter out, BufferedReader in, int productId, String title) throws IOException {
         System.out.println();
