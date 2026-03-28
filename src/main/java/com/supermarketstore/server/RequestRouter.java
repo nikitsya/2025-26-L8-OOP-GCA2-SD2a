@@ -59,7 +59,7 @@ public class RequestRouter {
         }
     }
 
-    // === Helpers ===
+    // === Department Helpers ===
 
     private ServerResponse<List<Department>> handleGetAllDepartments(DepartmentDao departmentDao) {
         List<Department> departments = departmentDao.getAllDepartments();
@@ -142,6 +142,8 @@ public class RequestRouter {
         Department insertDepartment = departmentDao.insertDepartment(newDepartment);
         return ServerResponse.ok("Department added successfully", insertDepartment);
     }
+
+    // === Product Helpers ===
 
     private ServerResponse<List<Product>> handleGetAllProducts(ProductDao productDao) {
         List<Product> products = productDao.getAllProducts();
