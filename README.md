@@ -56,14 +56,22 @@
 
 ### Stage 3 (F17-F22)</strong></summary>
 
-| Feature | Hanna | Nikita |
-|---------|-------|--------|
-| F17     |       |        |
-| F18     |       |        |
-| F19     |       |        |
-| F20     |       |        |
-| F21     |       |        |
-| F22     |       |        |
+#### Overview
+
+Stage 3 introduces binary file storage and retrieval between clients and the database, and a mandatory unit test suite. At least one entity table must be extended with a BLOB column to store binary data (for example, image files, audio clips, or documents relevant to the domain). Clients must be able to upload a binary file to the server, which stores it in the database, and subsequently request it back - receiving the reconstructed file. Metadata (`filename`, `content type`, `file size`) must be stored alongside the binary data and must be independently queryable without downloading the full payload.
+
+The JUnit 5 test suite must be passing at this stage, covering core DAO and JSON conversion behaviour. This stage is a mandatory gate - all features listed below must be demonstrated before proceeding to Stage 4. All features from Stages 1 and 2 must remain working.
+
+#### Required Features
+
+| #   | Feature                   | Specification                                                                                                                                                                                                                                                                          | Hanna | Nikita |
+|-----|---------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------|--------|
+| F17 | Binary Schema Extension   | Extend at least one entity table with a BLOB column and associated metadata columns: `file_name VARCHAR`, `content_type VARCHAR`, `file_size INT`. Update `sql/mysqlSetup.sql` to recreate this schema. The entity DTO must include a `byte[]` field for the binary data and corresponding metadata fields. |     |      |
+| F18 | Binary File Upload        | Client reads a binary file from disk, Base64-encodes it, and includes it in a JSON upload request alongside the metadata fields. Server decodes the payload and stores the binary data in the database using `PreparedStatement.setBytes()` or `setBinaryStream()`. Server returns a `ServerResponse<T>` confirming the stored record including its auto-generated ID. |     |      |
+| F19 | Binary File Retrieval     | Client sends a retrieval request specifying a record ID. Server fetches the BLOB using `getBytes()` or `getBinaryStream()`, Base64-encodes the data, and returns it in a `ServerResponse<T>`. Client decodes the payload and reconstructs the file on disk, preserving the original filename and extension. |     |      |
+| F20 | File Metadata Query       | Client can request metadata (`filename`, `content type`, `file size`) for a stored record without downloading the full binary payload. Server returns a `ServerResponse<T>` containing metadata only - the BLOB column is not fetched for this request type.                                                            |     |      |
+| F21 | Disconnect / Exit         | Client sends a structured `DISCONNECT` request before closing the socket. Server logs the disconnection and releases the thread cleanly.                                                                                                                                             |
+| F22 | Core Unit Tests           | A JUnit 5 test suite with at least 3 meaningful tests per team member. Tests must be in the codebase and passing. Required categories: (1) a DAO read method (`getAll` or `getById`); (2) an insert with the returned auto-generated ID verified; (3) a JSON serialisation/deserialisation round-trip. Each test must have a descriptive method name (for example, `getPlayerById_returnsEmptyOptional_whenIdDoesNotExist`). Tests must not depend on execution order; use `@BeforeEach` with known data. Coverage threshold is not required at this stage - that is assessed at Stage 4. |     |      |
 
 <details>
 <summary><strong>Stage 4 (F23-F24)</strong></summary>
