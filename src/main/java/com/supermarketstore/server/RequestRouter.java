@@ -51,8 +51,8 @@ public class RequestRouter {
      * Returns the payload field with the primary name, or falls back to the alternate name
      * when the primary field is missing.
      *
-     * @param payload the request payload that may contain the target field
-     * @param primaryName the preferred field name
+     * @param payload      the request payload that may contain the target field
+     * @param primaryName  the preferred field name
      * @param fallbackName the fallback field name used when the primary one is absent
      * @return the matching JSON node, or null if the payload is null or neither field exists
      */
