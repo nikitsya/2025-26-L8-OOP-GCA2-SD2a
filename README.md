@@ -4,8 +4,6 @@
 
 | Stage | Week  | Deadline          | Focus                                                      | Features | Status                      | Weight |
 |-------|-------|-------------------|------------------------------------------------------------|----------|-----------------------------|--------|
-| 1     | Wk 6  | Sunday 8th March  | DAO layer, full CRUD, JSON conversion                      | F1-F9    | Mandatory gate - not graded | -      |
-| 2     | Wk 8  | Sunday 25nd March | Client-server integration, all CRUD over sockets           | F10-F16  | Graded                      | 50%    |
 | 3     | Wk 11 | Sunday 26th April | Binary file handling, protocol completion, core unit tests | F17-F22  | Mandatory gate - not graded | -      |
 | 4     | Wk 12 | Sunday 3rd May    | Full test suite with coverage, all features stable         | F23-F24  | Graded                      | 50%    |
 
