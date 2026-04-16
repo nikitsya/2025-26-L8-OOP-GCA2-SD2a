@@ -56,8 +56,6 @@
 
 ### Stage 3 (F17-F22)</strong></summary>
 
-#### Overview
-
 Stage 3 introduces binary file storage and retrieval between clients and the database, and a mandatory unit test suite. At least one entity table must be extended with a BLOB column to store binary data (for example, image files, audio clips, or documents relevant to the domain). Clients must be able to upload a binary file to the server, which stores it in the database, and subsequently request it back - receiving the reconstructed file. Metadata (`filename`, `content type`, `file size`) must be stored alongside the binary data and must be independently queryable without downloading the full payload.
 
 The JUnit 5 test suite must be passing at this stage, covering core DAO and JSON conversion behaviour. This stage is a mandatory gate - all features listed below must be demonstrated before proceeding to Stage 4. All features from Stages 1 and 2 must remain working.
