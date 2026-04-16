@@ -49,7 +49,7 @@ class JdbcProductDaoTest {
     }
 
     private static void cleanupTestRows() {
-        String sql = "DELETE FROM products WHERE name LIKE ?";
+        String sql = "DELETE FROM supermarket_store_system.products WHERE name LIKE ?";
 
         try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
              PreparedStatement statement = connection.prepareStatement(sql)) {
