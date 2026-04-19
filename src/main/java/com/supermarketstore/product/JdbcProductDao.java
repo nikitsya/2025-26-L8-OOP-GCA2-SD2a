@@ -75,7 +75,8 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
     public Product insertProduct(Product product) {
         if (product == null) throw new IllegalArgumentException("product is required");
 
-        String sql = "INSERT INTO supermarket_store_system.products (name, price, is_on_sale, discount_price, stock) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO supermarket_store_system.products(name, price, is_on_sale, discount_price, stock, " +
+                "file_data, file_name, content_type, file_size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             bindProductParams(ps, product);
