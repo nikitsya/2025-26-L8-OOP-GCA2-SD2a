@@ -19,13 +19,13 @@ public class Product {
     private byte[] fileData;
     private String fileName;
     private String contentType;
-    private Integer fileSize;
+    private int fileSize;
 
     public Product() {
     }
 
     public Product(int productId, String name, double price, boolean onSale, Double discountPrice, int stock,
-                   byte[] fileData, String fileName, String contentType, Integer fileSize) {
+                   byte[] fileData, String fileName, String contentType, int fileSize) {
         setProductId(productId);
         setName(name);
         setPrice(price);
@@ -156,7 +156,7 @@ public class Product {
     }
 
     @JsonProperty("file_size")
-    public  Integer getFileSize() {
+    public  int getFileSize() {
         return fileSize;
     }
 
