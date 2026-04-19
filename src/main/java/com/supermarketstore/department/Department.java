@@ -2,6 +2,7 @@ package com.supermarketstore.department;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -19,6 +20,11 @@ public class Department {
     private double budget;
     private int employeeCount;
     private boolean isRefrigerated;
+    private String fileName;
+    private String contentType;
+    private int fileSize;
+    private byte[] departmentImage;
+
 
     public Department() {
     }
@@ -31,8 +37,19 @@ public class Department {
         setBudget(budget);
         setEmployeeCount(employeeCount);
         setRefrigerated(isRefrigerated);
+        setFileName("");
+        setContentType("");
+        setFileSize(0);
+        setDepartmentImage(null);
     }
 
+    public Department(int departmentId, String name, int floor, int zone, double budget, int employeeCount, boolean isRefrigerated, String fileName, String contentType, int fileSize, byte[] departmentImage) {
+        this(departmentId, name, floor, zone, budget, employeeCount, isRefrigerated);
+        setFileName(fileName);
+        setContentType(contentType);
+        setFileSize(fileSize);
+        setDepartmentImage(departmentImage);
+    }
 
     @JsonProperty("department_id")
     public int getDepartmentId() {
@@ -122,6 +139,46 @@ public class Department {
         this.isRefrigerated = refrigerated;
     }
 
+    @JsonProperty("file_name")
+    public String getFileName() {
+        return fileName;
+    }
+
+    @JsonProperty("file_name")
+    public void setFileName(String f) {
+        this.fileName = (f == null) ? "" : f.trim();
+    }
+
+    @JsonProperty("content_type")
+    public String getContentType() {
+        return contentType;
+    }
+
+    @JsonProperty("content_type")
+    public void setContentType(String ct) {
+        this.contentType = (ct == null) ? "" : ct.trim();
+    }
+
+    @JsonProperty("file_size")
+    public int getFileSize() {
+        return fileSize;
+    }
+
+    @JsonProperty("file_size")
+    public void setFileSize(int size) {
+        this.fileSize = Math.max(0, size);
+    }
+
+    @JsonProperty("department_image")
+    public byte[] getDepartmentImage() {
+        return departmentImage;
+    }
+
+    @JsonProperty("department_image")
+    public void setDepartmentImage(byte[] data) {
+        this.departmentImage = data;
+    }
+
     @Override
     public String toString() {
         return "Department{" +
@@ -132,6 +189,10 @@ public class Department {
                 ", budget=" + budget +
                 ", employeeCount=" + employeeCount +
                 ", isRefrigerated=" + isRefrigerated +
+                ", fileName='" + fileName + '\'' +
+                ", contentType='" + contentType + '\'' +
+                ", fileSize=" + fileSize +
+                ", departmentImage=" + (departmentImage != null ? departmentImage.length : 0) +
                 '}';
     }
 
@@ -145,12 +206,17 @@ public class Department {
                 && Double.compare(budget, department.budget) == 0
                 && employeeCount == department.employeeCount
                 && isRefrigerated == department.isRefrigerated
-                && Objects.equals(name, department.name);
+                && Objects.equals(name, department.name)
+                && Objects.equals(fileName, department.fileName)
+                && Objects.equals(contentType, department.contentType)
+                && fileSize == department.fileSize
+                && Arrays.equals(departmentImage, department.departmentImage);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(departmentId, name, floor, zone, budget, employeeCount, isRefrigerated);
+        int result = Objects.hash(departmentId, name, floor, zone, budget, employeeCount, isRefrigerated, fileName, contentType, fileSize);
+        result = 31 * result + java.util.Arrays.hashCode(departmentImage);
+        return result;
     }
-
 }
