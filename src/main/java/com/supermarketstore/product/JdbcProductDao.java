@@ -41,7 +41,8 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
     public Optional<Product> getProductById(int id) {
         if (id <= 0) return Optional.empty();
 
-        String sql = "SELECT product_id, name, price, is_on_sale, discount_price, stock FROM supermarket_store_system.products WHERE product_id = ?";
+        String sql = "SELECT product_id, name, price, is_on_sale, discount_price, stock, file_data, file_name, " +
+                "content_type, file_size FROM supermarket_store_system.products WHERE product_id = ?";
 
         try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql)) {
             ps.setInt(1, id);
