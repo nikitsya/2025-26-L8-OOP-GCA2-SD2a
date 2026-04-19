@@ -2,6 +2,7 @@ package com.supermarketstore.product;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -175,6 +176,10 @@ public class Product {
                 ", onSale=" + onSale +
                 ", discountPrice=" + discountPrice +
                 ", stock=" + stock +
+                ", fileData=" + Arrays.toString(fileData) +
+                ", fileName='" + fileName + '\'' +
+                ", contentType='" + contentType + '\'' +
+                ", fileSize=" + fileSize +
                 '}';
     }
 
@@ -182,11 +187,11 @@ public class Product {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return productId == product.productId && Double.compare(price, product.price) == 0 && onSale == product.onSale && stock == product.stock && Objects.equals(name, product.name) && Objects.equals(discountPrice, product.discountPrice);
+        return productId == product.productId && Double.compare(price, product.price) == 0 && onSale == product.onSale && stock == product.stock && fileSize == product.fileSize && Objects.equals(name, product.name) && Objects.equals(discountPrice, product.discountPrice) && Objects.deepEquals(fileData, product.fileData) && Objects.equals(fileName, product.fileName) && Objects.equals(contentType, product.contentType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(productId, name, price, onSale, discountPrice, stock);
+        return Objects.hash(productId, name, price, onSale, discountPrice, stock, Arrays.hashCode(fileData), fileName, contentType, fileSize);
     }
 }
