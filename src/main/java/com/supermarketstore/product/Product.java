@@ -16,11 +16,16 @@ public class Product {
     private boolean onSale;
     private Double discountPrice;
     private int stock;
+    private byte[] fileData;
+    private String fileName;
+    private String contentType;
+    private Integer fileSize;
 
     public Product() {
     }
 
-    public Product(int productId, String name, double price, boolean onSale, Double discountPrice, int stock) {
+    public Product(int productId, String name, double price, boolean onSale, Double discountPrice, int stock,
+                   byte[] fileData, String fileName, String contentType, Integer fileSize) {
         setProductId(productId);
         setName(name);
         setPrice(price);
