@@ -133,6 +133,7 @@ public class Product {
 
     @JsonProperty("file_data")
     public  void setFileData(byte[] fileData) {
+        if (fileData == null) throw new IllegalArgumentException("fileData cannot be null");
         this.fileData = fileData;
     }
 
