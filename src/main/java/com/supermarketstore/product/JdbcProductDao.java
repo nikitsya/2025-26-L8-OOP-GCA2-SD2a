@@ -25,7 +25,8 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
 
     @Override
     public List<Product> getAllProducts() {
-        String sql = "SELECT product_id, name, price, is_on_sale, discount_price, stock FROM supermarket_store_system.products";
+        String sql = "SELECT product_id, name, price, is_on_sale, discount_price, stock, file_data, file_name, " +
+                "content_type, file_size FROM supermarket_store_system.products";
 
         try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             ArrayList<Product> out = new ArrayList<>();
