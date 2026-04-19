@@ -179,13 +179,19 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product{" +
+        String base = "Product{" +
                 "productId=" + productId +
                 ", name='" + name + '\'' +
                 ", price=" + price +
                 ", onSale=" + onSale +
                 ", discountPrice=" + discountPrice +
-                ", stock=" + stock +
+                ", stock=" + stock;
+
+        if (fileData == null) {
+            return base + '}';
+        }
+
+        return base +
                 ", fileData=" + Arrays.toString(fileData) +
                 ", fileName='" + fileName + '\'' +
                 ", contentType='" + contentType + '\'' +
