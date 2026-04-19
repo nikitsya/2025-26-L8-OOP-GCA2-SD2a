@@ -100,8 +100,8 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         if (product == null) throw new IllegalArgumentException("product is required");
         if (id <= 0) throw new IllegalArgumentException("id must be positive");
 
-        String sql = "UPDATE supermarket_store_system.products SET name = ?, price = ?, is_on_sale = ?, discount_price = ?, stock = ? " +
-                "WHERE product_id = ?";
+        String sql = "UPDATE supermarket_store_system.products SET name = ?, price = ?, is_on_sale = ?, discount_price = ?, " +
+                "stock = ?, file_data = ?, file_name = ?, content_type = ?, file_size = ? WHERE product_id = ?";
 
         try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql)) {
             bindProductParams(ps, product);
