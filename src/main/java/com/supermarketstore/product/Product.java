@@ -37,9 +37,11 @@ public class Product {
             throw new IllegalArgumentException("Discount price must be null when product is not on sale");
         }
         setFileData(fileData);
-        setFileName(fileName);
-        setContentType(contentType);
-        setFileSize(fileSize);
+        if (fileData != null) {
+            setFileName(fileName);
+            setContentType(contentType);
+            setFileSize(fileSize);
+        }
     }
 
     @JsonProperty("product_id")
@@ -133,7 +135,6 @@ public class Product {
 
     @JsonProperty("file_data")
     public  void setFileData(byte[] fileData) {
-        if (fileData == null) throw new IllegalArgumentException("fileData cannot be null");
         this.fileData = fileData;
     }
 
@@ -144,6 +145,7 @@ public class Product {
 
     @JsonProperty("file_name")
     public  void setFileName(String fileName) {
+        if (fileName == null || fileName.trim().isEmpty()) throw new IllegalArgumentException("File name must not be null or blank");
         this.fileName = fileName;
     }
 
@@ -154,6 +156,7 @@ public class Product {
 
     @JsonProperty("content_type")
     public  void setContentType(String contentType) {
+        if(contentType == null) throw new IllegalArgumentException("Content type must not be null");
         this.contentType = contentType;
     }
 
