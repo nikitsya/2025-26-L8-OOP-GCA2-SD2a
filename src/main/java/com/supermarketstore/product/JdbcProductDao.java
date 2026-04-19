@@ -25,7 +25,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
 
     @Override
     public List<Product> getAllProducts() {
-        String sql = "SELECT product_id, name, price, is_on_sale, discount_price, stock FROM products";
+        String sql = "SELECT product_id, name, price, is_on_sale, discount_price, stock FROM supermarket_store_system.products";
 
         try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             ArrayList<Product> out = new ArrayList<>();
@@ -40,7 +40,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
     public Optional<Product> getProductById(int id) {
         if (id <= 0) return Optional.empty();
 
-        String sql = "SELECT product_id, name, price, is_on_sale, discount_price, stock FROM products WHERE product_id = ?";
+        String sql = "SELECT product_id, name, price, is_on_sale, discount_price, stock FROM supermarket_store_system.products WHERE product_id = ?";
 
         try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql)) {
             ps.setInt(1, id);
@@ -59,7 +59,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
     public boolean deleteProductById(int id) {
         if (id <= 0) return false;
 
-        String sql = "DELETE FROM products WHERE product_id = ?";
+        String sql = "DELETE FROM supermarket_store_system.products WHERE product_id = ?";
 
         try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql)) {
             ps.setInt(1, id);
@@ -73,7 +73,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
     public Product insertProduct(Product product) {
         if (product == null) throw new IllegalArgumentException("product is required");
 
-        String sql = "INSERT INTO products (name, price, is_on_sale, discount_price, stock) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO supermarket_store_system.products (name, price, is_on_sale, discount_price, stock) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             bindProductParams(ps, product);
@@ -97,7 +97,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         if (product == null) throw new IllegalArgumentException("product is required");
         if (id <= 0) throw new IllegalArgumentException("id must be positive");
 
-        String sql = "UPDATE products SET name = ?, price = ?, is_on_sale = ?, discount_price = ?, stock = ? " +
+        String sql = "UPDATE supermarket_store_system.products SET name = ?, price = ?, is_on_sale = ?, discount_price = ?, stock = ? " +
                 "WHERE product_id = ?";
 
         try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql)) {
