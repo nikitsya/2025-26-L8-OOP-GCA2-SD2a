@@ -15,7 +15,7 @@ public class DepartmentMain {
             throw new IllegalStateException("Set TEST_DB_PASS before running DepartmentMain");
         }
 
-        JdbcDepartmentDao dao =
+        DepartmentDao dao =
                 new JdbcDepartmentDao(
                         "jdbc:mysql://localhost:3306/supermarket_store_system",
                         "root",
