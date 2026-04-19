@@ -145,8 +145,21 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         ps.setString(1, product.getName());
         ps.setDouble(2, product.getPrice());
         ps.setBoolean(3, product.isOnSale());
+
         if (product.getDiscountPrice() == null) ps.setNull(4, Types.DOUBLE);
         else ps.setDouble(4, product.getDiscountPrice());
+
         ps.setInt(5, product.getStock());
+
+        if (product.getFileData() == null) ps.setNull(6, Types.BINARY);
+        else ps.setBytes(6, product.getFileData());
+
+        if (product.getFileName() == null) ps.setNull(7, Types.VARCHAR);
+        else ps.setString(7, product.getFileName());
+
+        if (product.getContentType() == null) ps.setNull(8, Types.VARCHAR);
+        else ps.setString(8, product.getContentType());
+
+        ps.setInt(9, product.getFileSize());
     }
 }
