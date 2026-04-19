@@ -105,7 +105,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
 
         try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql)) {
             bindProductParams(ps, product);
-            ps.setInt(6, id);
+            ps.setInt(10, id);
             int rows = ps.executeUpdate();
             if (rows != 1) throw new IllegalStateException("update failed, rows=" + rows);
             product.setProductId(id);
