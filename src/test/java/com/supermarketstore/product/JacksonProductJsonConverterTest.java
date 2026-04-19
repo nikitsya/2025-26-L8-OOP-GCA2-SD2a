@@ -15,7 +15,7 @@ class JacksonProductJsonConverterTest {
 
     JacksonProductJsonConverter converter = new JacksonProductJsonConverter();
 
-    Product product = new Product(1, "cucumber", 0.65, false, null, 98);
+    Product product = new Product(1, "cucumber", 0.65, false, null, 98, null, null, null, 0);
     List<Product> products = List.of(product, product);
     String product_json = "{\"product_id\":1,\"name\":\"cucumber\",\"price\":0.65,\"is_on_sale\":false,\"discount_price\":null,\"stock\":98}";
     String products_json = "[" + product_json + "," + product_json + "]";

@@ -36,8 +36,8 @@ class JdbcProductDaoTest {
         cleanupTestRows();
 
         // add test products to the database
-        product1 = new Product(0, "TEST_cucumber", 0.65, false, null, 98);
-        product2 = new Product(0, "TEST_cucumber", 0.70, true, 0.65, 126);
+        product1 = new Product(0, "TEST_cucumber", 0.65, false, null, 98, null, null, null, 0);
+        product2 = new Product(0, "TEST_cucumber", 0.70, true, 0.65, 126, null, null, null, 0);
         dao.insertProduct(product1);
         dao.insertProduct(product2);
     }
@@ -93,7 +93,7 @@ class JdbcProductDaoTest {
 
     @Test
     void insertProduct() {
-        Product toInsert = new Product(0, "TEST_insert_milk", 1.49, false, null, 15);
+        Product toInsert = new Product(0, "TEST_insert_milk", 1.49, false, null, 15, null, null, null, 0);
         Product inserted = dao.insertProduct(toInsert);
         assertTrue(inserted.getProductId() > 0);
         assertEquals(toInsert, inserted);
@@ -115,7 +115,7 @@ class JdbcProductDaoTest {
     @Test
     void updateProduct() {
         int id = product2.getProductId();
-        Product toUpdate = new Product(333, "TEST_tomato", 0.35, false, null, 70);
+        Product toUpdate = new Product(333, "TEST_tomato", 0.35, false, null, 70, null, null, null, 0);
         Product updated = dao.updateProduct(id, toUpdate);
         assertEquals(toUpdate.getName(), updated.getName());
         assertEquals(toUpdate, updated);

@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class ProductTest {
 
-    Product product = new Product(1, "Product", 20, false, null, 45);
+    Product product = new Product(1, "Product", 20, false, null, 45, null, null, null, 0);
 
     @Test
     void getProductId_returnsProductId() {
@@ -197,14 +197,14 @@ class ProductTest {
     void constructor_whenProductIsNotOnSaleAndDiscountPriceProvided_throwsIllegalArgumentException() {
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> new Product(1, "Product", 20.0, false, 15.0, 45)
+                () -> new Product(1, "Product", 20.0, false, 15.0, 45, null, null, null, 0)
         );
         assertEquals("Discount price must be null when product is not on sale", ex.getMessage());
     }
 
     @Test
     void constructor_whenProductIsOnSaleAndDiscountPriceProvided_setsDiscountPrice() {
-        Product saleProduct = new Product(2, "Sale Product", 30.0, true, 20.0, 10);
+        Product saleProduct = new Product(2, "Sale Product", 30.0, true, 20.0, 10, null, null, null, 0);
 
         assertAll(
                 () -> assertTrue(saleProduct.isOnSale()),
