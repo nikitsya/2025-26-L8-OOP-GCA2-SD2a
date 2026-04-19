@@ -16,7 +16,7 @@ CREATE TABLE departments
     file_name       VARCHAR(255) NOT NULL DEFAULT '',
     content_type    VARCHAR(100) NOT NULL DEFAULT '',
     file_size       INT          NOT NULL DEFAULT 0,
-    department_file MEDIUMBLOB
+    department_image MEDIUMBLOB
 );
 
 -- Store products that can be sold in the supermarket.
