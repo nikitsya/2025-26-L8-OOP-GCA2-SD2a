@@ -130,12 +130,18 @@ public class Product {
 
     @JsonProperty("file_data")
     public  byte[] getFileData() {
-        return fileData;
+        return fileData == null ? null : Arrays.copyOf(fileData, fileData.length);
     }
 
     @JsonProperty("file_data")
     public  void setFileData(byte[] fileData) {
-        this.fileData = fileData;
+        this.fileData = fileData == null ? null : Arrays.copyOf(fileData, fileData.length);
+
+        if (fileData == null) {
+            this.fileName = null;
+            this.contentType = null;
+            this.fileSize = 0;
+        }
     }
 
     @JsonProperty("file_name")
