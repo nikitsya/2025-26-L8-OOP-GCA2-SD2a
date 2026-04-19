@@ -63,6 +63,10 @@ public class RequestRouter {
         return node != null ? node : payload.get(fallbackName);
     }
 
+    private static byte[] getFileDataBytes(JsonNode fileDataNode) {
+
+    }
+
     // === Public API ===
 
     /**
@@ -218,6 +222,10 @@ public class RequestRouter {
         JsonNode onSaleNode = getPayloadField(payload, "isOnSale", "is_on_sale");
         JsonNode discountNode = getPayloadField(payload, "discountPrice", "discount_price");
         JsonNode stockNode = getPayloadField(payload, "stock", "stock");
+        JsonNode fileDataNode = getPayloadField(payload, "fileData", "file_data");
+        JsonNode fileNameNode = getPayloadField(payload, "fileName", "file_name");
+        JsonNode contentTypeNode = getPayloadField(payload, "contentType", "content_type");
+        JsonNode fileSizeNode = getPayloadField(payload, "fileSize", "file_size");
 
         if (nameNode == null || priceNode == null || onSaleNode == null || stockNode == null) {
             return ServerResponse.error("Missing required fields: name, price, isOnSale (or is_on_sale), stock");
@@ -229,13 +237,23 @@ public class RequestRouter {
         }
 
         Double discountPrice = (discountNode == null || discountNode.isNull()) ? null : discountNode.asDouble();
+
+        byte[] fileData = getFileDataBytes(fileDataNode);
+        String fileName = fileData == null || fileNameNode == null || fileNameNode.isNull() ? null : fileNameNode.asText();
+        String contentType = fileData == null || contentTypeNode == null || contentTypeNode.isNull() ? null : contentTypeNode.asText();
+        int fileSize = fileData == null || fileSizeNode == null || fileSizeNode.isNull() ? 0 : fileSizeNode.asInt();
+
         Product newProduct = new Product(
                 0,
                 nameNode.asText(),
                 priceNode.asDouble(),
                 onSale,
                 discountPrice,
-                stockNode.asInt()
+                stockNode.asInt(),
+                fileData,
+                fileName,
+                contentType,
+                fileSize
         );
 
         Product insertedProduct = productDao.insertProduct(newProduct);
@@ -260,6 +278,10 @@ public class RequestRouter {
         JsonNode onSaleNode = getPayloadField(payload, "isOnSale", "is_on_sale");
         JsonNode discountNode = getPayloadField(payload, "discountPrice", "discount_price");
         JsonNode stockNode = getPayloadField(payload, "stock", "stock");
+        JsonNode fileDataNode = getPayloadField(payload, "fileData", "file_data");
+        JsonNode fileNameNode = getPayloadField(payload, "fileName", "file_name");
+        JsonNode contentTypeNode = getPayloadField(payload, "contentType", "content_type");
+        JsonNode fileSizeNode = getPayloadField(payload, "fileSize", "file_size");
 
         if (idNode == null || nameNode == null || priceNode == null || onSaleNode == null || stockNode == null) {
             return ServerResponse.error("Missing required fields: id, name, price, isOnSale (or is_on_sale), stock");
@@ -277,13 +299,22 @@ public class RequestRouter {
 
         Double discountPrice = (discountNode == null || discountNode.isNull()) ? null : discountNode.asDouble();
 
+        byte[] fileData = getFileDataBytes(fileDataNode);
+        String fileName = fileData == null || fileNameNode == null || fileNameNode.isNull() ? null : fileNameNode.asText();
+        String contentType = fileData == null || contentTypeNode == null || contentTypeNode.isNull() ? null : contentTypeNode.asText();
+        int fileSize = fileData == null || fileSizeNode == null || fileSizeNode.isNull() ? 0 : fileSizeNode.asInt();
+
         Product updatedProduct = new Product(
                 id,
                 nameNode.asText(),
                 priceNode.asDouble(),
                 onSale,
                 discountPrice,
-                stockNode.asInt()
+                stockNode.asInt(),
+                fileData,
+                fileName,
+                contentType,
+                fileSize
         );
 
         Product savedProduct = productDao.updateProduct(id, updatedProduct);
