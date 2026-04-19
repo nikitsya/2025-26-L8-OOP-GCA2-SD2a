@@ -35,6 +35,10 @@ public class Product {
         else if (discountPrice != null) {
             throw new IllegalArgumentException("Discount price must be null when product is not on sale");
         }
+        setFileData(fileData);
+        setFileName(fileName);
+        setContentType(contentType);
+        setFileSize(fileSize);
     }
 
     @JsonProperty("product_id")
@@ -119,6 +123,38 @@ public class Product {
     public void setStock(int stock) {
         if (stock < 0) throw new IllegalArgumentException("Stock cannot be negative");
         this.stock = stock;
+    }
+
+    public  byte[] getFileData() {
+        return fileData;
+    }
+
+    public  void setFileData(byte[] fileData) {
+        this.fileData = fileData;
+    }
+
+    public  String getFileName() {
+        return fileName;
+    }
+
+    public  void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public  String getContentType() {
+        return contentType;
+    }
+
+    public  void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public  Integer getFileSize() {
+        return fileSize;
+    }
+
+    public  void setFileSize(Integer fileSize) {
+        this.fileSize = fileSize;
     }
 
     @Override
