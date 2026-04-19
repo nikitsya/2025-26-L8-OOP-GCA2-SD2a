@@ -27,7 +27,11 @@ CREATE TABLE products
     price          DOUBLE       NOT NULL,
     is_on_sale     BOOLEAN      NOT NULL DEFAULT FALSE,
     discount_price DOUBLE,
-    stock          INT          NOT NULL
+    stock          INT          NOT NULL,
+    file_data      BLOB,
+    file_name      VARCHAR(255),
+    content_type   VARCHAR(100),
+    file_size      INT
 );
 
 -- Bridge table for the many-to-many relationship between departments and products.
@@ -75,7 +79,7 @@ VALUES ('Heinz Turkish Style Garlic Sauce 420G', 3.45, TRUE, 2.50, 60),
        ('20 Compostable Caddy Liners Tie Top 10L', 1.75, FALSE, NULL, 70),
        ('San Pellegrino Sparkling Natural Mineral Water Multipack 6x1L', 7.00, FALSE, NULL, 30),
        ('Sunblest Pancakes 8 Pack', 1.35, FALSE, NULL, 95),
-       ('Heinz Classic Barbecue Sauce 480G', 3.30, TRUE, 2.50, 58),
+       ('Heinz Classic Barbecue Sauce 400G', 3.30, TRUE, 2.50, 58),
        ('Mashed Potato 450G', 1.10, FALSE, NULL, 100),
        ('Whole Cucumber Each', 0.99, FALSE, NULL, 105);
 
