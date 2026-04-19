@@ -161,7 +161,8 @@ public class Product {
     }
 
     @JsonProperty("file_size")
-    public  void setFileSize(Integer fileSize) {
+    public  void setFileSize(int fileSize) {
+        if (fileSize < 0) throw new IllegalArgumentException("File size cannot be negative");
         this.fileSize = fileSize;
     }
 
