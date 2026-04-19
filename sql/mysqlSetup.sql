@@ -12,8 +12,11 @@ CREATE TABLE departments
     zone            INT          NOT NULL,
     budget          DOUBLE       NOT NULL,
     employee_count  INT          NOT NULL,
-    is_refrigerated BOOLEAN      NOT NULL DEFAULT FALSE
-
+    is_refrigerated BOOLEAN      NOT NULL DEFAULT FALSE,
+    file_name       VARCHAR(255) NOT NULL DEFAULT '',
+    content_type    VARCHAR(100) NOT NULL DEFAULT '',
+    file_size       INT          NOT NULL DEFAULT 0,
+    department_file MEDIUMBLOB
 );
 
 -- Store products that can be sold in the supermarket.
