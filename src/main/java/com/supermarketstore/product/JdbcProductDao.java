@@ -133,8 +133,12 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         boolean onSale = resultSet.getBoolean("is_on_sale");
         Double discountPrice = resultSet.getObject("discount_price", Double.class);
         int stock = resultSet.getInt("stock");
+        byte[] fileData = resultSet.getBytes("file_data");
+        String fileName = resultSet.getString("file_name");
+        String contentType = resultSet.getString("content_type");
+        int fileSize = resultSet.getInt("file_size");
 
-        return new Product(productId, name, price, onSale, discountPrice, stock);
+        return new Product(productId, name, price, onSale, discountPrice, stock, fileData, fileName, contentType, fileSize);
     }
 
     private void bindProductParams(PreparedStatement ps, Product product) throws SQLException {
