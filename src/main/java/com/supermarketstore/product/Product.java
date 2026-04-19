@@ -125,34 +125,42 @@ public class Product {
         this.stock = stock;
     }
 
+    @JsonProperty("file_data")
     public  byte[] getFileData() {
         return fileData;
     }
 
+    @JsonProperty("file_data")
     public  void setFileData(byte[] fileData) {
         this.fileData = fileData;
     }
 
+    @JsonProperty("file_name")
     public  String getFileName() {
         return fileName;
     }
 
+    @JsonProperty("file_name")
     public  void setFileName(String fileName) {
         this.fileName = fileName;
     }
 
+    @JsonProperty("content_type")
     public  String getContentType() {
         return contentType;
     }
 
+    @JsonProperty("content_type")
     public  void setContentType(String contentType) {
         this.contentType = contentType;
     }
 
+    @JsonProperty("file_size")
     public  Integer getFileSize() {
         return fileSize;
     }
 
+    @JsonProperty("file_size")
     public  void setFileSize(Integer fileSize) {
         this.fileSize = fileSize;
     }
