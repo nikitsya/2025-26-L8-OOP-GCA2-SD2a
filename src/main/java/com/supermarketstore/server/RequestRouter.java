@@ -15,9 +15,6 @@ import java.util.Map;
 
 /**
  * Routes incoming requests to the appropriate handler by type.
- *
- * @author Hanna Bokariuk (primary)
- * @author Nikita Smiichyk (contributor - product flow, routing updates, and refactoring)
  */
 public class RequestRouter {
     // === Fields ===
@@ -63,8 +60,23 @@ public class RequestRouter {
         return node != null ? node : payload.get(fallbackName);
     }
 
+    /**
+     * Converts file data from the request payload into a byte array.
+     *
+     * @param fileDataNode the JSON node containing file data
+     * @return the byte array, or null when file data is absent
+     * @throws IllegalArgumentException when fileData is not a byte array
+     */
     private static byte[] getFileDataBytes(JsonNode fileDataNode) {
+        if (fileDataNode == null || fileDataNode.isNull()) return null;
 
+        if (!fileDataNode.isArray()) throw new IllegalArgumentException("fileData must be a byte array");
+
+        byte[] fileData = new byte[fileDataNode.size()];
+        for (int i = 0; i < fileDataNode.size(); i++) {
+            fileData[i] = (byte) fileDataNode.get(i).asInt();
+        }
+        return fileData;
     }
 
     // === Public API ===
