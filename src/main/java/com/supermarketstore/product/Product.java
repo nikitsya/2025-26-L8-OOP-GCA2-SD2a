@@ -169,7 +169,7 @@ public class Product {
 
     @JsonProperty("file_name")
     public void setFileName(String fileName) {
-        if (fileName == null || fileName.trim().isEmpty())
+        if ((fileName == null || fileName.trim().isEmpty()) && fileData != null)
             throw new IllegalArgumentException("File name must not be null or blank");
         this.fileName = fileName;
     }
@@ -181,7 +181,7 @@ public class Product {
 
     @JsonProperty("content_type")
     public void setContentType(String contentType) {
-        if (contentType == null) throw new IllegalArgumentException("Content type must not be null");
+        if (contentType == null && fileData != null) throw new IllegalArgumentException("Content type must not be null");
         this.contentType = contentType;
     }
 
