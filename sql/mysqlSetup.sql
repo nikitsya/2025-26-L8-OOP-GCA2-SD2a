@@ -6,16 +6,16 @@ USE supermarket_store_system;
 -- Store departments available in the supermarket.
 CREATE TABLE departments
 (
-    department_id   INT AUTO_INCREMENT PRIMARY KEY,
-    name            VARCHAR(100) NOT NULL,
-    floor           INT          NOT NULL,
-    zone            INT          NOT NULL,
-    budget          DOUBLE       NOT NULL,
-    employee_count  INT          NOT NULL,
-    is_refrigerated BOOLEAN      NOT NULL DEFAULT FALSE,
-    file_name       VARCHAR(255) NOT NULL DEFAULT '',
-    content_type    VARCHAR(100) NOT NULL DEFAULT '',
-    file_size       INT          NOT NULL DEFAULT 0,
+    department_id    INT AUTO_INCREMENT PRIMARY KEY,
+    name             VARCHAR(100) NOT NULL,
+    floor            INT          NOT NULL,
+    zone             INT          NOT NULL,
+    budget           DOUBLE       NOT NULL,
+    employee_count   INT          NOT NULL,
+    is_refrigerated  BOOLEAN      NOT NULL DEFAULT FALSE,
+    file_name        VARCHAR(255) NOT NULL DEFAULT '',
+    content_type     VARCHAR(100) NOT NULL DEFAULT '',
+    file_size        INT          NOT NULL DEFAULT 0,
     department_image MEDIUMBLOB
 );
 
