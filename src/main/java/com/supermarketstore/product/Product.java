@@ -22,9 +22,27 @@ public class Product {
     private String contentType;
     private int fileSize;
 
+    /**
+     * Creates an empty product instance for Jackson deserialization.
+     */
     public Product() {
     }
 
+    /**
+     * Creates a product with its core pricing data and optional attached file metadata.
+     *
+     * @param productId     the product identifier
+     * @param name          the product name
+     * @param price         the regular product price
+     * @param onSale        whether the product is currently on sale
+     * @param discountPrice the sale price when the product is on sale, otherwise null
+     * @param stock         the available stock quantity
+     * @param fileData      the optional attached file bytes
+     * @param fileName      the attached file name when file data is present
+     * @param contentType   the type of the attached file when file data is present
+     * @param fileSize      the attached file size in bytes when file data is present
+     * @throws IllegalArgumentException when the discount or file-related values are invalid
+     */
     public Product(int productId, String name, double price, boolean onSale, Double discountPrice, int stock,
                    byte[] fileData, String fileName, String contentType, int fileSize) {
         setProductId(productId);
@@ -129,12 +147,12 @@ public class Product {
     }
 
     @JsonProperty("file_data")
-    public  byte[] getFileData() {
+    public byte[] getFileData() {
         return fileData == null ? null : Arrays.copyOf(fileData, fileData.length);
     }
 
     @JsonProperty("file_data")
-    public  void setFileData(byte[] fileData) {
+    public void setFileData(byte[] fileData) {
         this.fileData = fileData == null ? null : Arrays.copyOf(fileData, fileData.length);
 
         if (fileData == null) {
@@ -145,34 +163,35 @@ public class Product {
     }
 
     @JsonProperty("file_name")
-    public  String getFileName() {
+    public String getFileName() {
         return fileName;
     }
 
     @JsonProperty("file_name")
-    public  void setFileName(String fileName) {
-        if (fileName == null || fileName.trim().isEmpty()) throw new IllegalArgumentException("File name must not be null or blank");
+    public void setFileName(String fileName) {
+        if (fileName == null || fileName.trim().isEmpty())
+            throw new IllegalArgumentException("File name must not be null or blank");
         this.fileName = fileName;
     }
 
     @JsonProperty("content_type")
-    public  String getContentType() {
+    public String getContentType() {
         return contentType;
     }
 
     @JsonProperty("content_type")
-    public  void setContentType(String contentType) {
-        if(contentType == null) throw new IllegalArgumentException("Content type must not be null");
+    public void setContentType(String contentType) {
+        if (contentType == null) throw new IllegalArgumentException("Content type must not be null");
         this.contentType = contentType;
     }
 
     @JsonProperty("file_size")
-    public  int getFileSize() {
+    public int getFileSize() {
         return fileSize;
     }
 
     @JsonProperty("file_size")
-    public  void setFileSize(int fileSize) {
+    public void setFileSize(int fileSize) {
         if (fileSize < 0) throw new IllegalArgumentException("File size cannot be negative");
         this.fileSize = fileSize;
     }
