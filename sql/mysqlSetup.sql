@@ -24,7 +24,11 @@ CREATE TABLE products
     price          DOUBLE       NOT NULL,
     is_on_sale     BOOLEAN      NOT NULL DEFAULT FALSE,
     discount_price DOUBLE,
-    stock          INT          NOT NULL
+    stock          INT          NOT NULL,
+    file_data      BLOB,
+    file_name      VARCHAR(255),
+    content_type   VARCHAR(100),
+    file_size      INT
 );
 
 -- Bridge table for the many-to-many relationship between departments and products.
