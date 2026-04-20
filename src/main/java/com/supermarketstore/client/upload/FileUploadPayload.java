@@ -5,7 +5,7 @@ package com.supermarketstore.client.upload;
  * and associated metadata fields.
  *
  * @author OOP Teaching Team
- * @author Nikita Smiichyk (adapted for product file upload payload handling)
+ * @author Nikita Smiichyk (adapted for shared entity file upload handling)
  */
 public class FileUploadPayload {
 
