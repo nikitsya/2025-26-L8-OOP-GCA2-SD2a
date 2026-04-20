@@ -15,7 +15,6 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-
 /**
  * Entry point for the supermarket client application.
  * Demonstrates socket-based request and response flows for department
