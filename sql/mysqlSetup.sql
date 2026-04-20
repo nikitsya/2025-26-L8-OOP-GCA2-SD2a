@@ -31,7 +31,7 @@ CREATE TABLE products
     file_name      VARCHAR(255),
     content_type   VARCHAR(100),
     file_size      INT,
-    file_data      BLOB
+    file_data      MEDIUMBLOB
 );
 
 -- Bridge table for the many-to-many relationship between departments and products.
