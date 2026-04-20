@@ -30,52 +30,42 @@ public class FileUploadPayload {
     }
 
     // === Public API ===
-    // Gets: the entity id this file is associated with
     public int getEntityId() {
         return _entityId;
     }
 
-    // Sets: the entity id
     public void setEntityId(int entityId) {
         _entityId = entityId;
     }
 
-    // Gets: the original filename including extension
     public String getFileName() {
         return _fileName;
     }
 
-    // Sets: the original filename
     public void setFileName(String f) {
         _fileName = f;
     }
 
-    // Gets: the MIME content type (e.g. "image/png")
     public String getContentType() {
         return _contentType;
     }
 
-    // Sets: the MIME content type
     public void setContentType(String ct) {
         _contentType = ct;
     }
 
-    // Gets: the file size in bytes (pre-encoding)
     public int getFileSize() {
         return _fileSize;
     }
 
-    // Sets: the file size in bytes
     public void setFileSize(int fileSize) {
         _fileSize = fileSize;
     }
 
-    // Gets: the Base64-encoded file content
     public String getFileData() {
         return _fileData;
     }
 
-    // Sets: the Base64-encoded file content
     public void setFileData(String fileData) {
         _fileData = fileData;
     }
