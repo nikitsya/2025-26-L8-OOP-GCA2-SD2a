@@ -30,15 +30,14 @@ public class ServerResponse<T> {
      * @param data    Optional payload data.
      */
     public ServerResponse(String status, String message, T data) {
-        if (status == null || status.isBlank())
-            throw new IllegalArgumentException("status is required");
-
+        if (status == null || status.isBlank()) throw new IllegalArgumentException("status is required");
         _status = status;
         _message = message;
         _data = data;
     }
 
     // === Methods ===
+
     public static <T> ServerResponse<T> ok(String message, T data) {
         return new ServerResponse<>("OK", message, data);
     }
@@ -48,6 +47,7 @@ public class ServerResponse<T> {
     }
 
     // === Properties ===
+
     public String getStatus() {
         return _status;
     }
