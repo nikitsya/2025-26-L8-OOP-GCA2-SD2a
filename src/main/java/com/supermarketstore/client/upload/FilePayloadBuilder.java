@@ -1,7 +1,6 @@
 package com.supermarketstore.client.upload;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.io.IOException;
@@ -34,7 +33,7 @@ public class FilePayloadBuilder {
         ObjectNode filePayload = MAPPER.createObjectNode();
 
         byte[] bytes = Files.readAllBytes(filePath);
-        String fileData   = Base64.getEncoder().encodeToString(bytes);
+        String fileData = Base64.getEncoder().encodeToString(bytes);
         String fileName = filePath.getFileName().toString();
         String detectedMime = Files.probeContentType(filePath);
         String contentType = detectedMime != null ? detectedMime : "application/octet-stream";
