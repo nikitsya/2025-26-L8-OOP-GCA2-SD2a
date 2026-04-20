@@ -241,6 +241,8 @@ class ProductTest {
         assertEquals("Stock cannot be negative", ex.getMessage());
     }
 
+    // TODO: fileData++
+
     @Test
     void toString_returnsFormattedProduct() {
         assertEquals("Product{productId=1, name='Product', price=20.0, onSale=false, discountPrice=null, stock=45}", product.toString());
