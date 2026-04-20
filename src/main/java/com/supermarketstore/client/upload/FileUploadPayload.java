@@ -5,6 +5,7 @@ package com.supermarketstore.client.upload;
  * and associated metadata fields.
  *
  * @author OOP Teaching Team
+ * @author Nikita Smiichyk (adapted for product file upload payload handling)
  */
 public class FileUploadPayload {
 
@@ -16,11 +17,23 @@ public class FileUploadPayload {
     private String _fileData;     // Base64-encoded binary content
 
     // === Constructors ===
-    // Creates: empty payload — required by Jackson
+
+    /**
+     * Creates an empty file upload payload instance for Jackson deserialization.
+     */
     public FileUploadPayload() {
     }
 
-    // Creates: fully populated upload payload
+    /**
+     * Creates a file upload payload with the target entity id, file metadata,
+     * and Base64-encoded file content.
+     *
+     * @param entityId the identifier of the entity that will receive the file
+     * @param fileName the original uploaded file name
+     * @param contentType the MIME type of the uploaded file
+     * @param fileSize the uploaded file size in bytes
+     * @param fileData the Base64-encoded file content
+     */
     public FileUploadPayload(int entityId, String fileName, String contentType, int fileSize, String fileData) {
         _entityId = entityId;
         _fileName = fileName;
@@ -30,6 +43,7 @@ public class FileUploadPayload {
     }
 
     // === Public API ===
+
     public int getEntityId() {
         return _entityId;
     }
