@@ -9,6 +9,7 @@ import com.supermarketstore.protocol.ClientRequest;
 import com.supermarketstore.protocol.RequestType;
 import com.supermarketstore.protocol.ServerResponse;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,25 +62,6 @@ public class RequestRouter {
 
         JsonNode node = payload.get(primaryName);
         return node != null ? node : payload.get(fallbackName);
-    }
-
-    /**
-     * Converts file data from the request payload into a byte array.
-     *
-     * @param fileDataNode the JSON node containing file data
-     * @return the byte array, or null when file data is absent
-     * @throws IllegalArgumentException when fileData is not a byte array
-     */
-    private static byte[] getFileDataBytes(JsonNode fileDataNode) {
-        if (fileDataNode == null || fileDataNode.isNull()) return null;
-
-        if (!fileDataNode.isArray()) throw new IllegalArgumentException("fileData must be a byte array");
-
-        byte[] fileData = new byte[fileDataNode.size()];
-        for (int i = 0; i < fileDataNode.size(); i++) {
-            fileData[i] = (byte) fileDataNode.get(i).asInt();
-        }
-        return fileData;
     }
 
     // === Public API ===
@@ -230,7 +212,7 @@ public class RequestRouter {
                 .orElseGet(() -> ServerResponse.error("Product not found for id: " + id));
     }
 
-    private ServerResponse<?> handleAddProduct(ClientRequest request, ProductDao productDao) {
+    private ServerResponse<?> handleAddProduct(ClientRequest request, ProductDao productDao) throws IOException {
         JsonNode payload = request.getPayload();
         JsonNode nameNode = getPayloadField(payload, "name", "name");
         JsonNode priceNode = getPayloadField(payload, "price", "price");
@@ -253,10 +235,17 @@ public class RequestRouter {
 
         Double discountPrice = (discountNode == null || discountNode.isNull()) ? null : discountNode.asDouble();
 
-        byte[] fileData = getFileDataBytes(fileDataNode);
-        String fileName = fileData == null || fileNameNode == null || fileNameNode.isNull() ? null : fileNameNode.asText();
-        String contentType = fileData == null || contentTypeNode == null || contentTypeNode.isNull() ? null : contentTypeNode.asText();
-        int fileSize = fileData == null || fileSizeNode == null || fileSizeNode.isNull() ? 0 : fileSizeNode.asInt();
+        byte[] fileData;
+        if (fileDataNode == null || fileDataNode.isNull()) fileData = null;
+        else {
+            fileData = fileDataNode.binaryValue();
+            if (fileData == null) {
+                return ServerResponse.error("Invalid file data: expected binary (byte[]) content");
+            }
+        }
+        String fileName = fileData == null ? null : (fileNameNode == null || fileNameNode.isNull() ? null : fileNameNode.asText());
+        String contentType = fileData == null ? null : (contentTypeNode == null || contentTypeNode.isNull() ? null : contentTypeNode.asText());
+        int fileSize = fileData == null ? 0 : (fileSizeNode == null || fileSizeNode.isNull() ? 0 : fileSizeNode.asInt());
 
         Product newProduct = new Product(
                 0,
@@ -285,7 +274,7 @@ public class RequestRouter {
         return ServerResponse.ok("Product deleted successfully", null);
     }
 
-    private ServerResponse<?> handleUpdateProduct(ClientRequest request, ProductDao productDao) {
+    private ServerResponse<?> handleUpdateProduct(ClientRequest request, ProductDao productDao) throws IOException {
         JsonNode payload = request.getPayload();
         JsonNode idNode = getPayloadField(payload, "id", "id");
         JsonNode nameNode = getPayloadField(payload, "name", "name");
@@ -314,10 +303,17 @@ public class RequestRouter {
 
         Double discountPrice = (discountNode == null || discountNode.isNull()) ? null : discountNode.asDouble();
 
-        byte[] fileData = getFileDataBytes(fileDataNode);
-        String fileName = fileData == null || fileNameNode == null || fileNameNode.isNull() ? null : fileNameNode.asText();
-        String contentType = fileData == null || contentTypeNode == null || contentTypeNode.isNull() ? null : contentTypeNode.asText();
-        int fileSize = fileData == null || fileSizeNode == null || fileSizeNode.isNull() ? 0 : fileSizeNode.asInt();
+        byte[] fileData;
+        if (fileDataNode == null || fileDataNode.isNull()) fileData = null;
+        else {
+            fileData = fileDataNode.binaryValue();
+            if (fileData == null) {
+                return ServerResponse.error("Invalid file data: expected binary (byte[]) content");
+            }
+        }
+        String fileName = fileData == null ? null : (fileNameNode == null || fileNameNode.isNull() ? null : fileNameNode.asText());
+        String contentType = fileData == null ? null : (contentTypeNode == null || contentTypeNode.isNull() ? null : contentTypeNode.asText());
+        int fileSize = fileData == null ? 0 : (fileSizeNode == null || fileSizeNode.isNull() ? 0 : fileSizeNode.asInt());
 
         Product updatedProduct = new Product(
                 id,
