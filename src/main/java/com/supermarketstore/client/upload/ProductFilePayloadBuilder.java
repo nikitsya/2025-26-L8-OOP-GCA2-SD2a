@@ -8,8 +8,17 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * Builds reusable JSON payload fragments for attaching file data and metadata
+ * to entity requests sent by the client.
+ *
+ * @author Nikita Smiichyk
+ */
 public class ProductFilePayloadBuilder {
+    // === Static Fields ===
     private static final ObjectMapper MAPPER = new ObjectMapper();
+
+    // === Methods ===
 
     public ObjectNode buildUploadPayload(Path filePath) throws IOException {
         ObjectNode filePayload = MAPPER.createObjectNode();
