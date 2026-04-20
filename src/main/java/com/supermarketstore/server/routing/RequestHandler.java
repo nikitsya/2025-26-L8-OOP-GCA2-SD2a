@@ -1,4 +1,4 @@
-package com.supermarketstore.server;
+package com.supermarketstore.server.routing;
 
 import com.supermarketstore.protocol.ClientRequest;
 import com.supermarketstore.protocol.ServerResponse;

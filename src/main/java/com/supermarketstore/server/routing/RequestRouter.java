@@ -1,4 +1,4 @@
-package com.supermarketstore.server;
+package com.supermarketstore.server.routing;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.supermarketstore.department.Department;
