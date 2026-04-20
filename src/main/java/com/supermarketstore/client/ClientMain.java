@@ -16,6 +16,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 
+/**
+ * Entry point for the supermarket client application.
+ * Demonstrates socket-based request and response flows for department
+ * and product operations against the server.
+ */
 public class ClientMain {
     // === Static Fields ===
     private static final String HOST = "localhost";
