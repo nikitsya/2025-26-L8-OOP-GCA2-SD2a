@@ -14,7 +14,7 @@ import java.nio.file.Path;
  *
  * @author Nikita Smiichyk
  */
-public class ProductFilePayloadBuilder {
+public class FilePayloadBuilder {
     // === Static Fields ===
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
