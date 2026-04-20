@@ -181,7 +181,8 @@ public class Product {
 
     @JsonProperty("content_type")
     public void setContentType(String contentType) {
-        if (contentType == null && fileData != null) throw new IllegalArgumentException("Content type must not be null");
+        if (contentType == null && fileData != null)
+            throw new IllegalArgumentException("Content type must not be null");
         this.contentType = contentType;
     }
 
