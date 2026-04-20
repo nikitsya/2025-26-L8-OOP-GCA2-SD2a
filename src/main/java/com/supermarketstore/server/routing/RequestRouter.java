@@ -10,6 +10,7 @@ import com.supermarketstore.protocol.RequestType;
 import com.supermarketstore.protocol.ServerResponse;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -212,7 +213,7 @@ public class RequestRouter {
                 .orElseGet(() -> ServerResponse.error("Product not found for id: " + id));
     }
 
-    private ServerResponse<?> handleAddProduct(ClientRequest request, ProductDao productDao) throws IOException {
+    private ServerResponse<?> handleAddProduct(ClientRequest request, ProductDao productDao) {
         JsonNode payload = request.getPayload();
         JsonNode nameNode = getPayloadField(payload, "name", "name");
         JsonNode priceNode = getPayloadField(payload, "price", "price");
@@ -235,14 +236,25 @@ public class RequestRouter {
 
         Double discountPrice = (discountNode == null || discountNode.isNull()) ? null : discountNode.asDouble();
 
-        byte[] fileData;
-        if (fileDataNode == null || fileDataNode.isNull()) fileData = null;
-        else {
-            fileData = fileDataNode.binaryValue();
-            if (fileData == null) {
+        byte[] fileData = null;
+        if (fileDataNode != null && !fileDataNode.isNull()) {
+            if (fileDataNode.isTextual()) {
+                try {
+                    fileData = Base64.getDecoder().decode(fileDataNode.asText());
+                } catch (IllegalArgumentException e) {
+                    return ServerResponse.error("Invalid file data: expected binary (byte[]) content");
+                }
+            } else if (fileDataNode.isBinary()) {
+                try {
+                    fileData = fileDataNode.binaryValue();
+                } catch (IOException e) {
+                    return ServerResponse.error("Invalid file data: expected binary (byte[]) content");
+                }
+            } else {
                 return ServerResponse.error("Invalid file data: expected binary (byte[]) content");
             }
         }
+
         String fileName = fileData == null ? null : (fileNameNode == null || fileNameNode.isNull() ? null : fileNameNode.asText());
         String contentType = fileData == null ? null : (contentTypeNode == null || contentTypeNode.isNull() ? null : contentTypeNode.asText());
         int fileSize = fileData == null ? 0 : (fileSizeNode == null || fileSizeNode.isNull() ? 0 : fileSizeNode.asInt());
@@ -274,7 +286,7 @@ public class RequestRouter {
         return ServerResponse.ok("Product deleted successfully", null);
     }
 
-    private ServerResponse<?> handleUpdateProduct(ClientRequest request, ProductDao productDao) throws IOException {
+    private ServerResponse<?> handleUpdateProduct(ClientRequest request, ProductDao productDao) {
         JsonNode payload = request.getPayload();
         JsonNode idNode = getPayloadField(payload, "id", "id");
         JsonNode nameNode = getPayloadField(payload, "name", "name");
@@ -303,14 +315,25 @@ public class RequestRouter {
 
         Double discountPrice = (discountNode == null || discountNode.isNull()) ? null : discountNode.asDouble();
 
-        byte[] fileData;
-        if (fileDataNode == null || fileDataNode.isNull()) fileData = null;
-        else {
-            fileData = fileDataNode.binaryValue();
-            if (fileData == null) {
+        byte[] fileData = null;
+        if (fileDataNode != null && !fileDataNode.isNull()) {
+            if (fileDataNode.isTextual()) {
+                try {
+                    fileData = Base64.getDecoder().decode(fileDataNode.asText());
+                } catch (IllegalArgumentException e) {
+                    return ServerResponse.error("Invalid file data: expected binary (byte[]) content");
+                }
+            } else if (fileDataNode.isBinary()) {
+                try {
+                    fileData = fileDataNode.binaryValue();
+                } catch (IOException e) {
+                    return ServerResponse.error("Invalid file data: expected binary (byte[]) content");
+                }
+            } else {
                 return ServerResponse.error("Invalid file data: expected binary (byte[]) content");
             }
         }
+
         String fileName = fileData == null ? null : (fileNameNode == null || fileNameNode.isNull() ? null : fileNameNode.asText());
         String contentType = fileData == null ? null : (contentTypeNode == null || contentTypeNode.isNull() ? null : contentTypeNode.asText());
         int fileSize = fileData == null ? 0 : (fileSizeNode == null || fileSizeNode.isNull() ? 0 : fileSizeNode.asInt());
