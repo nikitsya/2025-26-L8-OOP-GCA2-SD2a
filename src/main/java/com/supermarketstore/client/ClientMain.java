@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.supermarketstore.client.upload.FilePayloadBuilder;
 import com.supermarketstore.department.Department;
 import com.supermarketstore.product.Product;
 import com.supermarketstore.protocol.ClientRequest;
@@ -13,6 +14,7 @@ import com.supermarketstore.protocol.ServerResponse;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -346,11 +348,18 @@ public class ClientMain {
         System.out.println();
         System.out.println("Adding a new product...");
         ObjectNode addProductPayload = MAPPER.createObjectNode();
+
+        FilePayloadBuilder filePayloadBuilder = new FilePayloadBuilder();
+        ObjectNode productImagePayload = filePayloadBuilder.buildUploadPayload(Path.of(
+                "src/main/resources/images/products/30 Tie Handle Bin Liners 50L.jpeg"));
+
         addProductPayload.put("name", "TEST_NewProduct");
         addProductPayload.put("price", 29.99);
         addProductPayload.put("isOnSale", true);
         addProductPayload.put("discountPrice", 19.99);
         addProductPayload.put("stock", 50);
+        addProductPayload.setAll(productImagePayload);
+
         ServerResponse<Product> addProductResponse = sendRequest(
                 out, in,
                 RequestType.ADD_PRODUCT, addProductPayload,
@@ -369,12 +378,19 @@ public class ClientMain {
         System.out.println();
         System.out.println("Updating the product by id...");
         ObjectNode updateProductPayload = MAPPER.createObjectNode();
+
+        FilePayloadBuilder filePayloadBuilder = new FilePayloadBuilder();
+        ObjectNode productImagePayload = filePayloadBuilder.buildUploadPayload(Path.of(
+                "src/main/resources/images/products/Heinz Turkish Style Garlic Sauce 420G.jpeg"));
+
         updateProductPayload.put("id", productId);
         updateProductPayload.put("name", "TEST_UpdatedProduct");
         updateProductPayload.put("price", 24.99);
         updateProductPayload.put("isOnSale", true);
         updateProductPayload.put("discountPrice", 17.49);
         updateProductPayload.put("stock", 35);
+        updateProductPayload.setAll(productImagePayload);
+
         ServerResponse<Product> updateProductResponse = sendRequest(
                 out, in,
                 RequestType.UPDATE_PRODUCT, updateProductPayload,
