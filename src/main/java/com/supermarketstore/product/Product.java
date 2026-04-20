@@ -212,7 +212,7 @@ public class Product {
         }
 
         return base +
-                ", fileData=" + Arrays.toString(fileData) +
+                ", fileData=" + Arrays.toString(fileData).substring(0, 20) + " (...)]" +
                 ", fileName='" + fileName + '\'' +
                 ", contentType='" + contentType + '\'' +
                 ", fileSize=" + fileSize +
