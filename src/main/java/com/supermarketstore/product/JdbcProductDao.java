@@ -33,7 +33,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
             while (rs.next()) out.add(mapRow(rs));
             return out;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -51,7 +51,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
                 if (rs.next()) return Optional.of(mapRow(rs));
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage(), e);
         }
 
         return Optional.empty();
@@ -67,7 +67,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
             ps.setInt(1, id);
             return ps.executeUpdate() == 1;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage(), e);
         }
     }
 
@@ -88,8 +88,8 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
                 if (!keys.next()) throw new IllegalStateException("no generated key returned");
                 product.setProductId(keys.getInt(1));
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to insert product", e);
+        } catch (SQLException | IllegalStateException e) {
+            throw new RuntimeException("Failed to insert product: " + e.getMessage(), e);
         }
 
         return product;
@@ -109,8 +109,8 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
             int rows = ps.executeUpdate();
             if (rows != 1) throw new IllegalStateException("update failed, rows=" + rows);
             product.setProductId(id);
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to update product", e);
+        } catch (SQLException | IllegalStateException e) {
+            throw new RuntimeException("Failed to update product: " + e.getMessage(), e);
         }
 
         return product;
