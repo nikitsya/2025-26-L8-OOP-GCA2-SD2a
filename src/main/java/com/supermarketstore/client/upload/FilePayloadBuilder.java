@@ -22,6 +22,14 @@ public class FilePayloadBuilder {
 
     // === Methods ===
 
+    /**
+     * Builds a JSON payload fragment containing Base64-encoded file content
+     * and related metadata for an entity upload request.
+     *
+     * @param filePath the path to the file that will be attached to the request
+     * @return an object node containing fileData, fileName, contentType, and fileSize
+     * @throws IOException if the file cannot be read or its content type cannot be determined
+     */
     public ObjectNode buildUploadPayload(Path filePath) throws IOException {
         ObjectNode filePayload = MAPPER.createObjectNode();
 
