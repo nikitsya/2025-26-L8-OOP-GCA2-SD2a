@@ -49,7 +49,6 @@ public class ClientMain {
      * @param out the socket writer used to send requests
      * @param in  the socket reader used to receive responses
      * @throws IOException if client-server communication fails
-     * @author Hanna Bokariuk
      */
     private static void runDepartmentDemo(PrintWriter out, BufferedReader in) throws IOException {
         requestAllEntities(
@@ -122,7 +121,6 @@ public class ClientMain {
      * @param out the socket writer used to send requests
      * @param in  the socket reader used to receive responses
      * @throws IOException if client-server communication fails
-     * @author Nikita Smiichyk
      */
     private static void runProductDemo(PrintWriter out, BufferedReader in) throws IOException {
         requestAllEntities(
@@ -188,7 +186,6 @@ public class ClientMain {
      * @param responseType the Jackson type reference used to deserialize the typed server response
      * @return the deserialized server response for the request
      * @throws IOException if the request cannot be written or the response cannot be read or parsed
-     * @author Nikita Smiichyk
      */
     private static <T> ServerResponse<T> sendRequest(PrintWriter out, BufferedReader in, RequestType type, JsonNode payload, TypeReference<ServerResponse<T>> responseType) throws IOException {
         ClientRequest request = new ClientRequest(type.name(), payload);
