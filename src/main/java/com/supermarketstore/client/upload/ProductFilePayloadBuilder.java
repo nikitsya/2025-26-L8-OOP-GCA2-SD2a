@@ -33,7 +33,7 @@ public class ProductFilePayloadBuilder {
         String detectedMime = Files.probeContentType(filePath);
         String contentType = detectedMime != null ? detectedMime : "application/octet-stream";
 
-        filePayload.put("fileData", fileDataNode);
+        filePayload.set("fileData", fileDataNode);
         filePayload.put("fileName", fileName);
         filePayload.put("contentType", contentType);
         filePayload.put("fileSize", bytes.length);
