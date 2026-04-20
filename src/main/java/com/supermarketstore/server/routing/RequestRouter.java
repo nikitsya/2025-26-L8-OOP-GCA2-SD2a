@@ -127,33 +127,46 @@ public class RequestRouter {
     }
 
     private ServerResponse<?> handleUpdateDepartment(ClientRequest request, DepartmentDao departmentDao) {
-        try {
-            Department updatedDepartment = parseDepartment(request.getPayload(), true);
-            int id = updatedDepartment.getDepartmentId();
+        JsonNode payload = request.getPayload();
+        JsonNode idNode = getPayloadField(payload, "id", "id");
+        JsonNode nameNode = getPayloadField(payload, "name", "name");
+        JsonNode floorNode = getPayloadField(payload, "floor", "floor");
+        JsonNode zoneNode = getPayloadField(payload, "zone", "zone");
+        JsonNode budgetNode = getPayloadField(payload, "budget", "budget");
+        JsonNode employeeCountNode = getPayloadField(payload, "employeeCount", "employeeCount");
+        JsonNode refrigeratedNode = getPayloadField(payload, "isRefrigerated", "isRefrigerated");
 
-            if (departmentDao.getDepartmentById(id).isEmpty()) {
-                return ServerResponse.error("Department not found for id: " + id);
-            }
-
-            Department result = departmentDao.updateDepartment(id, updatedDepartment);
-            return ServerResponse.ok("Department updated successfully", result);
-        } catch (IllegalArgumentException e) {
-            return ServerResponse.error(e.getMessage());
+        if (idNode == null
+                || nameNode == null
+                || floorNode == null
+                || zoneNode == null
+                || budgetNode == null
+                || employeeCountNode == null
+                || refrigeratedNode == null) {
+            return ServerResponse.error("Missing required fields: id, name, floor, zone, budget, employeeCount, isRefrigerated");
         }
+
+        int id = idNode.asInt();
+        if (departmentDao.getDepartmentById(id).isEmpty()) {
+            return ServerResponse.error("Department not found for id: " + id);
+        }
+
+        Department updatedDepartment = new Department(
+                id,
+                nameNode.asText(),
+                floorNode.asInt(),
+                zoneNode.asInt(),
+                budgetNode.asDouble(),
+                employeeCountNode.asInt(),
+                refrigeratedNode.asBoolean()
+        );
+
+        Department result = departmentDao.updateDepartment(id, updatedDepartment);
+        return ServerResponse.ok("Department updated successfully", result);
     }
 
     private ServerResponse<?> handleAddDepartment(ClientRequest request, DepartmentDao departmentDao) {
-        try {
-            Department newDepartment = parseDepartment(request.getPayload(), false);
-            Department insertedDepartment = departmentDao.insertDepartment(newDepartment);
-            return ServerResponse.ok("Department added successfully", insertedDepartment);
-        } catch (IllegalArgumentException e) {
-            return ServerResponse.error(e.getMessage());
-        }
-    }
-
-    private Department parseDepartment(JsonNode payload, boolean requireId) {
-        JsonNode idNode = requireId ? getPayloadField(payload, "id", "id") : null;
+        JsonNode payload = request.getPayload();
         JsonNode nameNode = getPayloadField(payload, "name", "name");
         JsonNode floorNode = getPayloadField(payload, "floor", "floor");
         JsonNode zoneNode = getPayloadField(payload, "zone", "zone");
@@ -166,16 +179,12 @@ public class RequestRouter {
                 || zoneNode == null
                 || budgetNode == null
                 || employeeCountNode == null
-                || refrigeratedNode == null
-                || (requireId && idNode == null)) {
-            throw new IllegalArgumentException(
-                    requireId ? "Missing required fields: id, name, floor, zone, budget, employeeCount, isRefrigerated"
-                            : "Missing required fields: name, floor, zone, budget, employeeCount, isRefrigerated"
-            );
+                || refrigeratedNode == null) {
+            return ServerResponse.error("Missing required fields: name, floor, zone, budget, employeeCount, isRefrigerated");
         }
 
-        return new Department(
-                requireId ? idNode.asInt() : 0,
+        Department newDepartment = new Department(
+                0,
                 nameNode.asText(),
                 floorNode.asInt(),
                 zoneNode.asInt(),
@@ -183,6 +192,8 @@ public class RequestRouter {
                 employeeCountNode.asInt(),
                 refrigeratedNode.asBoolean()
         );
+        Department insertDepartment = departmentDao.insertDepartment(newDepartment);
+        return ServerResponse.ok("Department added successfully", insertDepartment);
     }
 
     // === Product Helpers ===
