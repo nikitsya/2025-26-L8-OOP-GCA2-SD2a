@@ -292,17 +292,17 @@ public class ClientMain {
         System.out.println();
         System.out.println("Adding a new department...");
 
-        ObjectNode addDepartmentPayload = MAPPER.createObjectNode();
-        addDepartmentPayload.put("name", "TEST_NewDepartment");
-        addDepartmentPayload.put("floor", 1);
-        addDepartmentPayload.put("zone", 11);
-        addDepartmentPayload.put("budget", 10000.0);
-        addDepartmentPayload.put("employeeCount", 5);
-        addDepartmentPayload.put("isRefrigerated", false);
+        ObjectNode departmentPayload = MAPPER.createObjectNode();
+        departmentPayload.put("name", "TEST_NewDepartment");
+        departmentPayload.put("floor", 1);
+        departmentPayload.put("zone", 11);
+        departmentPayload.put("budget", 10000.0);
+        departmentPayload.put("employeeCount", 5);
+        departmentPayload.put("isRefrigerated", false);
 
         ServerResponse<Department> addDepartmentResponse = sendRequest(
                 out, in,
-                RequestType.ADD_DEPARTMENT, addDepartmentPayload,
+                RequestType.ADD_DEPARTMENT, departmentPayload,
                 new TypeReference<>() {
                 }
         );
@@ -319,18 +319,18 @@ public class ClientMain {
         System.out.println();
         System.out.println("Updating the department by id...");
 
-        ObjectNode updateDepartmentPayload = MAPPER.createObjectNode();
-        updateDepartmentPayload.put("id", departmentId);
-        updateDepartmentPayload.put("name", "TEST_UpdatedDepartment");
-        updateDepartmentPayload.put("floor", 2);
-        updateDepartmentPayload.put("zone", 12);
-        updateDepartmentPayload.put("budget", 15000.0);
-        updateDepartmentPayload.put("employeeCount", 8);
-        updateDepartmentPayload.put("isRefrigerated", true);
+        ObjectNode departmentPayload = MAPPER.createObjectNode();
+        departmentPayload.put("id", departmentId);
+        departmentPayload.put("name", "TEST_UpdatedDepartment");
+        departmentPayload.put("floor", 2);
+        departmentPayload.put("zone", 12);
+        departmentPayload.put("budget", 15000.0);
+        departmentPayload.put("employeeCount", 8);
+        departmentPayload.put("isRefrigerated", true);
 
         ServerResponse<Department> updateDepartmentResponse = sendRequest(
                 out, in,
-                RequestType.UPDATE_DEPARTMENT, updateDepartmentPayload,
+                RequestType.UPDATE_DEPARTMENT, departmentPayload,
                 new TypeReference<>() {
                 }
         );
@@ -347,22 +347,22 @@ public class ClientMain {
     private static Product addDemoProduct(PrintWriter out, BufferedReader in) throws IOException {
         System.out.println();
         System.out.println("Adding a new product...");
-        ObjectNode addProductPayload = MAPPER.createObjectNode();
+        ObjectNode productPayload = MAPPER.createObjectNode();
 
         FilePayloadBuilder filePayloadBuilder = new FilePayloadBuilder();
         ObjectNode productImagePayload = filePayloadBuilder.buildUploadPayload(Path.of(
                 "src/main/resources/images/products/30 Tie Handle Bin Liners 50L.jpeg"));
 
-        addProductPayload.put("name", "TEST_NewProduct");
-        addProductPayload.put("price", 29.99);
-        addProductPayload.put("isOnSale", true);
-        addProductPayload.put("discountPrice", 19.99);
-        addProductPayload.put("stock", 50);
-        addProductPayload.setAll(productImagePayload);
+        productPayload.put("name", "TEST_NewProduct");
+        productPayload.put("price", 29.99);
+        productPayload.put("isOnSale", true);
+        productPayload.put("discountPrice", 19.99);
+        productPayload.put("stock", 50);
+        productPayload.setAll(productImagePayload);
 
         ServerResponse<Product> addProductResponse = sendRequest(
                 out, in,
-                RequestType.ADD_PRODUCT, addProductPayload,
+                RequestType.ADD_PRODUCT, productPayload,
                 new TypeReference<>() {
                 }
         );
@@ -377,23 +377,23 @@ public class ClientMain {
     private static void updateDemoProduct(PrintWriter out, BufferedReader in, int productId) throws IOException {
         System.out.println();
         System.out.println("Updating the product by id...");
-        ObjectNode updateProductPayload = MAPPER.createObjectNode();
+        ObjectNode productPayload = MAPPER.createObjectNode();
 
         FilePayloadBuilder filePayloadBuilder = new FilePayloadBuilder();
         ObjectNode productImagePayload = filePayloadBuilder.buildUploadPayload(Path.of(
                 "src/main/resources/images/products/Heinz Turkish Style Garlic Sauce 420G.jpeg"));
 
-        updateProductPayload.put("id", productId);
-        updateProductPayload.put("name", "TEST_UpdatedProduct");
-        updateProductPayload.put("price", 24.99);
-        updateProductPayload.put("isOnSale", true);
-        updateProductPayload.put("discountPrice", 17.49);
-        updateProductPayload.put("stock", 35);
-        updateProductPayload.setAll(productImagePayload);
+        productPayload.put("id", productId);
+        productPayload.put("name", "TEST_UpdatedProduct");
+        productPayload.put("price", 24.99);
+        productPayload.put("isOnSale", true);
+        productPayload.put("discountPrice", 17.49);
+        productPayload.put("stock", 35);
+        productPayload.setAll(productImagePayload);
 
         ServerResponse<Product> updateProductResponse = sendRequest(
                 out, in,
-                RequestType.UPDATE_PRODUCT, updateProductPayload,
+                RequestType.UPDATE_PRODUCT, productPayload,
                 new TypeReference<>() {
                 }
         );
