@@ -14,7 +14,6 @@ import java.util.Base64;
  *
  * @author Nikita Smiichyk
  */
-
 public class FilePayloadBuilder {
     // === Static Fields ===
     private static final ObjectMapper MAPPER = new ObjectMapper();
