@@ -16,6 +16,16 @@ import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Entry point for the supermarket server application.
+ * Starts the socket server, creates DAO dependencies, and delegates
+ * incoming JSON requests to the request router.
+ *
+ * @author Hanna Bokariuk (primary - server setup and department DAO wiring)
+ * @author Nikita Smiichyk (contributor - product DAO wiring, multithreading, and routing integration)
+ */
+
+
 public class ServerMain {
     // === Static Fields ===
     private static final int PORT = 9000;
