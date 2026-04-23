@@ -21,7 +21,11 @@ import java.util.List;
  * Entry point for the supermarket client application.
  * Demonstrates socket-based request and response flows for department
  * and product operations against the server.
+ *
+ * @author Hanna Bokariuk (primary - department client flow)
+ * @author Nikita Smiichyk (contributor - product client flow, file upload payloads, and refactoring)
  */
+
 public class ClientMain {
     // === Static Fields ===
     private static final String HOST = "localhost";
