@@ -105,6 +105,15 @@ public class ClientMain {
                 }
         );
 
+        requestEntityById(
+                out, in,
+                departmentId,
+                "Requesting the department with image by id...",
+                RequestType.GET_DEPARTMENT_IMAGE_BY_ID,
+                new TypeReference<ServerResponse<Department>>() {
+                }
+        );
+
         deleteEntityById(
                 out, in,
                 departmentId,
