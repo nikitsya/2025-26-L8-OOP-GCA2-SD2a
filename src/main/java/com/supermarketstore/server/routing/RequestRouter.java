@@ -109,6 +109,20 @@ public class RequestRouter {
                 .orElseGet(() -> ServerResponse.error("Department not found for id: " + id));
     }
 
+    private ServerResponse<?> handleGetDepartmentImageById(ClientRequest request, DepartmentDao departmentDao) {
+        JsonNode payload = request.getPayload();
+        JsonNode idNode = getPayloadField(payload, "id", "id");
+
+        if (idNode == null)
+            return ServerResponse.error("Missing required field: id");
+
+        int id = idNode.asInt();
+
+        return departmentDao.getDepartmentImageById(id)
+                .map(department -> ServerResponse.ok("Department image retrieved successfully", department))
+                .orElseGet(() -> ServerResponse.error("Department not found for id: " + id));
+    }
+
     private ServerResponse<?> handleDeleteDepartmentById(ClientRequest request, DepartmentDao departmentDao) {
         JsonNode payload = request.getPayload();
         JsonNode idNode = getPayloadField(payload, "id", "id");
