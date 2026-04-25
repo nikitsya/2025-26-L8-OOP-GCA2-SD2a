@@ -30,4 +30,10 @@ public interface DepartmentDao {
 
     // Finds: departments matching a filter
     List<Department> findDepartmentsByFilter(Predicate<Department> filter);
+
+    // Gets: a department including its image by id
+    Optional<Department> getDepartmentImageById(int id);
+
+    // Gets: department image metadata only by id
+    Optional<Department> getDepartmentImageMetadataById(int id);
 }
