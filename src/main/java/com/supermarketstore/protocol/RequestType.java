@@ -17,4 +17,5 @@ public enum RequestType {
     ADD_PRODUCT,
     DELETE_PRODUCT_BY_ID,
     UPDATE_PRODUCT,
+    DISCONNECT
 }
