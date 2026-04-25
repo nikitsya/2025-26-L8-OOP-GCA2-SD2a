@@ -432,4 +432,8 @@ public class RequestRouter {
         Product savedProduct = productDao.updateProduct(id, updatedProduct);
         return ServerResponse.ok("Product updated successfully", savedProduct);
     }
+
+    private ServerResponse<?> handleDisconnect() {
+        return ServerResponse.ok("Client disconnected successfully", null);
+    }
 }
