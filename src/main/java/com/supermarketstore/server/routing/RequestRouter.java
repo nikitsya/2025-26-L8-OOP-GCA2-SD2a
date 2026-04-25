@@ -46,6 +46,7 @@ public class RequestRouter {
         _handlers.put(RequestType.ADD_PRODUCT.name(), req -> handleAddProduct(req, productDao));
         _handlers.put(RequestType.DELETE_PRODUCT_BY_ID.name(), req -> handleDeleteProductById(req, productDao));
         _handlers.put(RequestType.UPDATE_PRODUCT.name(), req -> handleUpdateProduct(req, productDao));
+        _handlers.put(RequestType.DISCONNECT.name(), req -> handleDisconnect());
     }
 
     // === Helpers ===
