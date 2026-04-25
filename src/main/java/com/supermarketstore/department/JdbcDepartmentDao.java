@@ -48,7 +48,8 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
     public Optional<Department> getDepartmentById(int id) {
         if (id <= 0) return Optional.empty();
 
-        String sql = "SELECT department_id, name, floor, zone, budget, employee_count, is_refrigerated FROM departments WHERE department_id = ?";
+        String sql = "SELECT department_id, name, floor, zone, budget, employee_count, is_refrigerated," +
+                "file_name, content_type, file_size, department_image FROM departments WHERE department_id = ?";
 
         try (Connection c = open();
              PreparedStatement ps = c.prepareStatement(sql)) {
