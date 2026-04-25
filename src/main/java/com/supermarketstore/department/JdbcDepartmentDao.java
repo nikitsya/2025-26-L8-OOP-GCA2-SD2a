@@ -135,7 +135,8 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
     public Department insertDepartment(Department department) {
         if (department == null) throw new IllegalArgumentException("department is required");
 
-        String sql = "INSERT INTO departments (name, floor, zone, budget, employee_count, is_refrigerated) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO departments (name, floor, zone, budget, employee_count, is_refrigerated, file_name, content_type, file_size, department_image)" +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection c = open();
              PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -146,6 +147,15 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
             ps.setDouble(4, department.getBudget());
             ps.setInt(5, department.getEmployeeCount());
             ps.setBoolean(6, department.isRefrigerated());
+            ps.setString(7, department.getFileName());
+            ps.setString(8, department.getContentType());
+            ps.setInt(9, department.getFileSize());
+
+            if (department.getDepartmentImage() == null) {
+                ps.setNull(10, Types.BLOB);
+            } else {
+                ps.setBytes(10, department.getDepartmentImage());
+            }
 
             int rows = ps.executeUpdate();
             if (rows != 1) {
@@ -163,7 +173,11 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
                             department.getZone(),
                             department.getBudget(),
                             department.getEmployeeCount(),
-                            department.isRefrigerated()
+                            department.isRefrigerated(),
+                            department.getFileName(),
+                            department.getContentType(),
+                            department.getFileSize(),
+                            department.getDepartmentImage()
                     );
                 }
             }
