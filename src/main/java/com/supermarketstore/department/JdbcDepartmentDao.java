@@ -67,6 +67,54 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
     }
 
     @Override
+    public Optional<Department> getDepartmentImageById(int id) {
+        if (id <= 0) return Optional.empty();
+
+        String sql = "SELECT department_id, name, floor, zone, budget, employee_count, is_refrigerated, " +
+                "file_name, content_type, file_size, department_image " +
+                "FROM departments WHERE department_id = ?";
+
+        try (Connection c = open();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return Optional.of(mapRowWithImage(rs));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to fetch department image by id", e);
+        }
+
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Department> getDepartmentImageMetadataById(int id) {
+        if (id <= 0) return Optional.empty();
+
+        String sql = "SELECT department_id, name, floor, zone, budget, employee_count, is_refrigerated, " +
+                "file_name, content_type, file_size " +
+                "FROM departments WHERE department_id = ?";
+
+        try (Connection c = open();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+
+            ps.setInt(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return Optional.of(mapRowWithMetadata(rs));
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to fetch department image metadata by id", e);
+        }
+
+        return Optional.empty();
+    }
+
+    @Override
     public boolean deleteDepartmentById(int id) {
         if (id <= 0) return false;
 
@@ -183,5 +231,62 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
         boolean refrigerated = resultSet.getBoolean("is_refrigerated");
 
         return new Department(departmentId, name, floor, zone, budget, employeeCount, refrigerated);
+    }
+
+    // Maps: a single SQL ResultSet row to a Department object including image data
+    private Department mapRowWithImage(ResultSet resultSet) throws SQLException {
+        int departmentId = resultSet.getInt("department_id");
+        String name = resultSet.getString("name");
+        int floor = resultSet.getInt("floor");
+        int zone = resultSet.getInt("zone");
+        double budget = resultSet.getDouble("budget");
+        int employeeCount = resultSet.getInt("employee_count");
+        boolean refrigerated = resultSet.getBoolean("is_refrigerated");
+        String fileName = resultSet.getString("file_name");
+        String contentType = resultSet.getString("content_type");
+        int fileSize = resultSet.getInt("file_size");
+        byte[] departmentImage = resultSet.getBytes("department_image");
+
+        return new Department(
+                departmentId,
+                name,
+                floor,
+                zone,
+                budget,
+                employeeCount,
+                refrigerated,
+                fileName,
+                contentType,
+                fileSize,
+                departmentImage
+        );
+    }
+
+    // Maps: a single SQL ResultSet row to a Department object with metadata only
+    private Department mapRowWithMetadata(ResultSet resultSet) throws SQLException {
+        int departmentId = resultSet.getInt("department_id");
+        String name = resultSet.getString("name");
+        int floor = resultSet.getInt("floor");
+        int zone = resultSet.getInt("zone");
+        double budget = resultSet.getDouble("budget");
+        int employeeCount = resultSet.getInt("employee_count");
+        boolean refrigerated = resultSet.getBoolean("is_refrigerated");
+        String fileName = resultSet.getString("file_name");
+        String contentType = resultSet.getString("content_type");
+        int fileSize = resultSet.getInt("file_size");
+
+        return new Department(
+                departmentId,
+                name,
+                floor,
+                zone,
+                budget,
+                employeeCount,
+                refrigerated,
+                fileName,
+                contentType,
+                fileSize,
+                null
+        );
     }
 }
