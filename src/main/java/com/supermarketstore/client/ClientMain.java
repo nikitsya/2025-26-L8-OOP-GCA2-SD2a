@@ -288,6 +288,9 @@ public class ClientMain {
         Department department = response.getData();
         if (department != null) {
             System.out.println(department);
+            System.out.println("Retrieved file name: " + department.getFileName());
+            System.out.println("Retrieved content type: " + department.getContentType());
+            System.out.println("Retrieved file size: " + department.getFileSize() + " bytes");
 
             byte[] imageBytes = department.getDepartmentImage();
             String fileName = department.getFileName();
