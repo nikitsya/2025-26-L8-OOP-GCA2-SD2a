@@ -297,12 +297,18 @@ public class ClientMain {
         System.out.println("Adding a new department...");
 
         ObjectNode departmentPayload = MAPPER.createObjectNode();
+
+        FilePayloadBuilder filePayloadBuilder = new FilePayloadBuilder();
+        ObjectNode departmentImagePayload = filePayloadBuilder.buildUploadPayload(Path.of(
+                "src/main/resources/images/departments/bakery.jpg"));
+
         departmentPayload.put("name", "TEST_NewDepartment");
         departmentPayload.put("floor", 1);
         departmentPayload.put("zone", 11);
         departmentPayload.put("budget", 10000.0);
         departmentPayload.put("employeeCount", 5);
         departmentPayload.put("isRefrigerated", false);
+        departmentPayload.setAll(departmentImagePayload);
 
         ServerResponse<Department> addDepartmentResponse = sendRequest(
                 out, in,
