@@ -29,7 +29,7 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
 
     @Override
     public List<Department> getAllDepartments() {
-        String sql = "SELECT department_id, name, floor, zone, budget, employee_count, is_refrigerated,"+
+        String sql = "SELECT department_id, name, floor, zone, budget, employee_count, is_refrigerated, "+
                 "file_name, content_type, file_size, department_image FROM departments";
 
         try (Connection c = open();
@@ -49,7 +49,7 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
     public Optional<Department> getDepartmentById(int id) {
         if (id <= 0) return Optional.empty();
 
-        String sql = "SELECT department_id, name, floor, zone, budget, employee_count, is_refrigerated," +
+        String sql = "SELECT department_id, name, floor, zone, budget, employee_count, is_refrigerated, " +
                 "file_name, content_type, file_size, department_image FROM departments WHERE department_id = ?";
 
         try (Connection c = open();
@@ -137,8 +137,8 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
     public Department insertDepartment(Department department) {
         if (department == null) throw new IllegalArgumentException("department is required");
 
-        String sql = "INSERT INTO departments (name, floor, zone, budget, employee_count, is_refrigerated," +
-                "file_name, content_type, file_size, department_image)" +
+        String sql = "INSERT INTO departments (name, floor, zone, budget, employee_count, is_refrigerated, " +
+                "file_name, content_type, file_size, department_image) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection c = open();
@@ -197,7 +197,7 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
         if (id <= 0) throw new IllegalArgumentException("id must be greater than 0");
         if (department == null) throw new IllegalArgumentException("department is required");
 
-        String sql = "UPDATE departments SET name = ?, floor = ?, zone = ?, budget = ?, employee_count = ?, is_refrigerated = ?," +
+        String sql = "UPDATE departments SET name = ?, floor = ?, zone = ?, budget = ?, employee_count = ?, is_refrigerated = ?, " +
                 "file_name = ?, content_type = ?, file_size = ?, department_image = ? WHERE department_id = ?";
 
         try (Connection c = open();
