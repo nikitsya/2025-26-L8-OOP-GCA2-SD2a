@@ -180,7 +180,7 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
         if (id <= 0) throw new IllegalArgumentException("id must be greater than 0");
         if (department == null) throw new IllegalArgumentException("department is required");
 
-        String sql = "UPDATE departments SET name = ?, floor = ?, zone = ?, budget = ?, employee_count = ?, is_refrigerated = ? WHERE department_id = ?";
+        String sql = "UPDATE departments SET name = ?, floor = ?, zone = ?, budget = ?, employee_count = ?, is_refrigerated = ?," + "file_name = ?, content_type = ?, file_size = ?, department_image = ? WHERE department_id = ?";
 
         try (Connection c = open();
              PreparedStatement ps = c.prepareStatement(sql)) {
@@ -191,7 +191,17 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
             ps.setDouble(4, department.getBudget());
             ps.setInt(5, department.getEmployeeCount());
             ps.setBoolean(6, department.isRefrigerated());
-            ps.setInt(7, id);
+            ps.setString(7, department.getFileName());
+            ps.setString(8, department.getContentType());
+            ps.setInt(9, department.getFileSize());
+
+            if (department.getDepartmentImage() == null) {
+                ps.setNull(10, Types.BLOB);
+            } else {
+                ps.setBytes(10, department.getDepartmentImage());
+            }
+
+            ps.setInt(11, id);
 
             int rows = ps.executeUpdate();
             if (rows != 1) {
@@ -205,7 +215,11 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
                     department.getZone(),
                     department.getBudget(),
                     department.getEmployeeCount(),
-                    department.isRefrigerated()
+                    department.isRefrigerated(),
+                    department.getFileName(),
+                    department.getContentType(),
+                    department.getFileSize(),
+                    department.getDepartmentImage()
             );
 
         } catch (SQLException e) {
