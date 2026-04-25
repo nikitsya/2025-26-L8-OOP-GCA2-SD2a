@@ -105,14 +105,16 @@ public class ClientMain {
                 }
         );
 
-        requestEntityById(
-                out, in,
-                departmentId,
-                "Requesting the department with image by id...",
-                RequestType.GET_DEPARTMENT_IMAGE_BY_ID,
-                new TypeReference<ServerResponse<Department>>() {
-                }
-        );
+//        requestEntityById(
+//                out, in,
+//                departmentId,
+//                "Requesting the department with image by id...",
+//                RequestType.GET_DEPARTMENT_IMAGE_BY_ID,
+//                new TypeReference<ServerResponse<Department>>() {
+//                }
+//        );
+        requestDepartmentImageById(out, in, departmentId);
+
 
         deleteEntityById(
                 out, in,
@@ -265,6 +267,41 @@ public class ClientMain {
         T entity = response.getData();
         if (entity != null) {
             System.out.println(entity);
+        }
+    }
+    // TODO: extract this into a reusable helper if file retrieval is later added for other entities such as Product
+    private static void requestDepartmentImageById(PrintWriter out, BufferedReader in, int id) throws IOException {
+        System.out.println();
+        System.out.println("Requesting the department with image by id...");
+
+        ObjectNode payload = MAPPER.createObjectNode();
+        payload.put("id", id);
+
+        ServerResponse<Department> response = sendRequest(
+                out, in,
+                RequestType.GET_DEPARTMENT_IMAGE_BY_ID, payload,
+                new TypeReference<>() {
+                }
+        );
+        printResponse(response);
+
+        Department department = response.getData();
+        if (department != null) {
+            System.out.println(department);
+
+            byte[] imageBytes = department.getDepartmentImage();
+            String fileName = department.getFileName();
+
+            if (imageBytes != null && fileName != null && !fileName.isBlank()) {
+                Path outputPath = Path.of("downloads", "departments", fileName);
+                try {
+                    java.nio.file.Files.createDirectories(outputPath.getParent());
+                    java.nio.file.Files.write(outputPath, imageBytes);
+                    System.out.println("Department image saved to: " + outputPath);
+                } catch (IOException e) {
+                    System.out.println("Failed to save department image: " + e.getMessage());
+                }
+            }
         }
     }
 
