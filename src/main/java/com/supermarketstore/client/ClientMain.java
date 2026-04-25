@@ -324,6 +324,11 @@ public class ClientMain {
         System.out.println("Updating the department by id...");
 
         ObjectNode departmentPayload = MAPPER.createObjectNode();
+
+        FilePayloadBuilder filePayloadBuilder = new FilePayloadBuilder();
+        ObjectNode departmentImagePayload = filePayloadBuilder.buildUploadPayload(Path.of(
+                "src/main/resources/images/departments/frozen_foods.jpg"));
+
         departmentPayload.put("id", departmentId);
         departmentPayload.put("name", "TEST_UpdatedDepartment");
         departmentPayload.put("floor", 2);
@@ -331,6 +336,7 @@ public class ClientMain {
         departmentPayload.put("budget", 15000.0);
         departmentPayload.put("employeeCount", 8);
         departmentPayload.put("isRefrigerated", true);
+        departmentPayload.setAll(departmentImagePayload);
 
         ServerResponse<Department> updateDepartmentResponse = sendRequest(
                 out, in,
