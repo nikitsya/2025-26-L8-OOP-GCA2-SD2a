@@ -34,6 +34,4 @@ public interface DepartmentDao {
     // Gets: a department including its image by id
     Optional<Department> getDepartmentImageById(int id);
 
-    // Gets: department image metadata only by id
-    Optional<Department> getDepartmentImageMetadataById(int id);
 }

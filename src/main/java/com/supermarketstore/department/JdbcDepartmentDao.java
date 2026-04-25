@@ -29,8 +29,8 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
 
     @Override
     public List<Department> getAllDepartments() {
-        String sql = "SELECT department_id, name, floor, zone, budget, employee_count, is_refrigerated, "+
-                "file_name, content_type, file_size, department_image FROM departments";
+        String sql = "SELECT department_id, name, floor, zone, budget, employee_count, is_refrigerated, " +
+                "file_name, content_type, file_size FROM departments";
 
         try (Connection c = open();
              PreparedStatement ps = c.prepareStatement(sql);
@@ -50,7 +50,7 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
         if (id <= 0) return Optional.empty();
 
         String sql = "SELECT department_id, name, floor, zone, budget, employee_count, is_refrigerated, " +
-                "file_name, content_type, file_size, department_image FROM departments WHERE department_id = ?";
+                "file_name, content_type, file_size FROM departments WHERE department_id = ?";
 
         try (Connection c = open();
              PreparedStatement ps = c.prepareStatement(sql)) {
@@ -87,30 +87,6 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
 
         } catch (SQLException e) {
             throw new RuntimeException("Failed to fetch department image by id", e);
-        }
-
-        return Optional.empty();
-    }
-
-    @Override
-    public Optional<Department> getDepartmentImageMetadataById(int id) {
-        if (id <= 0) return Optional.empty();
-
-        String sql = "SELECT department_id, name, floor, zone, budget, employee_count, is_refrigerated, " +
-                "file_name, content_type, file_size " +
-                "FROM departments WHERE department_id = ?";
-
-        try (Connection c = open();
-             PreparedStatement ps = c.prepareStatement(sql)) {
-
-            ps.setInt(1, id);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) return Optional.of(mapRowWithMetadata(rs));
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Failed to fetch department image metadata by id", e);
         }
 
         return Optional.empty();
@@ -252,7 +228,7 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
         return getAllDepartments().stream().filter(filter).toList();
     }
 
-    // Maps: a single SQL ResultSet row to a Department object
+    // // Maps: a single SQL ResultSet row to a Department object with file metadata only
     private Department mapRow(ResultSet resultSet) throws SQLException {
         int departmentId = resultSet.getInt("department_id");
         String name = resultSet.getString("name");
@@ -294,34 +270,6 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
                 contentType,
                 fileSize,
                 departmentImage
-        );
-    }
-
-    // Maps: a single SQL ResultSet row to a Department object with metadata only
-    private Department mapRowWithMetadata(ResultSet resultSet) throws SQLException {
-        int departmentId = resultSet.getInt("department_id");
-        String name = resultSet.getString("name");
-        int floor = resultSet.getInt("floor");
-        int zone = resultSet.getInt("zone");
-        double budget = resultSet.getDouble("budget");
-        int employeeCount = resultSet.getInt("employee_count");
-        boolean refrigerated = resultSet.getBoolean("is_refrigerated");
-        String fileName = resultSet.getString("file_name");
-        String contentType = resultSet.getString("content_type");
-        int fileSize = resultSet.getInt("file_size");
-
-        return new Department(
-                departmentId,
-                name,
-                floor,
-                zone,
-                budget,
-                employeeCount,
-                refrigerated,
-                fileName,
-                contentType,
-                fileSize,
-                null
         );
     }
 }
