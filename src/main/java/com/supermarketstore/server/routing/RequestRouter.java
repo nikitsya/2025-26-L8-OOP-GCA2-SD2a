@@ -204,6 +204,10 @@ public class RequestRouter {
         JsonNode budgetNode = getPayloadField(payload, "budget", "budget");
         JsonNode employeeCountNode = getPayloadField(payload, "employeeCount", "employeeCount");
         JsonNode refrigeratedNode = getPayloadField(payload, "isRefrigerated", "isRefrigerated");
+        JsonNode fileDataNode = getPayloadField(payload, "fileData", "file_data");
+        JsonNode fileNameNode = getPayloadField(payload, "fileName", "file_name");
+        JsonNode contentTypeNode = getPayloadField(payload, "contentType", "content_type");
+        JsonNode fileSizeNode = getPayloadField(payload, "fileSize", "file_size");
 
         if (nameNode == null
                 || floorNode == null
@@ -214,6 +218,29 @@ public class RequestRouter {
             return ServerResponse.error("Missing required fields: name, floor, zone, budget, employeeCount, isRefrigerated");
         }
 
+        byte[] departmentImage = null;
+        if (fileDataNode != null && !fileDataNode.isNull()) {
+            if (fileDataNode.isTextual()) {
+                try {
+                    departmentImage = Base64.getDecoder().decode(fileDataNode.asText());
+                } catch (IllegalArgumentException e) {
+                    return ServerResponse.error("Invalid file data: expected binary (byte[]) content");
+                }
+            } else if (fileDataNode.isBinary()) {
+                try {
+                    departmentImage = fileDataNode.binaryValue();
+                } catch (IOException e) {
+                    return ServerResponse.error("Invalid file data: expected binary (byte[]) content");
+                }
+            } else {
+                return ServerResponse.error("Invalid file data: expected binary (byte[]) content");
+            }
+        }
+
+        String fileName = departmentImage == null ? null : (fileNameNode == null || fileNameNode.isNull() ? null : fileNameNode.asText());
+        String contentType = departmentImage == null ? null : (contentTypeNode == null || contentTypeNode.isNull() ? null : contentTypeNode.asText());
+        int fileSize = departmentImage == null ? 0 : (fileSizeNode == null || fileSizeNode.isNull() ? 0 : fileSizeNode.asInt());
+
         Department newDepartment = new Department(
                 0,
                 nameNode.asText(),
@@ -221,7 +248,11 @@ public class RequestRouter {
                 zoneNode.asInt(),
                 budgetNode.asDouble(),
                 employeeCountNode.asInt(),
-                refrigeratedNode.asBoolean()
+                refrigeratedNode.asBoolean(),
+                fileName,
+                contentType,
+                fileSize,
+                departmentImage
         );
         Department insertDepartment = departmentDao.insertDepartment(newDepartment);
         return ServerResponse.ok("Department added successfully", insertDepartment);
