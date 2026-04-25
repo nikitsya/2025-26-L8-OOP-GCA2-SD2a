@@ -29,7 +29,8 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
 
     @Override
     public List<Department> getAllDepartments() {
-        String sql = "SELECT department_id, name, floor, zone, budget, employee_count, is_refrigerated FROM departments";
+        String sql = "SELECT department_id, name, floor, zone, budget, employee_count, is_refrigerated,"+
+                "file_name, content_type, file_size, department_image FROM departments";
 
         try (Connection c = open();
              PreparedStatement ps = c.prepareStatement(sql);
@@ -136,7 +137,8 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
     public Department insertDepartment(Department department) {
         if (department == null) throw new IllegalArgumentException("department is required");
 
-        String sql = "INSERT INTO departments (name, floor, zone, budget, employee_count, is_refrigerated, file_name, content_type, file_size, department_image)" +
+        String sql = "INSERT INTO departments (name, floor, zone, budget, employee_count, is_refrigerated," +
+                "file_name, content_type, file_size, department_image)" +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection c = open();
@@ -195,7 +197,8 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
         if (id <= 0) throw new IllegalArgumentException("id must be greater than 0");
         if (department == null) throw new IllegalArgumentException("department is required");
 
-        String sql = "UPDATE departments SET name = ?, floor = ?, zone = ?, budget = ?, employee_count = ?, is_refrigerated = ?," + "file_name = ?, content_type = ?, file_size = ?, department_image = ? WHERE department_id = ?";
+        String sql = "UPDATE departments SET name = ?, floor = ?, zone = ?, budget = ?, employee_count = ?, is_refrigerated = ?," +
+                "file_name = ?, content_type = ?, file_size = ?, department_image = ? WHERE department_id = ?";
 
         try (Connection c = open();
              PreparedStatement ps = c.prepareStatement(sql)) {
@@ -258,8 +261,11 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
         double budget = resultSet.getDouble("budget");
         int employeeCount = resultSet.getInt("employee_count");
         boolean refrigerated = resultSet.getBoolean("is_refrigerated");
+        String fileName = resultSet.getString("file_name");
+        String contentType = resultSet.getString("content_type");
+        int fileSize = resultSet.getInt("file_size");
 
-        return new Department(departmentId, name, floor, zone, budget, employeeCount, refrigerated);
+        return new Department(departmentId, name, floor, zone, budget, employeeCount, refrigerated, fileName, contentType, fileSize, null);
     }
 
     // Maps: a single SQL ResultSet row to a Department object including image data
