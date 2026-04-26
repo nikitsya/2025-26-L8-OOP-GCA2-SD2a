@@ -71,6 +71,15 @@
 | F21 | Disconnect / Exit         | Client sends a structured `DISCONNECT` request before closing the socket. Server logs the disconnection and releases the thread cleanly.                                                                                                                                             | ✅   |  ✅   |
 | F22 | Core Unit Tests           | A JUnit 5 test suite with at least 3 meaningful tests per team member. Tests must be in the codebase and passing. Required categories: (1) a DAO read method (`getAll` or `getById`); (2) an insert with the returned auto-generated ID verified; (3) a JSON serialisation/deserialisation round-trip. Each test must have a descriptive method name (for example, `getPlayerById_returnsEmptyOptional_whenIdDoesNotExist`). Tests must not depend on execution order; use `@BeforeEach` with known data. Coverage threshold is not required at this stage - that is assessed at Stage 4. |  ✅   |      |
 
+#### F19 Implementation Notes
+
+Binary file retrieval is implemented for both departments and products. The client sends a request with the target `id`
+using `GET_DEPARTMENT_IMAGE_BY_ID` or `GET_PRODUCT_IMAGE_BY_ID`. The server routes the request to the relevant DAO
+method, which fetches the BLOB column with `ResultSet.getBytes()` and returns the entity inside `ServerResponse<T>`.
+Jackson serialises the returned `byte[]` as Base64 in the JSON response and deserialises it back into a `byte[]` on the
+client. The client then writes the bytes to `downloads/departments/` or `downloads/products/` using the stored
+`file_name`, preserving the original filename and extension.
+
 </details>
 
 ## <strong>Stage 4 (F23-F24)</strong>

@@ -100,12 +100,14 @@ Before running the server or the JDBC integration tests, set:
     - get department by id
     - add department
     - update department
+    - retrieve and save a department image by id
     - delete department
     - retrieve department image data
     - get all products
     - get product by id
     - add product
     - update product
+    - retrieve and save a product image by id
     - delete product
     - send a structured disconnect request
 
@@ -319,7 +321,9 @@ Current implementation:
 - `JdbcDepartmentDao` and `JdbcProductDao` store file bytes through JDBC and provide image retrieval methods.
 - `GET_DEPARTMENT_IMAGE_BY_ID` and `GET_PRODUCT_IMAGE_BY_ID` return the requested entity including binary data and
   metadata.
-- The department client demo writes retrieved image data to `downloads/departments/`.
+- DAO retrieval methods fetch the BLOB with `ResultSet.getBytes()`.
+- Jackson serialises returned `byte[]` values as Base64 in `ServerResponse<T>` JSON and deserialises them back into `byte[]` on the client.
+- The client reconstructs files under `downloads/departments/` or `downloads/products/`, preserving the stored filename and extension.
 
 ---
 
