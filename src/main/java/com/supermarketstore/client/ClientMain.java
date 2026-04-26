@@ -432,7 +432,7 @@ public class ClientMain {
                 id,
                 "Requesting the department with image by id...",
                 RequestType.GET_DEPARTMENT_IMAGE_BY_ID,
-                new TypeReference<ServerResponse<Department>>() {
+                new TypeReference<>() {
                 },
                 "Department image",
                 Path.of("downloads", "departments"),
@@ -514,7 +514,7 @@ public class ClientMain {
                 id,
                 "Requesting the product with image by id...",
                 RequestType.GET_PRODUCT_IMAGE_BY_ID,
-                new TypeReference<ServerResponse<Product>>() {
+                new TypeReference<>() {
                 },
                 "Product image",
                 Path.of("downloads", "products"),
