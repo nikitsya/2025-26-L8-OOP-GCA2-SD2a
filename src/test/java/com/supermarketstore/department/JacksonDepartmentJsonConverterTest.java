@@ -17,11 +17,11 @@ class JacksonDepartmentJsonConverterTest {
     );
 
     private final String departmentJson =
-            "{\"department_id\":1,\"name\":\"Bakery\",\"floor\":0,\"zone\":2,\"budget\":12000.0,\"employee_count\":5,\"is_refrigerated\":false,\"file_name\":\"bakery.jpg\",\"content_type\":\"image/jpeg\",\"file_size\":3,\"department_image\":\"AQID\"}";
+            "{\"department_id\":1,\"name\":\"Bakery\",\"floor\":0,\"zone\":2,\"budget\":12000.0,\"employee_count\":5,\"file_name\":\"bakery.jpg\",\"content_type\":\"image/jpeg\",\"file_size\":3,\"department_image\":\"AQID\",\"is_refrigerated\":false}";
     private final String departmentsJson =
             "[" +
                     departmentJson +
-                    ",{\"department_id\":2,\"name\":\"Frozen Foods\",\"floor\":1,\"zone\":5,\"budget\":20000.0,\"employee_count\":7,\"is_refrigerated\":true,\"file_name\":\"frozen-foods.jpg\",\"content_type\":\"image/jpeg\",\"file_size\":4,\"department_image\":\"BAUGBw==\"}" +
+                    ",{\"department_id\":2,\"name\":\"Frozen Foods\",\"floor\":1,\"zone\":5,\"budget\":20000.0,\"employee_count\":7,\"file_name\":\"frozen-foods.jpg\",\"content_type\":\"image/jpeg\",\"file_size\":4,\"department_image\":\"BAUGBw==\",\"is_refrigerated\":true}" +
                     "]";
 
     @Test
