@@ -93,14 +93,14 @@ class JdbcDepartmentDaoTest {
 
     @Test
     void updateDepartment_shouldPersistUpdatedValues() {
-        Department original = new Department(0, "TEST_OriginalBakery", 0, 2, 12000.0, 5, false);
+        Department original = new Department(0, "TEST_OriginalBakery", 0, 2, 12000.0, 5, false, "bakery.jpg", "image/jpeg", 3, new byte[]{1, 2, 3});
         Department inserted = dao.insertDepartment(original);
 
-        Department changes = new Department(0, "TEST_UpdatedBakery", 1, 6, 15000.0, 8, true);
+        Department changes = new Department(0, "TEST_UpdatedBakery", 1, 6, 15000.0, 8, true,  "updated-bakery.jpg", "image/jpeg", 4, new byte[]{7, 8, 9, 10});
 
         // Update the stored row, then read it back to confirm the new values were saved.
         Department updated = dao.updateDepartment(inserted.getDepartmentId(), changes);
-        Optional<Department> fetched = dao.getDepartmentById(inserted.getDepartmentId());
+        Optional<Department> fetched = dao.getDepartmentImageById(inserted.getDepartmentId());
 
         assertTrue(fetched.isPresent());
 
@@ -113,6 +113,10 @@ class JdbcDepartmentDaoTest {
         assertEquals(15000.0, actual.getBudget());
         assertEquals(8, actual.getEmployeeCount());
         assertTrue(actual.isRefrigerated());
+        assertEquals("updated-bakery.jpg", actual.getFileName());
+        assertEquals("image/jpeg", actual.getContentType());
+        assertEquals(4, actual.getFileSize());
+        assertArrayEquals(new byte[]{7, 8, 9, 10}, actual.getDepartmentImage());
     }
 
     @Test
