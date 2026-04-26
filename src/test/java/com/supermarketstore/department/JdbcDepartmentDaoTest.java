@@ -54,13 +54,13 @@ class JdbcDepartmentDaoTest {
 
     @Test
     void insertDepartment_shouldPersistAndReturnMatchingDepartment() {
-        Department newDepartment = new Department(0, "TEST_Bakery", 0, 2, 12000.0, 5, false);
+        Department newDepartment = new Department(0, "TEST_Bakery", 0, 2, 12000.0, 5, false, "bakery.jpg", "image/jpeg", 3, new byte[]{1, 2, 3});
 
         // Insert a new row and keep the generated id returned by the DAO.
         Department inserted = dao.insertDepartment(newDepartment);
 
         // Read the same row back from the database and verify the stored values.
-        Optional<Department> fetched = dao.getDepartmentById(inserted.getDepartmentId());
+        Optional<Department> fetched = dao.getDepartmentImageById(inserted.getDepartmentId());
 
         assertTrue(fetched.isPresent());
 
@@ -72,6 +72,10 @@ class JdbcDepartmentDaoTest {
         assertEquals(12000.0, actual.getBudget());
         assertEquals(5, actual.getEmployeeCount());
         assertFalse(actual.isRefrigerated());
+        assertEquals("bakery.jpg", actual.getFileName());
+        assertEquals("image/jpeg", actual.getContentType());
+        assertEquals(3, actual.getFileSize());
+        assertArrayEquals(new byte[]{1, 2, 3}, actual.getDepartmentImage());
     }
 
     @Test
