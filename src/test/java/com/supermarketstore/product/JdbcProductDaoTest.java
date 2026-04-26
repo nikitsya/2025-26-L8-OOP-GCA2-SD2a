@@ -1,8 +1,6 @@
 package com.supermarketstore.product;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -24,27 +22,24 @@ class JdbcProductDaoTest {
     private static final String DB_PASS = System.getenv("TEST_DB_PASS");
     private static final String TEST_NAME_PATTERN = "TEST_%";
 
-    static Product product1;
-    static Product product2;
-
-    static JdbcProductDao dao;
+    private static JdbcProductDao dao;
 
     @BeforeAll
     static void beforeAll() {
-        if (DB_PASS == null || DB_PASS.isBlank()) fail("Set TEST_DB_PASS in Run Configuration");
-        dao = new JdbcProductDao(DB_URL, DB_USER, DB_PASS);
-        cleanupTestRows();
+        if (DB_PASS == null || DB_PASS.isBlank()) {
+            fail("Set TEST_DB_PASS in Run Configuration");
+        }
 
-        // add test products to the database
-        product1 = new Product(0, "TEST_cucumber", 0.65, false, null, 98, null, null, null, 0);
-        product2 = new Product(0, "TEST_cucumber", 0.70, true, 0.65, 126, null, null, null, 0);
-        dao.insertProduct(product1);
-        dao.insertProduct(product2);
+        dao = new JdbcProductDao(DB_URL, DB_USER, DB_PASS);
     }
 
-    @AfterAll
-    static void afterAll() {
-        dao = null;
+    @BeforeEach
+    void setUp() {
+        cleanupTestRows();
+    }
+
+    @AfterEach
+    void tearDown() {
         cleanupTestRows();
     }
 
