@@ -271,7 +271,6 @@ class ProductTest {
         assertEquals("Discount price must be less than product price", exception.getMessage());
     }
 
-
     @Test
     void setStock_withValidValue_updatesStock() {
         product.setStock(100);
@@ -280,12 +279,98 @@ class ProductTest {
 
     @Test
     void setStock_withNegativeValue_throwsIllegalArgumentException() {
-        IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> product.setStock(-1)
-        );
-        assertEquals("Stock cannot be negative", ex.getMessage());
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> product.setStock(-1));
+        assertEquals("Stock cannot be negative", exception.getMessage());
     }
+
+    @Test
+    void setProductImage_withBytes_usesDefensiveCopies() {
+        byte[] image = {1, 2, 3};
+
+        product.setProductImage(image);
+        image[0] = 99;
+
+        byte[] returnedImage = product.getProductImage();
+        returnedImage[1] = 88;
+
+        assertArrayEquals(new byte[]{1, 2, 3}, product.getProductImage());
+    }
+
+    @Test
+    void setProductImage_withNull_clearsFileMetadata() {
+        Product productWithImage = productWithImage();
+
+        productWithImage.setProductImage(null);
+
+        assertAll(
+                () -> assertNull(productWithImage.getProductImage()),
+                () -> assertNull(productWithImage.getFileName()),
+                () -> assertNull(productWithImage.getContentType()),
+                () -> assertEquals(0, productWithImage.getFileSize())
+        );
+    }
+
+    @Test
+    void setFileName_whenImageIsPresentAndNameIsBlankOrNull_throwsIllegalArgumentException() {
+        Product productWithImage = productWithImage();
+
+        assertAll(
+                () -> assertEquals(
+                        "File name must not be null or blank",
+                        assertThrows(IllegalArgumentException.class, () -> productWithImage.setFileName(null)).getMessage()
+                ),
+                () -> assertEquals(
+                        "File name must not be null or blank",
+                        assertThrows(IllegalArgumentException.class, () -> productWithImage.setFileName(" ")).getMessage()
+                )
+        );
+    }
+
+    @Test
+    void setFileName_whenImageIsPresentAndNameIsValid_updatesFileName() {
+        Product productWithImage = productWithImage();
+
+        productWithImage.setFileName("updated.jpeg");
+
+        assertEquals("updated.jpeg", productWithImage.getFileName());
+    }
+
+    @Test
+    void setContentType_whenImageIsPresentAndContentTypeIsNull_throwsIllegalArgumentException() {
+        Product productWithImage = productWithImage();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                productWithImage.setContentType(null)
+        );
+
+        assertEquals("Content type must not be null", exception.getMessage());
+    }
+
+    @Test
+    void setContentType_whenImageIsPresentAndContentTypeIsValid_updatesContentType() {
+        Product productWithImage = productWithImage();
+
+        productWithImage.setContentType("image/png");
+
+        assertEquals("image/png", productWithImage.getContentType());
+    }
+
+    @Test
+    void setFileSize_withValidValue_updatesFileSize() {
+        product.setFileSize(12);
+
+        assertEquals(12, product.getFileSize());
+    }
+
+    @Test
+    void setFileSize_withNegativeValue_throwsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                product.setFileSize(-1)
+        );
+
+        assertEquals("File size cannot be negative", exception.getMessage());
+    }
+
 
     @Test
     void toString_whenNoImage_returnsFormattedProductWithFileMetadata() {
