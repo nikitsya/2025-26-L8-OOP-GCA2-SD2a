@@ -25,12 +25,12 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
 
     @Override
     public List<Product> getAllProducts() {
-        String sql = "SELECT product_id, name, price, is_on_sale, discount_price, stock, file_data, file_name, " +
+        String sql = "SELECT product_id, name, price, is_on_sale, discount_price, stock, file_name, " +
                 "content_type, file_size FROM supermarket_store_system.products";
 
         try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             ArrayList<Product> out = new ArrayList<>();
-            while (rs.next()) out.add(mapRow(rs));
+            while (rs.next()) out.add(mapRowWithoutImage(rs));
             return out;
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage(), e);
@@ -41,14 +41,34 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
     public Optional<Product> getProductById(int id) {
         if (id <= 0) return Optional.empty();
 
-        String sql = "SELECT product_id, name, price, is_on_sale, discount_price, stock, file_data, file_name, " +
+        String sql = "SELECT product_id, name, price, is_on_sale, discount_price, stock, file_name, " +
                 "content_type, file_size FROM supermarket_store_system.products WHERE product_id = ?";
 
         try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql)) {
             ps.setInt(1, id);
 
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) return Optional.of(mapRow(rs));
+                if (rs.next()) return Optional.of(mapRowWithoutImage(rs));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage(), e);
+        }
+
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Product> getProductImageById(int id) {
+        if (id <= 0) return Optional.empty();
+
+        String sql = "SELECT product_id, name, price, is_on_sale, discount_price, stock, product_image, file_name, " +
+                "content_type, file_size FROM supermarket_store_system.products WHERE product_id = ?";
+
+        try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, id);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return Optional.of(mapRowWithImage(rs));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage(), e);
@@ -76,7 +96,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         if (product == null) throw new IllegalArgumentException("product is required");
 
         String sql = "INSERT INTO supermarket_store_system.products(name, price, is_on_sale, discount_price, stock, " +
-                "file_data, file_name, content_type, file_size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "product_image, file_name, content_type, file_size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             bindProductParams(ps, product);
@@ -101,7 +121,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         if (id <= 0) throw new IllegalArgumentException("id must be positive");
 
         String sql = "UPDATE supermarket_store_system.products SET name = ?, price = ?, is_on_sale = ?, discount_price = ?, " +
-                "stock = ?, file_data = ?, file_name = ?, content_type = ?, file_size = ? WHERE product_id = ?";
+                "stock = ?, product_image = ?, file_name = ?, content_type = ?, file_size = ? WHERE product_id = ?";
 
         try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql)) {
             bindProductParams(ps, product);
@@ -126,19 +146,27 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         return DriverManager.getConnection(_url, _user, _pass);
     }
 
-    private Product mapRow(ResultSet resultSet) throws SQLException {
+    private Product mapRowWithoutImage(ResultSet resultSet) throws SQLException {
+        return mapRow(resultSet, false);
+    }
+
+    private Product mapRowWithImage(ResultSet resultSet) throws SQLException {
+        return mapRow(resultSet, true);
+    }
+
+    private Product mapRow(ResultSet resultSet, boolean includeImage) throws SQLException {
         int productId = resultSet.getInt("product_id");
         String name = resultSet.getString("name");
         double price = resultSet.getDouble("price");
         boolean onSale = resultSet.getBoolean("is_on_sale");
         Double discountPrice = resultSet.getObject("discount_price", Double.class);
         int stock = resultSet.getInt("stock");
-        byte[] fileData = resultSet.getBytes("file_data");
         String fileName = resultSet.getString("file_name");
         String contentType = resultSet.getString("content_type");
         int fileSize = resultSet.getInt("file_size");
+        byte[] productImage = includeImage ? resultSet.getBytes("product_image") : null;
 
-        return new Product(productId, name, price, onSale, discountPrice, stock, fileData, fileName, contentType, fileSize);
+        return new Product(productId, name, price, onSale, discountPrice, stock, productImage, fileName, contentType, fileSize);
     }
 
     private void bindProductParams(PreparedStatement ps, Product product) throws SQLException {
@@ -151,8 +179,8 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
 
         ps.setInt(5, product.getStock());
 
-        if (product.getFileData() == null) ps.setNull(6, Types.BINARY);
-        else ps.setBytes(6, product.getFileData());
+        if (product.getProductImage() == null) ps.setNull(6, Types.BINARY);
+        else ps.setBytes(6, product.getProductImage());
 
         if (product.getFileName() == null) ps.setNull(7, Types.VARCHAR);
         else ps.setString(7, product.getFileName());

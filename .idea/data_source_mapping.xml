@@ -2,6 +2,7 @@
 <project version="4">
   <component name="DataSourcePerFileMappings">
     <file url="file://$PROJECT_DIR$/sql/mysqlSetup.sql" value="f022a0d8-3c0d-420f-82c1-35aaeecda80d" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/supermarketstore/department/JdbcDepartmentDao.java" value="f022a0d8-3c0d-420f-82c1-35aaeecda80d" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/supermarketstore/product/JdbcProductDao.java" value="f022a0d8-3c0d-420f-82c1-35aaeecda80d" />
     <file url="file://$PROJECT_DIR$/src/test/java/com/supermarketstore/department/JdbcDepartmentDaoTest.java" value="f022a0d8-3c0d-420f-82c1-35aaeecda80d" />
     <file url="file://$PROJECT_DIR$/src/test/java/com/supermarketstore/product/JdbcProductDaoTest.java" value="f022a0d8-3c0d-420f-82c1-35aaeecda80d" />

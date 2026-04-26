@@ -16,6 +16,8 @@ public interface ProductDao {
 
     Optional<Product> getProductById(int id);
 
+    Optional<Product> getProductImageById(int id);
+
     boolean deleteProductById(int id);
 
     Product insertProduct(Product product);
