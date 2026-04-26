@@ -166,8 +166,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         int fileSize = resultSet.getInt("file_size");
         byte[] productImage = includeImage ? resultSet.getBytes("product_image") : null;
 
-        return new Product(productId, name, price, onSale, discountPrice, stock,
-                productImage, fileName, contentType, fileSize);
+        return new Product(productId, name, price, onSale, discountPrice, stock, productImage, fileName, contentType, fileSize);
     }
 
     private void bindProductParams(PreparedStatement ps, Product product) throws SQLException {
@@ -180,8 +179,8 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
 
         ps.setInt(5, product.getStock());
 
-        if (product.getFileData() == null) ps.setNull(6, Types.BINARY);
-        else ps.setBytes(6, product.getFileData());
+        if (product.getProductImage() == null) ps.setNull(6, Types.BINARY);
+        else ps.setBytes(6, product.getProductImage());
 
         if (product.getFileName() == null) ps.setNull(7, Types.VARCHAR);
         else ps.setString(7, product.getFileName());
