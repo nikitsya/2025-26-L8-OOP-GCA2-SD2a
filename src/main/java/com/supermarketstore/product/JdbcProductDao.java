@@ -25,7 +25,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
 
     @Override
     public List<Product> getAllProducts() {
-        String sql = "SELECT product_id, name, price, is_on_sale, discount_price, stock, file_data, file_name, " +
+        String sql = "SELECT product_id, name, price, is_on_sale, discount_price, stock, product_image, file_name, " +
                 "content_type, file_size FROM supermarket_store_system.products";
 
         try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
@@ -41,7 +41,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
     public Optional<Product> getProductById(int id) {
         if (id <= 0) return Optional.empty();
 
-        String sql = "SELECT product_id, name, price, is_on_sale, discount_price, stock, file_data, file_name, " +
+        String sql = "SELECT product_id, name, price, is_on_sale, discount_price, stock, product_image, file_name, " +
                 "content_type, file_size FROM supermarket_store_system.products WHERE product_id = ?";
 
         try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql)) {
@@ -54,6 +54,11 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
             throw new RuntimeException(e.getMessage(), e);
         }
 
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<Product> getProductImageById(int id) {
         return Optional.empty();
     }
 
@@ -76,7 +81,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         if (product == null) throw new IllegalArgumentException("product is required");
 
         String sql = "INSERT INTO supermarket_store_system.products(name, price, is_on_sale, discount_price, stock, " +
-                "file_data, file_name, content_type, file_size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "product_image, file_name, content_type, file_size) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             bindProductParams(ps, product);
@@ -101,7 +106,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         if (id <= 0) throw new IllegalArgumentException("id must be positive");
 
         String sql = "UPDATE supermarket_store_system.products SET name = ?, price = ?, is_on_sale = ?, discount_price = ?, " +
-                "stock = ?, file_data = ?, file_name = ?, content_type = ?, file_size = ? WHERE product_id = ?";
+                "stock = ?, product_image = ?, file_name = ?, content_type = ?, file_size = ? WHERE product_id = ?";
 
         try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql)) {
             bindProductParams(ps, product);
