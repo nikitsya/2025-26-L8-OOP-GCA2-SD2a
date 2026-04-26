@@ -119,9 +119,10 @@ public class ServerMain {
 
                 ServerResponse<?> response;
 
+                ClientRequest request = null;
                 try {
                     // Parse the incoming request, create object from line, and route it.
-                    ClientRequest request = MAPPER.readValue(line, ClientRequest.class);
+                    request = MAPPER.readValue(line, ClientRequest.class);
                     response = router.route(request);
                 } catch (Exception e) {
                     response = ServerResponse.error("Invalid request: " + e.getMessage());
@@ -129,8 +130,10 @@ public class ServerMain {
 
                 // Send the response back on one line.
                 out.println(MAPPER.writeValueAsString(response));
+                if (request != null && "DISCONNECT".equals(request.getType())) {
+                    break;
+                }
             }
-
             System.out.println("Client disconnected");
         }
     }
