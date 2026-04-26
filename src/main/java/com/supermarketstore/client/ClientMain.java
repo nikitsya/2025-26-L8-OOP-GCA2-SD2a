@@ -47,6 +47,7 @@ public class ClientMain {
 
             runDepartmentDemo(out, in);
             runProductDemo(out, in);
+            disconnectClient(out, in);
         }
     }
 
@@ -337,6 +338,19 @@ public class ClientMain {
     private static void printResponse(ServerResponse<?> response) {
         System.out.println("Status: " + response.getStatus());
         System.out.println("Message: " + response.getMessage());
+    }
+
+    private static void disconnectClient(PrintWriter out, BufferedReader in) throws IOException {
+        System.out.println();
+        System.out.println("Disconnecting client...");
+
+        ServerResponse<Void> response = sendRequest(
+                out, in,
+                RequestType.DISCONNECT, null,
+                new TypeReference<>() {
+                }
+        );
+        printResponse(response);
     }
 
     // === Department Helpers ===
