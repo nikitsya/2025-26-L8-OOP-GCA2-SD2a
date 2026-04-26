@@ -271,6 +271,7 @@ public class ClientMain {
      * Requests one entity by id when the response is expected to include attached file bytes.
      * Unlike requestEntityById, this helper also prints file metadata and saves the returned
      * file content to the configured output directory.
+     * Jackson handles the Base64 decoding when the JSON response is deserialized into byte arrays.
      *
      * @param out               the socket writer used to send requests
      * @param in                the socket reader used to receive responses
@@ -287,18 +288,7 @@ public class ClientMain {
      * @param <T>               the entity type returned by the server
      * @throws IOException if client-server communication fails
      */
-    private static <T> void requestEntityFileById(PrintWriter out,
-                                                  BufferedReader in,
-                                                  int id,
-                                                  String title,
-                                                  RequestType requestType,
-                                                  TypeReference<ServerResponse<T>> responseType,
-                                                  String fileDescription,
-                                                  Path outputDirectory,
-                                                  Function<T, byte[]> fileDataGetter,
-                                                  Function<T, String> fileNameGetter,
-                                                  Function<T, String> contentTypeGetter,
-                                                  ToIntFunction<T> fileSizeGetter) throws IOException {
+    private static <T> void requestEntityFileById(PrintWriter out, BufferedReader in, int id, String title, RequestType requestType, TypeReference<ServerResponse<T>> responseType, String fileDescription, Path outputDirectory, Function<T, byte[]> fileDataGetter, Function<T, String> fileNameGetter, Function<T, String> contentTypeGetter, ToIntFunction<T> fileSizeGetter) throws IOException {
         System.out.println();
         System.out.println(title);
 
@@ -327,7 +317,7 @@ public class ClientMain {
 
     /**
      * Saves returned file bytes to the requested output directory when both
-     * the file content and file name are present.
+     * the file content and file name are present, preserving the original file name and extension.
      *
      * @param outputDirectory the directory where the file should be saved
      * @param fileDescription the human-readable file description used in log messages
