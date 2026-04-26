@@ -20,6 +20,24 @@ class ProductTest {
     }
 
     @Test
+    void defaultConstructor_initialisesEmptyProductForJackson() {
+        Product emptyProduct = new Product();
+
+        assertAll(
+                () -> assertEquals(0, emptyProduct.getProductId()),
+                () -> assertNull(emptyProduct.getName()),
+                () -> assertEquals(0.0, emptyProduct.getPrice()),
+                () -> assertFalse(emptyProduct.isOnSale()),
+                () -> assertNull(emptyProduct.getDiscountPrice()),
+                () -> assertEquals(0, emptyProduct.getStock()),
+                () -> assertNull(emptyProduct.getProductImage()),
+                () -> assertNull(emptyProduct.getFileName()),
+                () -> assertNull(emptyProduct.getContentType()),
+                () -> assertEquals(0, emptyProduct.getFileSize())
+        );
+    }
+
+    @Test
     void getProductId_returnsProductId() {
         assertEquals(1, product.getProductId());
     }
