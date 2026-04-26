@@ -17,7 +17,7 @@ public class Product {
     private boolean onSale;
     private Double discountPrice;
     private int stock;
-    private byte[] fileData;
+    private byte[] productImage;
     private String fileName;
     private String contentType;
     private int fileSize;
@@ -37,14 +37,14 @@ public class Product {
      * @param onSale        whether the product is currently on sale
      * @param discountPrice the sale price when the product is on sale, otherwise null
      * @param stock         the available stock quantity
-     * @param fileData      the optional attached file bytes
+     * @param productImage  the optional attached file bytes
      * @param fileName      the attached file name when file data is present
      * @param contentType   the type of the attached file when file data is present
      * @param fileSize      the attached file size in bytes when file data is present
      * @throws IllegalArgumentException when the discount or file-related values are invalid
      */
     public Product(int productId, String name, double price, boolean onSale, Double discountPrice, int stock,
-                   byte[] fileData, String fileName, String contentType, int fileSize) {
+                   byte[] productImage, String fileName, String contentType, int fileSize) {
         setProductId(productId);
         setName(name);
         setPrice(price);
@@ -54,12 +54,10 @@ public class Product {
         else if (discountPrice != null) {
             throw new IllegalArgumentException("Discount price must be null when product is not on sale");
         }
-        setFileData(fileData);
-        if (fileData != null) {
-            setFileName(fileName);
-            setContentType(contentType);
-            setFileSize(fileSize);
-        }
+        setProductImage(productImage);
+        setFileName(fileName);
+        setContentType(contentType);
+        setFileSize(fileSize);
     }
 
     @JsonProperty("product_id")
@@ -147,15 +145,15 @@ public class Product {
     }
 
     @JsonProperty("file_data")
-    public byte[] getFileData() {
-        return fileData == null ? null : Arrays.copyOf(fileData, fileData.length);
+    public byte[] getProductImage() {
+        return productImage == null ? null : Arrays.copyOf(productImage, productImage.length);
     }
 
     @JsonProperty("file_data")
-    public void setFileData(byte[] fileData) {
-        this.fileData = fileData == null ? null : Arrays.copyOf(fileData, fileData.length);
+    public void setProductImage(byte[] productImage) {
+        this.productImage = productImage == null ? null : Arrays.copyOf(productImage, productImage.length);
 
-        if (fileData == null) {
+        if (productImage == null) {
             this.fileName = null;
             this.contentType = null;
             this.fileSize = 0;
@@ -169,7 +167,7 @@ public class Product {
 
     @JsonProperty("file_name")
     public void setFileName(String fileName) {
-        if ((fileName == null || fileName.trim().isEmpty()) && fileData != null)
+        if ((fileName == null || fileName.trim().isEmpty()) && productImage != null)
             throw new IllegalArgumentException("File name must not be null or blank");
         this.fileName = fileName;
     }
@@ -181,7 +179,7 @@ public class Product {
 
     @JsonProperty("content_type")
     public void setContentType(String contentType) {
-        if (contentType == null && fileData != null)
+        if (contentType == null && productImage != null)
             throw new IllegalArgumentException("Content type must not be null");
         this.contentType = contentType;
     }
@@ -207,12 +205,12 @@ public class Product {
                 ", discountPrice=" + discountPrice +
                 ", stock=" + stock;
 
-        if (fileData == null) {
+        if (productImage == null) {
             return base + '}';
         }
 
         return base +
-                ", fileData=" + Arrays.toString(fileData).substring(0, 20) + " (...)]" +
+                ", productImage=" + Arrays.toString(productImage).substring(0, 20) + " (...)]" +
                 ", fileName='" + fileName + '\'' +
                 ", contentType='" + contentType + '\'' +
                 ", fileSize=" + fileSize +
@@ -223,11 +221,11 @@ public class Product {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return productId == product.productId && Double.compare(price, product.price) == 0 && onSale == product.onSale && stock == product.stock && fileSize == product.fileSize && Objects.equals(name, product.name) && Objects.equals(discountPrice, product.discountPrice) && Objects.deepEquals(fileData, product.fileData) && Objects.equals(fileName, product.fileName) && Objects.equals(contentType, product.contentType);
+        return productId == product.productId && Double.compare(price, product.price) == 0 && onSale == product.onSale && stock == product.stock && fileSize == product.fileSize && Objects.equals(name, product.name) && Objects.equals(discountPrice, product.discountPrice) && Objects.deepEquals(productImage, product.productImage) && Objects.equals(fileName, product.fileName) && Objects.equals(contentType, product.contentType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(productId, name, price, onSale, discountPrice, stock, Arrays.hashCode(fileData), fileName, contentType, fileSize);
+        return Objects.hash(productId, name, price, onSale, discountPrice, stock, Arrays.hashCode(productImage), fileName, contentType, fileSize);
     }
 }
