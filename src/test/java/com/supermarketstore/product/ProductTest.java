@@ -390,6 +390,33 @@ class ProductTest {
     }
 
     @Test
+    void equals_whenFieldsMatch_returnsTrueAndHashCodesMatch() {
+        Product first = productWithImage();
+        Product second = productWithImage();
+
+        assertAll(
+                () -> assertEquals(first, second),
+                () -> assertEquals(first.hashCode(), second.hashCode())
+        );
+    }
+
+    @Test
+    void equals_whenImageContentDiffers_returnsFalse() {
+        Product first = productWithImage();
+        Product second = new Product(1, "Product", 20.0, false, null, 45, new byte[]{9, 8, 7}, "product.jpeg", "image/jpeg", 3);
+
+        assertNotEquals(first, second);
+    }
+
+    @Test
+    void equals_withNullOrDifferentType_returnsFalse() {
+        assertAll(
+                () -> assertNotEquals(null, product),
+                () -> assertNotEquals("Product", product)
+        );
+    }
+
+    @Test
     void toString_whenNoImage_returnsFormattedProductWithFileMetadata() {
         assertEquals(
                 "Product{productId=1, name='Product', price=20.0, onSale=false, discountPrice=null, stock=45, productImage=null, fileName='null', contentType='null', fileSize=0}",
