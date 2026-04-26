@@ -96,11 +96,13 @@ Before running the server or the JDBC integration tests, set:
     - get department by id
     - add department
     - update department
+    - retrieve and save a department image by id
     - delete department
     - get all products
     - get product by id
     - add product
     - update product
+    - retrieve and save a product image by id
     - delete product
 
 ---
@@ -110,7 +112,7 @@ Before running the server or the JDBC integration tests, set:
 ### 3.1 N-tier overview
 
 - Client layer:
-    - `ClientMain` serializes `ClientRequest` objects to JSON and parses `ServerResponse<T>` replies.
+    - `ClientMain` serialises `ClientRequest` objects to JSON and parses `ServerResponse<T>` replies.
 - Protocol layer:
     - `ClientRequest`, `RequestType`, and `ServerResponse<T>` define the shared request and response contract.
 - Server layer:
@@ -232,18 +234,20 @@ Example department success response:
 |:--|:--|:--|:--|
 | `GET_ALL_DEPARTMENTS` | none (`payload = null`) | `data` = array of department objects | DAO or server error |
 | `GET_DEPARTMENT_BY_ID` | `id:int` | `data` = one department object | missing `id`, department not found |
+| `GET_DEPARTMENT_IMAGE_BY_ID` | `id:int` | `data` = one department object including `department_image`, `file_name`, `content_type`, and `file_size` | missing `id`, department not found |
 | `ADD_DEPARTMENT` | `name:string`, `floor:int`, `zone:int`, `budget:double`, `employeeCount:int`, `isRefrigerated:boolean` | `data` = inserted department with generated `department_id` | missing fields, validation error, DAO error |
 | `DELETE_DEPARTMENT_BY_ID` | `id:int` | `data` = `null`, success confirmed by message | missing `id`, department not found |
 | `UPDATE_DEPARTMENT` | `id:int`, `name:string`, `floor:int`, `zone:int`, `budget:double`, `employeeCount:int`, `isRefrigerated:boolean` | `data` = updated department object | missing fields, department not found, validation error, DAO error |
 | `GET_ALL_PRODUCTS` | none (`payload = null`) | `data` = array of product objects | DAO or server error |
 | `GET_PRODUCT_BY_ID` | `id:int` | `data` = one product object | missing `id`, product not found |
+| `GET_PRODUCT_IMAGE_BY_ID` | `id:int` | `data` = one product object including `file_data`, `file_name`, `content_type`, and `file_size` | missing `id`, product not found |
 | `ADD_PRODUCT` | `name:string`, `price:double`, `isOnSale:boolean` or `is_on_sale:boolean`, `stock:int`, optional `discountPrice:double` or `discount_price:double` | `data` = inserted product with generated `product_id` | missing fields, missing discount price for sale item, validation error, DAO error |
 | `DELETE_PRODUCT_BY_ID` | `id:int` | `data` = `null`, success confirmed by message | missing `id`, product not found |
 | `UPDATE_PRODUCT` | `id:int`, `name:string`, `price:double`, `isOnSale:boolean` or `is_on_sale:boolean`, `stock:int`, optional `discountPrice:double` or `discount_price:double` | `data` = updated product object | missing fields, missing discount price for sale item, product not found, validation error, DAO error |
 
 ### 4.3 Entity JSON shapes
 
-Department objects are serialized with these JSON keys:
+Department objects are serialised with these JSON keys:
 
 ```json
 {
@@ -257,7 +261,7 @@ Department objects are serialized with these JSON keys:
 }
 ```
 
-Product objects are serialized with these JSON keys:
+Product objects are serialised with these JSON keys:
 
 ```json
 {
@@ -285,16 +289,18 @@ Product objects are serialized with these JSON keys:
 
 ## 5. Binary File Handling Status
 
-Binary file handling is not implemented in the current repository state.
+Binary file handling is implemented for both departments and products.
 
 Current status:
 
-- No BLOB columns exist in the MySQL schema.
-- No binary upload or retrieval request types exist in `RequestType`.
-- No client or server flow currently transfers files.
-
-This section is kept only to document the present status of the project. If binary handling is added in a later stage,
-this README should be extended with the exact schema, request types, and payload format used.
+- `departments` stores `department_image` plus `file_name`, `content_type`, and `file_size`.
+- `products` stores `product_image` plus `file_name`, `content_type`, and `file_size`.
+- Upload requests use `FilePayloadBuilder` to read files from disk, Base64-encode the content, and attach metadata.
+- Server handlers decode upload payloads and store binary data with `PreparedStatement.setBytes()`.
+- Retrieval requests use `GET_DEPARTMENT_IMAGE_BY_ID` and `GET_PRODUCT_IMAGE_BY_ID`.
+- DAO retrieval methods fetch the BLOB with `ResultSet.getBytes()`.
+- Jackson serialises returned `byte[]` values as Base64 in `ServerResponse<T>` JSON and deserialises them back into `byte[]` on the client.
+- The client reconstructs files under `downloads/departments/` or `downloads/products/`, preserving the stored filename and extension.
 
 ---
 
