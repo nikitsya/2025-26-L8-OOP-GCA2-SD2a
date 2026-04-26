@@ -80,11 +80,26 @@ class JdbcProductDaoTest {
     }
 
     @Test
-    void getProductById() {
-        int id = product1.getProductId();
-        Optional<Product> found = dao.getProductById(id);
-        assertTrue(found.isPresent());
-        assertEquals(product1, found.get());
+    void getProductById_whenProductExists_returnsMetadataWithoutImageData() {
+        Product inserted = dao.insertProduct(new Product(0, "TEST_MetadataOnly", 2.50, false, null, 20, new byte[]{5, 6, 7}, "metadata.jpeg", "image/jpeg", 3));
+
+        Optional<Product> fetched = dao.getProductById(inserted.getProductId());
+
+        assertTrue(fetched.isPresent());
+
+        Product actual = fetched.get();
+        assertAll(
+                () -> assertEquals(inserted.getProductId(), actual.getProductId()),
+                () -> assertEquals("TEST_MetadataOnly", actual.getName()),
+                () -> assertEquals(2.50, actual.getPrice()),
+                () -> assertFalse(actual.isOnSale()),
+                () -> assertNull(actual.getDiscountPrice()),
+                () -> assertEquals(20, actual.getStock()),
+                () -> assertEquals("metadata.jpeg", actual.getFileName()),
+                () -> assertEquals("image/jpeg", actual.getContentType()),
+                () -> assertEquals(3, actual.getFileSize()),
+                () -> assertNull(actual.getProductImage())
+        );
     }
 
     @Test
