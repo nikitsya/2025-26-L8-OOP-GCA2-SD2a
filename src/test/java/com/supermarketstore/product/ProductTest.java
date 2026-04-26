@@ -1,5 +1,6 @@
 package com.supermarketstore.product;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,7 +12,12 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class ProductTest {
 
-    Product product = new Product(1, "Product", 20, false, null, 45, null, null, null, 0);
+    private Product product;
+
+    @BeforeEach
+    void setUp() {
+        product = new Product(1, "Product", 20.0, false, null, 45, null, null, null, 0);
+    }
 
     @Test
     void getProductId_returnsProductId() {
