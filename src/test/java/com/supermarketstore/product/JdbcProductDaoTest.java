@@ -117,6 +117,41 @@ class JdbcProductDaoTest {
     }
 
     @Test
+    void getProductImageById_whenProductExists_returnsImageBytesAndMetadata() {
+        byte[] image = {9, 8, 7, 6};
+        Product inserted = dao.insertProduct(new Product(0, "TEST_ImageRetrieval", 3.75, true, 2.99, 14, image, "image-retrieval.jpeg", "image/jpeg", image.length));
+
+        Optional<Product> fetched = dao.getProductImageById(inserted.getProductId());
+
+        assertTrue(fetched.isPresent());
+
+        Product actual = fetched.get();
+        assertAll(
+                () -> assertEquals(inserted.getProductId(), actual.getProductId()),
+                () -> assertEquals("TEST_ImageRetrieval", actual.getName()),
+                () -> assertEquals("image-retrieval.jpeg", actual.getFileName()),
+                () -> assertEquals("image/jpeg", actual.getContentType()),
+                () -> assertEquals(image.length, actual.getFileSize()),
+                () -> assertArrayEquals(image, actual.getProductImage())
+        );
+    }
+
+    @Test
+    void getProductImageById_whenIdDoesNotExist_returnsEmpty() {
+        Optional<Product> fetched = dao.getProductImageById(999999);
+
+        assertTrue(fetched.isEmpty());
+    }
+
+    @Test
+    void getProductImageById_whenIdIsNotPositive_returnsEmpty() {
+        assertAll(
+                () -> assertTrue(dao.getProductImageById(0).isEmpty()),
+                () -> assertTrue(dao.getProductImageById(-1).isEmpty())
+        );
+    }
+
+    @Test
     void deleteProductById() {
         int id = product1.getProductId();
         assertTrue(dao.deleteProductById(id));
