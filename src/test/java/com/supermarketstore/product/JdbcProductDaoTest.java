@@ -61,6 +61,15 @@ class JdbcProductDaoTest {
     }
 
     @Test
+    void constructor_whenUrlIsBlank_throwsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                new JdbcProductDao(" ", DB_USER, DB_PASS)
+        );
+
+        assertEquals("url is required", exception.getMessage());
+    }
+
+    @Test
     void getAllProducts() {
         List<Product> products = dao.getAllProducts();
         assertNotNull(products);
