@@ -284,19 +284,25 @@ class JdbcProductDaoTest {
     }
 
     @Test
-    void findProductsByFilter() {
-        List<Product> filtered = dao.findProductsByFilter(p -> p.getName().startsWith("TEST_") && p.getPrice() >= 0.70);
+    void findProductsByFilter_returnsOnlyMatchingProducts() {
+        dao.insertProduct(new Product(0, "TEST_FilterLowPrice", 0.60, false, null, 30, null, null, null, 0));
+        dao.insertProduct(new Product(0, "TEST_FilterHighPrice", 2.40, true, 1.95, 12, null, null, null, 0));
+
+        List<Product> filtered = dao.findProductsByFilter(product ->
+                product.getName().startsWith("TEST_") && product.getPrice() >= 2.00
+        );
+
         assertFalse(filtered.isEmpty());
-        assertTrue(filtered.stream().allMatch(p -> p.getName().startsWith("TEST_")));
-        assertTrue(filtered.stream().allMatch(p -> p.getPrice() >= 0.70));
+        assertTrue(filtered.stream().allMatch(product -> product.getName().startsWith("TEST_")));
+        assertTrue(filtered.stream().allMatch(product -> product.getPrice() >= 2.00));
     }
 
     @Test
     void findProductsByFilter_whenFilterIsNull_throwsIllegalArgumentException() {
-        IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> dao.findProductsByFilter(null)
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                dao.findProductsByFilter(null)
         );
-        assertEquals("filter is required", ex.getMessage());
+
+        assertEquals("filter is required", exception.getMessage());
     }
 }
