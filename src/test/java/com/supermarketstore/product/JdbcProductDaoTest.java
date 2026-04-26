@@ -65,13 +65,25 @@ class JdbcProductDaoTest {
     }
 
     @Test
-    void getAllProducts() {
-        List<Product> products = dao.getAllProducts();
-        assertNotNull(products);
-        assertFalse(products.isEmpty());
-        long testCount = products.stream().filter(p -> p.getName().startsWith("TEST_")).count();
-        assertEquals(2, testCount);
+    void getAllProducts_returnsInsertedTestProductsWithoutImageData() {
+        Product first = dao.insertProduct(new Product(0, "TEST_GetAllApples", 1.20, false, null, 12, new byte[]{1, 2}, "apples.jpeg", "image/jpeg", 2));
+        Product second = dao.insertProduct(new Product(0, "TEST_GetAllPears", 1.40, true, 1.10, 8, new byte[]{3, 4}, "pears.jpeg", "image/jpeg", 2));
 
+        List<Product> products = dao.getAllProducts();
+
+        Optional<Product> fetchedFirst = products.stream()
+                .filter(product -> product.getProductId() == first.getProductId())
+                .findFirst();
+        Optional<Product> fetchedSecond = products.stream()
+                .filter(product -> product.getProductId() == second.getProductId())
+                .findFirst();
+
+        assertAll(
+                () -> assertTrue(fetchedFirst.isPresent()),
+                () -> assertTrue(fetchedSecond.isPresent()),
+                () -> assertNull(fetchedFirst.orElseThrow().getProductImage()),
+                () -> assertNull(fetchedSecond.orElseThrow().getProductImage())
+        );
     }
 
     @Test
