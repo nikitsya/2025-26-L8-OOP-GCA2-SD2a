@@ -38,6 +38,22 @@ class ProductTest {
     }
 
     @Test
+    void constructor_withValidNonSaleProduct_setsCoreFields() {
+        assertAll(
+                () -> assertEquals(1, product.getProductId()),
+                () -> assertEquals("Product", product.getName()),
+                () -> assertEquals(20.0, product.getPrice()),
+                () -> assertFalse(product.isOnSale()),
+                () -> assertNull(product.getDiscountPrice()),
+                () -> assertEquals(45, product.getStock()),
+                () -> assertNull(product.getProductImage()),
+                () -> assertNull(product.getFileName()),
+                () -> assertNull(product.getContentType()),
+                () -> assertEquals(0, product.getFileSize())
+        );
+    }
+
+    @Test
     void getProductId_returnsProductId() {
         assertEquals(1, product.getProductId());
     }
