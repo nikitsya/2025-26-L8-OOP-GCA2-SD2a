@@ -245,57 +245,32 @@ class ProductTest {
     }
 
     @Test
-    void setOnSale_whenTrue_keepsDiscountPriceNull() {
-        product.setOnSale(true);
-        assertNull(product.getDiscountPrice());
-    }
-
-    @Test
-    void setDiscountPrice_withValidValue_updatesDiscountPrice() {
-        product.setOnSale(true);
-        product.setDiscountPrice(15.0);
-        assertEquals(15.0, product.getDiscountPrice());
-    }
-
-    @Test
-    void setDiscountPrice_whenNullAndOnSale_throwsIllegalArgumentException() {
-        product.setOnSale(true);
-        IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> product.setDiscountPrice(null)
+    void constructor_whenProductIsNotOnSaleAndDiscountPriceProvided_throwsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                new Product(1, "Product", 20.0, false, 15.0, 45, null, null, null, 0)
         );
-        assertEquals("Discount price is required when product is on sale", ex.getMessage());
+
+        assertEquals("Discount price must be null when product is not on sale", exception.getMessage());
     }
 
     @Test
-    void setDiscountPrice_whenPriceNotSet_throwsIllegalStateException() {
-        product = new Product();
-        product.setOnSale(true);
-        IllegalStateException ex = assertThrows(
-                IllegalStateException.class,
-                () -> product.setDiscountPrice(23.00)
+    void constructor_whenProductIsOnSaleWithoutDiscountPrice_throwsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                new Product(1, "Product", 20.0, true, null, 45, null, null, null, 0)
         );
-        assertEquals("Price must be set before discount price", ex.getMessage());
+
+        assertEquals("Discount price is required when product is on sale", exception.getMessage());
     }
 
     @Test
-    void setDiscountPrice_whenGreaterThanPrice_throwsIllegalArgumentException() {
-        product.setOnSale(true);
-        product.setPrice(25);
-        IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> product.setDiscountPrice(28.00)
+    void constructor_whenProductIsOnSaleAndDiscountPriceIsTooHigh_throwsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                new Product(1, "Product", 20.0, true, 20.0, 45, null, null, null, 0)
         );
-        assertEquals("Discount price must be less than product price", ex.getMessage());
+
+        assertEquals("Discount price must be less than product price", exception.getMessage());
     }
 
-    @Test
-    void setOnSale_whenFalse_clearsDiscountPrice() {
-        product.setOnSale(true);
-        product.setDiscountPrice(15.0);
-        product.setOnSale(false);
-        assertNull(product.getDiscountPrice());
-    }
 
     @Test
     void setStock_withValidValue_updatesStock() {
