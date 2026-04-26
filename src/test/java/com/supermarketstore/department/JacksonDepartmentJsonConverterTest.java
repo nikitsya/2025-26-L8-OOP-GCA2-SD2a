@@ -10,18 +10,18 @@ class JacksonDepartmentJsonConverterTest {
 
     private final JacksonDepartmentJsonConverter converter = new JacksonDepartmentJsonConverter();
 
-    private final Department department = new Department(1, "Bakery", 0, 2, 12000.0, 5, false);
+    private final Department department = new Department(1, "Bakery", 0, 2, 12000.0, 5, false, "bakery.jpg", "image/jpeg", 3, new byte[]{1, 2, 3});
     private final List<Department> departments = List.of(
             department,
-            new Department(2, "Frozen Foods", 1, 5, 20000.0, 7, true)
+            new Department(2, "Frozen Foods", 1, 5, 20000.0, 7, true, "frozen-foods.jpg", "image/jpeg", 4, new byte[]{4, 5, 6, 7})
     );
 
     private final String departmentJson =
-            "{\"department_id\":1,\"name\":\"Bakery\",\"floor\":0,\"zone\":2,\"budget\":12000.0,\"employee_count\":5,\"is_refrigerated\":false}";
+            "{\"department_id\":1,\"name\":\"Bakery\",\"floor\":0,\"zone\":2,\"budget\":12000.0,\"employee_count\":5,\"is_refrigerated\":false,\"file_name\":\"bakery.jpg\",\"content_type\":\"image/jpeg\",\"file_size\":3,\"department_image\":\"AQID\"}";
     private final String departmentsJson =
             "[" +
                     departmentJson +
-                    ",{\"department_id\":2,\"name\":\"Frozen Foods\",\"floor\":1,\"zone\":5,\"budget\":20000.0,\"employee_count\":7,\"is_refrigerated\":true}" +
+                    ",{\"department_id\":2,\"name\":\"Frozen Foods\",\"floor\":1,\"zone\":5,\"budget\":20000.0,\"employee_count\":7,\"is_refrigerated\":true,\"file_name\":\"frozen-foods.jpg\",\"content_type\":\"image/jpeg\",\"file_size\":4,\"department_image\":\"BAUGBw==\"}" +
                     "]";
 
     @Test
