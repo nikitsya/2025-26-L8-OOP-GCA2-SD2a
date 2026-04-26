@@ -109,6 +109,14 @@ class JdbcProductDaoTest {
     }
 
     @Test
+    void getProductById_whenIdIsNotPositive_returnsEmpty() {
+        assertAll(
+                () -> assertTrue(dao.getProductById(0).isEmpty()),
+                () -> assertTrue(dao.getProductById(-1).isEmpty())
+        );
+    }
+
+    @Test
     void deleteProductById() {
         int id = product1.getProductId();
         assertTrue(dao.deleteProductById(id));
