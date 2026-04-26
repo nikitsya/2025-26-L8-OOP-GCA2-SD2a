@@ -197,20 +197,14 @@ public class Product {
 
     @Override
     public String toString() {
-        String base = "Product{" +
+        return  "Product{" +
                 "productId=" + productId +
                 ", name='" + name + '\'' +
                 ", price=" + price +
                 ", onSale=" + onSale +
                 ", discountPrice=" + discountPrice +
-                ", stock=" + stock;
-
-        if (productImage == null) {
-            return base + '}';
-        }
-
-        return base +
-                ", productImage=" + Arrays.toString(productImage).substring(0, 20) + " (...)]" +
+                ", stock=" + stock +
+                ", productImage=" + (productImage == null ? null : productImage.length + " bytes") +
                 ", fileName='" + fileName + '\'' +
                 ", contentType='" + contentType + '\'' +
                 ", fileSize=" + fileSize +
