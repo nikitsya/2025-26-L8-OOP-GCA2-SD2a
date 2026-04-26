@@ -30,7 +30,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
 
         try (Connection c = open(); PreparedStatement ps = c.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             ArrayList<Product> out = new ArrayList<>();
-            while (rs.next()) out.add(mapRow(rs));
+            while (rs.next()) out.add(mapRowWithoutImage(rs));
             return out;
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage(), e);
@@ -48,7 +48,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
             ps.setInt(1, id);
 
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) return Optional.of(mapRow(rs));
+                if (rs.next()) return Optional.of(mapRowWithoutImage(rs));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage(), e);
@@ -146,7 +146,7 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         return DriverManager.getConnection(_url, _user, _pass);
     }
 
-    private Product mapRow(ResultSet resultSet) throws SQLException {
+    private Product mapRowWithoutImage(ResultSet resultSet) throws SQLException {
         return mapRow(resultSet, false);
     }
 
