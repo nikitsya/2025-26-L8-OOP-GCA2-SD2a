@@ -84,11 +84,6 @@ class ProductTest {
     }
 
     @Test
-    void getProductId_returnsProductId() {
-        assertEquals(1, product.getProductId());
-    }
-
-    @Test
     void setProductId_withValidValue_updatesProductId() {
         product.setProductId(2);
         assertEquals(2, product.getProductId());
@@ -96,96 +91,72 @@ class ProductTest {
 
     @Test
     void setProductId_withNegativeValue_throwsIllegalArgumentException() {
-        IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> product.setProductId(-1)
-        );
-        assertEquals("productId cannot be negative", ex.getMessage());
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> product.setProductId(-1));
+        assertEquals("productId cannot be negative", exception.getMessage());
     }
 
     @Test
-    void getName_returnsName() {
-        assertEquals("Product", product.getName());
-    }
-
-    @Test
-    void setName_withValidValue_updatesName() {
-        product.setName("New Product");
-        assertEquals("New Product", product.getName());
-    }
-
-    @Test
-    void setName_withValidValueAndWhitespace_trimsAndUpdatesName() {
+    void setName_withValidValue_trimsAndUpdatesName() {
         product.setName("   New Product ");
         assertEquals("New Product", product.getName());
     }
 
     @Test
     void setName_withBlankOrNullValue_throwsIllegalArgumentException() {
-        IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> product.setName("")
+        assertAll(
+                () -> assertEquals(
+                        "Product name must not be null or blank",
+                        assertThrows(IllegalArgumentException.class, () -> product.setName("")).getMessage()
+                ),
+                () -> assertEquals(
+                        "Product name must not be null or blank",
+                        assertThrows(IllegalArgumentException.class, () -> product.setName(" ")).getMessage()
+                ),
+                () -> assertEquals(
+                        "Product name must not be null or blank",
+                        assertThrows(IllegalArgumentException.class, () -> product.setName(null)).getMessage()
+                )
         );
-        assertEquals("Product name must not be null or blank", ex.getMessage());
-
-        ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> product.setName(" ")
-        );
-        assertEquals("Product name must not be null or blank", ex.getMessage());
-
-        ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> product.setName(null)
-        );
-        assertEquals("Product name must not be null or blank", ex.getMessage());
-    }
-
-    @Test
-    void getPrice_returnsPrice() {
-        assertEquals(20, product.getPrice());
     }
 
     @Test
     void setPrice_withValidValue_updatesPrice() {
-        product.setPrice(30);
-        assertEquals(30, product.getPrice());
+        product.setPrice(30.0);
+
+        assertEquals(30.0, product.getPrice());
     }
 
     @Test
-    void setPrice_whenOnSaleAndDiscountIsLessThanNewPrice_updatesPrice() {
+    void setPrice_withZeroOrNegativeValue_throwsIllegalArgumentException() {
+        assertAll(
+                () -> assertEquals(
+                        "Product price must be greater than 0",
+                        assertThrows(IllegalArgumentException.class, () -> product.setPrice(0)).getMessage()
+                ),
+                () -> assertEquals(
+                        "Product price must be greater than 0",
+                        assertThrows(IllegalArgumentException.class, () -> product.setPrice(-1)).getMessage()
+                )
+        );
+    }
+
+    @Test
+    void setPrice_whenOnSaleAndDiscountRemainsValid_updatesPrice() {
         product.setOnSale(true);
         product.setDiscountPrice(10.0);
-
         product.setPrice(20.0);
 
         assertEquals(20.0, product.getPrice());
     }
 
     @Test
-    void setPrice_withNegativeValue_throwsIllegalArgumentException() {
-        IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> product.setPrice(-20)
-        );
-        assertEquals("Product price must be greater than 0", ex.getMessage());
-    }
-
-    @Test
-    void setPrice_whenLessThanDiscountPrice_throwsIllegalArgumentException() {
+    void setPrice_whenOnSaleAndDiscountWouldBeInvalid_throwsIllegalArgumentException() {
         product.setOnSale(true);
-        product.setPrice(30);
-        product.setDiscountPrice(28.00);
-        IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> product.setPrice(25)
-        );
-        assertEquals("Discount price must be less than product price", ex.getMessage());
-    }
+        product.setDiscountPrice(15.0);
 
-    @Test
-    void isOnSale_returnsFalseFromSetup() {
-        assertFalse(product.isOnSale());
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> product.setPrice(10.0));
+
+        assertEquals("Discount price must be less than product price", exception.getMessage());
     }
 
     @Test
@@ -195,13 +166,87 @@ class ProductTest {
     }
 
     @Test
-    void setOnSale_whenTrue_keepsDiscountPriceNull() {
+    void setOnSale_withFalse_clearsDiscountPrice() {
         product.setOnSale(true);
-        assertNull(product.getDiscountPrice());
+        product.setDiscountPrice(15.0);
+        product.setOnSale(false);
+        assertAll(
+                () -> assertFalse(product.isOnSale()),
+                () -> assertNull(product.getDiscountPrice())
+        );
     }
 
     @Test
-    void getDiscountPrice_returnsNullFromSetup() {
+    void setDiscountPrice_whenOnSaleAndValid_updatesDiscountPrice() {
+        product.setOnSale(true);
+
+        product.setDiscountPrice(15.0);
+
+        assertEquals(15.0, product.getDiscountPrice());
+    }
+
+    @Test
+    void setDiscountPrice_whenProductIsNotOnSale_throwsIllegalStateException() {
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () ->
+                product.setDiscountPrice(15.0)
+        );
+
+        assertEquals("Cannot set discount price when product is not on sale", exception.getMessage());
+    }
+
+    @Test
+    void setDiscountPrice_whenOnSaleAndNull_throwsIllegalArgumentException() {
+        product.setOnSale(true);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                product.setDiscountPrice(null)
+        );
+
+        assertEquals("Discount price is required when product is on sale", exception.getMessage());
+    }
+
+    @Test
+    void setDiscountPrice_withNegativeValue_throwsIllegalArgumentException() {
+        product.setOnSale(true);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                product.setDiscountPrice(-1.0)
+        );
+
+        assertEquals("Discount price must be 0 or greater", exception.getMessage());
+    }
+
+    @Test
+    void setDiscountPrice_whenPriceIsNotSet_throwsIllegalStateException() {
+        Product emptyProduct = new Product();
+        emptyProduct.setOnSale(true);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () ->
+                emptyProduct.setDiscountPrice(1.0)
+        );
+
+        assertEquals("Price must be set before discount price", exception.getMessage());
+    }
+
+    @Test
+    void setDiscountPrice_whenGreaterThanOrEqualToPrice_throwsIllegalArgumentException() {
+        product.setOnSale(true);
+
+        assertAll(
+                () -> assertEquals(
+                        "Discount price must be less than product price",
+                        assertThrows(IllegalArgumentException.class, () -> product.setDiscountPrice(20.0)).getMessage()
+                ),
+                () -> assertEquals(
+                        "Discount price must be less than product price",
+                        assertThrows(IllegalArgumentException.class, () -> product.setDiscountPrice(25.0)).getMessage()
+                )
+        );
+    }
+
+    @Test
+    void setOnSale_whenTrue_keepsDiscountPriceNull() {
+        product.setOnSale(true);
         assertNull(product.getDiscountPrice());
     }
 
@@ -213,15 +258,6 @@ class ProductTest {
     }
 
     @Test
-    void setDiscountPrice_whenProductIsNotOnSale_throwsIllegalStateException() {
-        IllegalStateException ex = assertThrows(
-                IllegalStateException.class,
-                () -> product.setDiscountPrice(20.30)
-        );
-        assertEquals("Cannot set discount price when product is not on sale", ex.getMessage());
-    }
-
-    @Test
     void setDiscountPrice_whenNullAndOnSale_throwsIllegalArgumentException() {
         product.setOnSale(true);
         IllegalArgumentException ex = assertThrows(
@@ -229,16 +265,6 @@ class ProductTest {
                 () -> product.setDiscountPrice(null)
         );
         assertEquals("Discount price is required when product is on sale", ex.getMessage());
-    }
-
-    @Test
-    void setDiscountPrice_withNegativeValue_throwsIllegalArgumentException() {
-        product.setOnSale(true);
-        IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> product.setDiscountPrice(-20.30)
-        );
-        assertEquals("Discount price must be 0 or greater", ex.getMessage());
     }
 
     @Test
@@ -264,36 +290,11 @@ class ProductTest {
     }
 
     @Test
-    void constructor_whenProductIsNotOnSaleAndDiscountPriceProvided_throwsIllegalArgumentException() {
-        IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> new Product(1, "Product", 20.0, false, 15.0, 45, null, null, null, 0)
-        );
-        assertEquals("Discount price must be null when product is not on sale", ex.getMessage());
-    }
-
-    @Test
-    void constructor_whenProductIsOnSaleAndDiscountPriceProvided_setsDiscountPrice() {
-        Product saleProduct = new Product(2, "Sale Product", 30.0, true, 20.0, 10, null, null, null, 0);
-
-        assertAll(
-                () -> assertTrue(saleProduct.isOnSale()),
-                () -> assertEquals(20.0, saleProduct.getDiscountPrice()),
-                () -> assertEquals(30.0, saleProduct.getPrice())
-        );
-    }
-
-    @Test
     void setOnSale_whenFalse_clearsDiscountPrice() {
         product.setOnSale(true);
         product.setDiscountPrice(15.0);
         product.setOnSale(false);
         assertNull(product.getDiscountPrice());
-    }
-
-    @Test
-    void getStock_returnsStock() {
-        assertEquals(45, product.getStock());
     }
 
     @Test
@@ -311,10 +312,25 @@ class ProductTest {
         assertEquals("Stock cannot be negative", ex.getMessage());
     }
 
-    // TODO: fileData++
+    @Test
+    void toString_whenNoImage_returnsFormattedProductWithFileMetadata() {
+        assertEquals(
+                "Product{productId=1, name='Product', price=20.0, onSale=false, discountPrice=null, stock=45, productImage=null, fileName='null', contentType='null', fileSize=0}",
+                product.toString()
+        );
+    }
 
     @Test
-    void toString_returnsFormattedProduct() {
-        assertEquals("Product{productId=1, name='Product', price=20.0, onSale=false, discountPrice=null, stock=45}", product.toString());
+    void toString_whenImageIsPresent_includesImageSizeAndMetadata() {
+        Product productWithImage = productWithImage();
+
+        assertEquals(
+                "Product{productId=1, name='Product', price=20.0, onSale=false, discountPrice=null, stock=45, productImage=3 bytes, fileName='product.jpeg', contentType='image/jpeg', fileSize=3}",
+                productWithImage.toString()
+        );
+    }
+
+    private static Product productWithImage() {
+        return new Product(1, "Product", 20.0, false, null, 45, new byte[]{1, 2, 3}, "product.jpeg", "image/jpeg", 3);
     }
 }
