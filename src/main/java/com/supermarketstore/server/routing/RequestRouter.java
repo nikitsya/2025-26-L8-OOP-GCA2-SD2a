@@ -41,8 +41,10 @@ public class RequestRouter {
         _handlers.put(RequestType.ADD_DEPARTMENT.name(), req -> handleAddDepartment(req, departmentDao));
         _handlers.put(RequestType.DELETE_DEPARTMENT_BY_ID.name(), req -> handleDeleteDepartmentById(req, departmentDao));
         _handlers.put(RequestType.UPDATE_DEPARTMENT.name(), req -> handleUpdateDepartment(req, departmentDao));
+
         _handlers.put(RequestType.GET_ALL_PRODUCTS.name(), req -> handleGetAllProducts(productDao));
         _handlers.put(RequestType.GET_PRODUCT_BY_ID.name(), req -> handleGetProductById(req, productDao));
+        _handlers.put(RequestType.GET_PRODUCT_IMAGE_BY_ID.name(), req -> handleGetProductImageById(req, productDao));
         _handlers.put(RequestType.ADD_PRODUCT.name(), req -> handleAddProduct(req, productDao));
         _handlers.put(RequestType.DELETE_PRODUCT_BY_ID.name(), req -> handleDeleteProductById(req, productDao));
         _handlers.put(RequestType.UPDATE_PRODUCT.name(), req -> handleUpdateProduct(req, productDao));
@@ -288,6 +290,16 @@ public class RequestRouter {
         int id = idNode.asInt();
         return productDao.getProductById(id)
                 .map(product -> ServerResponse.ok("Product retrieved successfully", product))
+                .orElseGet(() -> ServerResponse.error("Product not found for id: " + id));
+    }
+
+    private ServerResponse<?> handleGetProductImageById(ClientRequest request, ProductDao productDao) {
+        JsonNode payload = request.getPayload();
+        JsonNode idNode = getPayloadField(payload, "id", "id");
+        if (idNode == null) return ServerResponse.error("Missing required field: id");
+        int id = idNode.asInt();
+        return productDao.getProductImageById(id)
+                .map(product -> ServerResponse.ok("Product image retrieved successfully", product))
                 .orElseGet(() -> ServerResponse.error("Product not found for id: " + id));
     }
 
