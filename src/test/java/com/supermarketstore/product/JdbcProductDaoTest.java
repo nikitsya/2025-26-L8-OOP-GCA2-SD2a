@@ -259,10 +259,28 @@ class JdbcProductDaoTest {
     }
 
     @Test
-    void deleteProductById() {
-        int id = product1.getProductId();
-        assertTrue(dao.deleteProductById(id));
-        assertFalse(dao.getProductById(id).isPresent());
+    void deleteProductById_whenProductExists_removesProduct() {
+        Product inserted = dao.insertProduct(new Product(0, "TEST_DeleteMilk", 1.25, false, null, 11, null, null, null, 0));
+
+        boolean deleted = dao.deleteProductById(inserted.getProductId());
+
+        assertAll(
+                () -> assertTrue(deleted),
+                () -> assertTrue(dao.getProductById(inserted.getProductId()).isEmpty())
+        );
+    }
+
+    @Test
+    void deleteProductById_whenIdDoesNotExist_returnsFalse() {
+        assertFalse(dao.deleteProductById(999999));
+    }
+
+    @Test
+    void deleteProductById_whenIdIsNotPositive_returnsFalse() {
+        assertAll(
+                () -> assertFalse(dao.deleteProductById(0)),
+                () -> assertFalse(dao.deleteProductById(-1))
+        );
     }
 
     @Test
