@@ -14,8 +14,12 @@ import com.supermarketstore.protocol.ServerResponse;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Locale;
+import java.util.function.Function;
+import java.util.function.ToIntFunction;
 
 /**
  * Entry point for the supermarket client application.
@@ -25,7 +29,6 @@ import java.util.List;
  * @author Hanna Bokariuk (primary - department client flow)
  * @author Nikita Smiichyk (contributor - product client flow, file upload payloads, and refactoring)
  */
-
 public class ClientMain {
     // === Static Fields ===
     private static final String HOST = "localhost";
@@ -106,16 +109,7 @@ public class ClientMain {
                 }
         );
 
-//        requestEntityById(
-//                out, in,
-//                departmentId,
-//                "Requesting the department with image by id...",
-//                RequestType.GET_DEPARTMENT_IMAGE_BY_ID,
-//                new TypeReference<ServerResponse<Department>>() {
-//                }
-//        );
         requestDepartmentImageById(out, in, departmentId);
-
 
         deleteEntityById(
                 out, in,
@@ -181,6 +175,7 @@ public class ClientMain {
                 new TypeReference<ServerResponse<Product>>() {
                 }
         );
+        requestProductImageById(out, in, productId);
         deleteEntityById(
                 out, in,
                 productId,
@@ -271,41 +266,53 @@ public class ClientMain {
         }
     }
 
-    // TODO: extract this into a reusable helper if file retrieval is later added for other entities such as Product
-    private static void requestDepartmentImageById(PrintWriter out, BufferedReader in, int id) throws IOException {
+    private static <T> void requestEntityFileById(PrintWriter out,
+                                                  BufferedReader in,
+                                                  int id,
+                                                  String title,
+                                                  RequestType requestType,
+                                                  TypeReference<ServerResponse<T>> responseType,
+                                                  String fileDescription,
+                                                  Path outputDirectory,
+                                                  Function<T, byte[]> fileDataGetter,
+                                                  Function<T, String> fileNameGetter,
+                                                  Function<T, String> contentTypeGetter,
+                                                  ToIntFunction<T> fileSizeGetter) throws IOException {
         System.out.println();
-        System.out.println("Requesting the department with image by id...");
+        System.out.println(title);
 
         ObjectNode payload = MAPPER.createObjectNode();
         payload.put("id", id);
 
-        ServerResponse<Department> response = sendRequest(
+        ServerResponse<T> response = sendRequest(
                 out, in,
-                RequestType.GET_DEPARTMENT_IMAGE_BY_ID, payload,
-                new TypeReference<>() {
-                }
+                requestType, payload,
+                responseType
         );
         printResponse(response);
 
-        Department department = response.getData();
-        if (department != null) {
-            System.out.println(department);
-            System.out.println("Retrieved file name: " + department.getFileName());
-            System.out.println("Retrieved content type: " + department.getContentType());
-            System.out.println("Retrieved file size: " + department.getFileSize() + " bytes");
+        T entity = response.getData();
+        if (entity != null) {
+            System.out.println(entity);
 
-            byte[] imageBytes = department.getDepartmentImage();
-            String fileName = department.getFileName();
+            String fileName = fileNameGetter.apply(entity);
+            System.out.println("Retrieved file name: " + fileName);
+            System.out.println("Retrieved content type: " + contentTypeGetter.apply(entity));
+            System.out.println("Retrieved file size: " + fileSizeGetter.applyAsInt(entity) + " bytes");
 
-            if (imageBytes != null && fileName != null && !fileName.isBlank()) {
-                Path outputPath = Path.of("downloads", "departments", fileName);
-                try {
-                    java.nio.file.Files.createDirectories(outputPath.getParent());
-                    java.nio.file.Files.write(outputPath, imageBytes);
-                    System.out.println("Department image saved to: " + outputPath);
-                } catch (IOException e) {
-                    System.out.println("Failed to save department image: " + e.getMessage());
-                }
+            saveRetrievedFile(outputDirectory, fileDescription, fileName, fileDataGetter.apply(entity));
+        }
+    }
+
+    private static void saveRetrievedFile(Path outputDirectory, String fileDescription, String fileName, byte[] fileBytes) {
+        if (fileBytes != null && fileName != null && !fileName.isBlank()) {
+            Path outputPath = outputDirectory.resolve(fileName);
+            try {
+                Files.createDirectories(outputPath.getParent());
+                Files.write(outputPath, fileBytes);
+                System.out.println(fileDescription + " saved to: " + outputPath);
+            } catch (IOException e) {
+                System.out.println("Failed to save " + fileDescription.toLowerCase(Locale.ROOT) + ": " + e.getMessage());
             }
         }
     }
@@ -389,6 +396,23 @@ public class ClientMain {
         return addedDepartment;
     }
 
+    private static void requestDepartmentImageById(PrintWriter out, BufferedReader in, int id) throws IOException {
+        requestEntityFileById(
+                out, in,
+                id,
+                "Requesting the department with image by id...",
+                RequestType.GET_DEPARTMENT_IMAGE_BY_ID,
+                new TypeReference<ServerResponse<Department>>() {
+                },
+                "Department image",
+                Path.of("downloads", "departments"),
+                Department::getDepartmentImage,
+                Department::getFileName,
+                Department::getContentType,
+                Department::getFileSize
+        );
+    }
+
     private static void updateDemoDepartment(PrintWriter out, BufferedReader in, int departmentId) throws IOException {
         System.out.println();
         System.out.println("Updating the department by id...");
@@ -452,6 +476,23 @@ public class ClientMain {
             System.out.println(addedProduct);
         }
         return addedProduct;
+    }
+
+    private static void requestProductImageById(PrintWriter out, BufferedReader in, int id) throws IOException {
+        requestEntityFileById(
+                out, in,
+                id,
+                "Requesting the product with image by id...",
+                RequestType.GET_PRODUCT_IMAGE_BY_ID,
+                new TypeReference<ServerResponse<Product>>() {
+                },
+                "Product image",
+                Path.of("downloads", "products"),
+                Product::getProductImage,
+                Product::getFileName,
+                Product::getContentType,
+                Product::getFileSize
+        );
     }
 
     private static void updateDemoProduct(PrintWriter out, BufferedReader in, int productId) throws IOException {
