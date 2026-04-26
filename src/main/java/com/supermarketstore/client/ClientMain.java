@@ -240,6 +240,7 @@ public class ClientMain {
 
     /**
      * Requests one entity by id and prints the server response and returned entity.
+     * This helper is intended for regular entity data and does not save attached file bytes.
      *
      * @param out          the socket writer used to send requests
      * @param in           the socket reader used to receive responses
@@ -266,6 +267,26 @@ public class ClientMain {
         }
     }
 
+    /**
+     * Requests one entity by id when the response is expected to include attached file bytes.
+     * Unlike requestEntityById, this helper also prints file metadata and saves the returned
+     * file content to the configured output directory.
+     *
+     * @param out               the socket writer used to send requests
+     * @param in                the socket reader used to receive responses
+     * @param id                the entity id
+     * @param title             the message printed before sending the request
+     * @param requestType       the request type used to fetch the entity file
+     * @param responseType      the type reference used to deserialize the response body
+     * @param fileDescription   the human-readable file description used in log messages
+     * @param outputDirectory   the directory where the returned file should be saved
+     * @param fileDataGetter    extracts the file bytes from the returned entity
+     * @param fileNameGetter    extracts the file name from the returned entity
+     * @param contentTypeGetter extracts the content type from the returned entity
+     * @param fileSizeGetter    extracts the file size from the returned entity
+     * @param <T>               the entity type returned by the server
+     * @throws IOException if client-server communication fails
+     */
     private static <T> void requestEntityFileById(PrintWriter out,
                                                   BufferedReader in,
                                                   int id,
@@ -304,6 +325,15 @@ public class ClientMain {
         }
     }
 
+    /**
+     * Saves returned file bytes to the requested output directory when both
+     * the file content and file name are present.
+     *
+     * @param outputDirectory the directory where the file should be saved
+     * @param fileDescription the human-readable file description used in log messages
+     * @param fileName        the name of the file to create
+     * @param fileBytes       the returned file content
+     */
     private static void saveRetrievedFile(Path outputDirectory, String fileDescription, String fileName, byte[] fileBytes) {
         if (fileBytes != null && fileName != null && !fileName.isBlank()) {
             Path outputPath = outputDirectory.resolve(fileName);
