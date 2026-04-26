@@ -80,7 +80,7 @@ class JdbcDepartmentDaoTest {
 
     @Test
     void deleteDepartment_shouldRemoveInsertedDepartment() {
-        Department newDepartment = new Department(0, "TEST_DeleteBakery", 1, 4, 9000.0, 3, true);
+        Department newDepartment = new Department(0, "TEST_DeleteBakery", 1, 4, 9000.0, 3, true, "delete-bakery.jpg", "image/jpeg", 3, new byte[]{4, 5, 6});
         Department inserted = dao.insertDepartment(newDepartment);
 
         // Delete the row we just inserted and confirm it is no longer in the table.
