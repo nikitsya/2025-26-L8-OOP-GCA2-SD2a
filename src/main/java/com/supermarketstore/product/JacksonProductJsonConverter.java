@@ -57,5 +57,4 @@ public class JacksonProductJsonConverter implements ProductJsonConverter {
             throw new IllegalArgumentException("Failed to deserialize Product list from JSON", e);
         }
     }
-
 }
