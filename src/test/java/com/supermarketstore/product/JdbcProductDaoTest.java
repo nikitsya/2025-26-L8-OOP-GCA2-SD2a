@@ -152,31 +152,59 @@ class JdbcProductDaoTest {
     }
 
     @Test
-    void deleteProductById() {
-        int id = product1.getProductId();
-        assertTrue(dao.deleteProductById(id));
-        assertFalse(dao.getProductById(id).isPresent());
+    void insertProduct_shouldPersistProductAndGeneratedId() {
+        Product toInsert = new Product(0, "TEST_InsertMilk", 1.49, false, null, 15, null, null, null, 0);
+
+        Product inserted = dao.insertProduct(toInsert);
+        Optional<Product> fetched = dao.getProductById(inserted.getProductId());
+
+        assertTrue(fetched.isPresent());
+
+        Product actual = fetched.get();
+        assertAll(
+                () -> assertTrue(inserted.getProductId() > 0),
+                () -> assertEquals(inserted.getProductId(), actual.getProductId()),
+                () -> assertEquals("TEST_InsertMilk", actual.getName()),
+                () -> assertEquals(1.49, actual.getPrice()),
+                () -> assertFalse(actual.isOnSale()),
+                () -> assertNull(actual.getDiscountPrice()),
+                () -> assertEquals(15, actual.getStock())
+        );
     }
 
     @Test
-    void insertProduct() {
-        Product toInsert = new Product(0, "TEST_insert_milk", 1.49, false, null, 15, null, null, null, 0);
-        Product inserted = dao.insertProduct(toInsert);
-        assertTrue(inserted.getProductId() > 0);
-        assertEquals(toInsert, inserted);
+    void insertProduct_whenProductHasImage_persistsImageMetadataAndBytes() {
+        byte[] image = {1, 3, 5, 7};
+        Product toInsert = new Product(0, "TEST_InsertImage", 4.99, false, null, 6, image, "insert-image.jpeg", "image/jpeg", image.length);
 
-        Optional<Product> productFromDb = dao.getProductById(inserted.getProductId());
-        assertTrue(productFromDb.isPresent());
-        assertEquals("TEST_insert_milk", productFromDb.get().getName());
+        Product inserted = dao.insertProduct(toInsert);
+        Optional<Product> fetched = dao.getProductImageById(inserted.getProductId());
+
+        assertTrue(fetched.isPresent());
+
+        Product actual = fetched.get();
+        assertAll(
+                () -> assertEquals("insert-image.jpeg", actual.getFileName()),
+                () -> assertEquals("image/jpeg", actual.getContentType()),
+                () -> assertEquals(image.length, actual.getFileSize()),
+                () -> assertArrayEquals(image, actual.getProductImage())
+        );
     }
 
     @Test
     void insertProduct_whenProductIsNull_throwsIllegalArgumentException() {
-        IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> dao.insertProduct(null)
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                dao.insertProduct(null)
         );
-        assertEquals("product is required", ex.getMessage());
+
+        assertEquals("product is required", exception.getMessage());
+    }
+
+    @Test
+    void deleteProductById() {
+        int id = product1.getProductId();
+        assertTrue(dao.deleteProductById(id));
+        assertFalse(dao.getProductById(id).isPresent());
     }
 
     @Test
