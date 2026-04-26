@@ -201,28 +201,68 @@ class JdbcProductDaoTest {
     }
 
     @Test
-    void deleteProductById() {
-        int id = product1.getProductId();
-        assertTrue(dao.deleteProductById(id));
-        assertFalse(dao.getProductById(id).isPresent());
-    }
+    void updateProduct_shouldPersistUpdatedValuesAndImage() {
+        Product inserted = dao.insertProduct(new Product(0, "TEST_UpdateOriginal", 2.30, false, null, 9, new byte[]{1, 1}, "original.jpeg", "image/jpeg", 2));
+        byte[] updatedImage = {2, 4, 6};
+        Product changes = new Product(0, "TEST_UpdateChanged", 2.80, true, 2.10, 18, updatedImage, "updated.jpeg", "image/jpeg", updatedImage.length);
 
-    @Test
-    void updateProduct() {
-        int id = product2.getProductId();
-        Product toUpdate = new Product(333, "TEST_tomato", 0.35, false, null, 70, null, null, null, 0);
-        Product updated = dao.updateProduct(id, toUpdate);
-        assertEquals(toUpdate.getName(), updated.getName());
-        assertEquals(toUpdate, updated);
+        Product updated = dao.updateProduct(inserted.getProductId(), changes);
+        Optional<Product> fetched = dao.getProductImageById(inserted.getProductId());
+
+        assertTrue(fetched.isPresent());
+
+        Product actual = fetched.get();
+        assertAll(
+                () -> assertEquals(inserted.getProductId(), updated.getProductId()),
+                () -> assertEquals(inserted.getProductId(), actual.getProductId()),
+                () -> assertEquals("TEST_UpdateChanged", actual.getName()),
+                () -> assertEquals(2.80, actual.getPrice()),
+                () -> assertTrue(actual.isOnSale()),
+                () -> assertEquals(2.10, actual.getDiscountPrice()),
+                () -> assertEquals(18, actual.getStock()),
+                () -> assertEquals("updated.jpeg", actual.getFileName()),
+                () -> assertEquals("image/jpeg", actual.getContentType()),
+                () -> assertEquals(updatedImage.length, actual.getFileSize()),
+                () -> assertArrayEquals(updatedImage, actual.getProductImage())
+        );
     }
 
     @Test
     void updateProduct_whenProductIsNull_throwsIllegalArgumentException() {
-        IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> dao.updateProduct(1, null)
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                dao.updateProduct(1, null)
         );
-        assertEquals("product is required", ex.getMessage());
+
+        assertEquals("product is required", exception.getMessage());
+    }
+
+    @Test
+    void updateProduct_whenIdIsNotPositive_throwsIllegalArgumentException() {
+        Product changes = new Product(0, "TEST_InvalidUpdate", 1.99, false, null, 4, null, null, null, 0);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                dao.updateProduct(0, changes)
+        );
+
+        assertEquals("id must be positive", exception.getMessage());
+    }
+
+    @Test
+    void updateProduct_whenIdDoesNotExist_throwsRuntimeException() {
+        Product changes = new Product(0, "TEST_MissingUpdate", 1.99, false, null, 4, null, null, null, 0);
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () ->
+                dao.updateProduct(999999, changes)
+        );
+
+        assertTrue(exception.getMessage().startsWith("Failed to update product: update failed"));
+    }
+
+    @Test
+    void deleteProductById() {
+        int id = product1.getProductId();
+        assertTrue(dao.deleteProductById(id));
+        assertFalse(dao.getProductById(id).isPresent());
     }
 
     @Test
