@@ -371,6 +371,23 @@ class ProductTest {
         assertEquals("File size cannot be negative", exception.getMessage());
     }
 
+    @Test
+    void constructor_whenImageIsPresentAndFileNameIsMissing_throwsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                new Product(1, "Product", 20.0, false, null, 45, new byte[]{1}, null, "image/jpeg", 1)
+        );
+
+        assertEquals("File name must not be null or blank", exception.getMessage());
+    }
+
+    @Test
+    void constructor_whenImageIsPresentAndContentTypeIsMissing_throwsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                new Product(1, "Product", 20.0, false, null, 45, new byte[]{1}, "product.jpeg", null, 1)
+        );
+
+        assertEquals("Content type must not be null", exception.getMessage());
+    }
 
     @Test
     void toString_whenNoImage_returnsFormattedProductWithFileMetadata() {
