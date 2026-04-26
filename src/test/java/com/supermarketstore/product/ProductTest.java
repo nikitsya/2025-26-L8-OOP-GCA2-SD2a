@@ -54,6 +54,36 @@ class ProductTest {
     }
 
     @Test
+    void constructor_withValidSaleProductAndImage_setsAllFields() {
+        byte[] image = {1, 2, 3};
+        Product saleProduct = new Product(
+                2,
+                "Sale Product",
+                30.0,
+                true,
+                20.0,
+                10,
+                image,
+                "sale-product.jpeg",
+                "image/jpeg",
+                image.length
+        );
+
+        assertAll(
+                () -> assertEquals(2, saleProduct.getProductId()),
+                () -> assertEquals("Sale Product", saleProduct.getName()),
+                () -> assertEquals(30.0, saleProduct.getPrice()),
+                () -> assertTrue(saleProduct.isOnSale()),
+                () -> assertEquals(20.0, saleProduct.getDiscountPrice()),
+                () -> assertEquals(10, saleProduct.getStock()),
+                () -> assertArrayEquals(image, saleProduct.getProductImage()),
+                () -> assertEquals("sale-product.jpeg", saleProduct.getFileName()),
+                () -> assertEquals("image/jpeg", saleProduct.getContentType()),
+                () -> assertEquals(3, saleProduct.getFileSize())
+        );
+    }
+
+    @Test
     void getProductId_returnsProductId() {
         assertEquals(1, product.getProductId());
     }
