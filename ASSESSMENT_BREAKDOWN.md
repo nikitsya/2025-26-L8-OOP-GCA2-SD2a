@@ -8,7 +8,6 @@
 | B. JSON Conversion (F9) | 8 | Accurate bidirectional JSON conversion; `xxxToJson()`, `xxxFromJson()`, and `xxxListToJson()` all correct and round-trip verified. |  |  |
 | C. Client-Server Communication (F10-F16) | 20 | Functional multithreaded server using `ExecutorService`; `ServerResponse<T>` used consistently; clean documented JSON protocol; client-server separation maintained. Ability to trace a request end-to-end assessed at demo. |  |  |
 | D. Process and Repository - Stage 2 | 6 | Meaningful commits spanning both stages; two-client demo successful; README includes protocol documentation; commit messages are descriptive. |  |  |
-| Stage 2 Total | 50 |  |  |  |
 
 ## Stage 4 - 50% of GCA2 Grade
 
@@ -23,4 +22,3 @@
 | K. Technical Excellence (Optional) | 20 | Optional component for students seeking to demonstrate advanced architectural design. Design and implement a generic service abstraction layer that can handle multiple service types polymorphically, for example file upload/download service, task processing service, or other domain-relevant services. Requirements: (1) service interface or abstract class defining the contract; (2) at least two concrete service implementations; (3) server-side polymorphic service routing and execution; (4) appropriate design pattern application, such as Strategy, Factory, Template Method, or Command; (5) all services fully functional and tested; (6) clear architectural rationale explained at demo. Students who do not attempt this component can still achieve 30/50 in Stage 4. |  |  |
 | Base Total (E-J) | 30 |  |  |  |
 | Maximum Available (E-K) | 50 |  |  |  |
-| Stage 4 Total | 50 |  |  |  |
