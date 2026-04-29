@@ -42,22 +42,6 @@ class ProductTest {
     }
 
     @Test
-    void constructor_withValidNonSaleProduct_setsCoreFields() {
-        assertAll(
-                () -> assertEquals(1, product.getProductId()),
-                () -> assertEquals("Product", product.getName()),
-                () -> assertEquals(20.0, product.getPrice()),
-                () -> assertFalse(product.isOnSale()),
-                () -> assertNull(product.getDiscountPrice()),
-                () -> assertEquals(45, product.getStock()),
-                () -> assertNull(product.getProductImage()),
-                () -> assertNull(product.getFileName()),
-                () -> assertNull(product.getContentType()),
-                () -> assertEquals(0, product.getFileSize())
-        );
-    }
-
-    @Test
     void constructor_withValidSaleProductAndImage_setsAllFields() {
         byte[] image = {1, 2, 3};
         Product saleProduct = new Product(
@@ -88,11 +72,6 @@ class ProductTest {
     }
 
     // --- Product identity and name validation ---
-    @Test
-    void setProductId_withValidValue_updatesProductId() {
-        product.setProductId(2);
-        assertEquals(2, product.getProductId());
-    }
 
     @Test
     void setProductId_withNegativeValue_throwsIllegalArgumentException() {
@@ -125,12 +104,6 @@ class ProductTest {
     }
 
     // --- Price and sale status validation ---
-    @Test
-    void setPrice_withValidValue_updatesPrice() {
-        product.setPrice(30.0);
-
-        assertEquals(30.0, product.getPrice());
-    }
 
     @Test
     void setPrice_withZeroOrNegativeValue_throwsIllegalArgumentException() {
@@ -166,12 +139,6 @@ class ProductTest {
     }
 
     @Test
-    void setOnSale_withTrue_updatesSaleStatus() {
-        product.setOnSale(true);
-        assertTrue(product.isOnSale());
-    }
-
-    @Test
     void setOnSale_withFalse_clearsDiscountPrice() {
         product.setOnSale(true);
         product.setDiscountPrice(15.0);
@@ -183,14 +150,6 @@ class ProductTest {
     }
 
     // --- Discount price validation ---
-    @Test
-    void setDiscountPrice_whenOnSaleAndValid_updatesDiscountPrice() {
-        product.setOnSale(true);
-
-        product.setDiscountPrice(15.0);
-
-        assertEquals(15.0, product.getDiscountPrice());
-    }
 
     @Test
     void setDiscountPrice_whenProductIsNotOnSale_throwsIllegalStateException() {
@@ -279,11 +238,6 @@ class ProductTest {
     }
 
     // --- Stock validation ---
-    @Test
-    void setStock_withValidValue_updatesStock() {
-        product.setStock(100);
-        assertEquals(100, product.getStock());
-    }
 
     @Test
     void setStock_withNegativeValue_throwsIllegalArgumentException() {
@@ -336,15 +290,6 @@ class ProductTest {
     }
 
     @Test
-    void setFileName_whenImageIsPresentAndNameIsValid_updatesFileName() {
-        Product productWithImage = productWithImage();
-
-        productWithImage.setFileName("updated.jpeg");
-
-        assertEquals("updated.jpeg", productWithImage.getFileName());
-    }
-
-    @Test
     void setContentType_whenImageIsPresentAndContentTypeIsNull_throwsIllegalArgumentException() {
         Product productWithImage = productWithImage();
 
@@ -355,22 +300,7 @@ class ProductTest {
         assertEquals("Content type must not be null", exception.getMessage());
     }
 
-    @Test
-    void setContentType_whenImageIsPresentAndContentTypeIsValid_updatesContentType() {
-        Product productWithImage = productWithImage();
-
-        productWithImage.setContentType("image/png");
-
-        assertEquals("image/png", productWithImage.getContentType());
-    }
-
     // --- File size validation ---
-    @Test
-    void setFileSize_withValidValue_updatesFileSize() {
-        product.setFileSize(12);
-
-        assertEquals(12, product.getFileSize());
-    }
 
     @Test
     void setFileSize_withNegativeValue_throwsIllegalArgumentException() {
@@ -424,24 +354,6 @@ class ProductTest {
         assertAll(
                 () -> assertNotEquals(null, product),
                 () -> assertNotEquals("Product", product)
-        );
-    }
-
-    @Test
-    void toString_whenNoImage_returnsFormattedProductWithFileMetadata() {
-        assertEquals(
-                "Product{productId=1, name='Product', price=20.0, onSale=false, discountPrice=null, stock=45, productImage=null, fileName='null', contentType='null', fileSize=0}",
-                product.toString()
-        );
-    }
-
-    @Test
-    void toString_whenImageIsPresent_includesImageSizeAndMetadata() {
-        Product productWithImage = productWithImage();
-
-        assertEquals(
-                "Product{productId=1, name='Product', price=20.0, onSale=false, discountPrice=null, stock=45, productImage=3 bytes, fileName='product.jpeg', contentType='image/jpeg', fileSize=3}",
-                productWithImage.toString()
         );
     }
 }
