@@ -1,9 +1,9 @@
 ---
 title: "Supermarket Store System"
 subtitle: "README"
-description: "Project overview, setup, protocol, architecture, testing status, and contribution matrix for the Supermarket Store System."
+description: "Project overview, setup, protocol, architecture, binary file handling, testing status, and contribution matrix for the Supermarket Store System."
 module: "COMP C8Z03 Object-Oriented Programming"
-stage: "2 (Group Project)"
+stage: "4 (Final Group Project Submission)"
 ---
 
 # 2026 - OOP - L8 - GCA2 — Supermarket Store System
@@ -21,12 +21,14 @@ relationship between departments and products.
 The project is implemented as an N-tier Java application. The client sends JSON requests over a socket connection, the
 server routes each request to the correct handler, and the DAO layer performs persistence through JDBC using MySQL.
 Stage 1 established the entity classes, validation, DAO interfaces, JDBC implementations, predicate-based filtering,
-and JSON conversion. Stage 2 extends that work with a multithreaded server, a shared `ServerResponse<T>` wrapper, and
-socket-based CRUD flows for the currently supported operations.
+and JSON conversion. Stage 2 extended that work with a multithreaded server, a shared `ServerResponse<T>` wrapper, and
+socket-based CRUD flows. Stage 3 added binary file metadata and BLOB handling for departments and products. Stage 4
+focuses on the expanded test suite, coverage evidence, final documentation, the contribution matrix, and the final
+demo submission.
 
-The project supports JSON-based read, insert, update, and delete flows through the shared client-server protocol. The
-README below documents the exact protocol and the actual project setup in this repository rather than the original
-course template.
+The project supports JSON-based read, insert, update, delete, image retrieval, and disconnect flows through the shared
+client-server protocol. This README documents the actual repository state and final submission requirements rather than
+the original course template.
 
 ### Team
 
@@ -42,7 +44,9 @@ course template.
 - DAO interfaces plus JDBC implementations for both entities
 - JSON conversion utilities and socket protocol DTOs
 - Multithreaded socket server using `ExecutorService`
+- Binary image upload and retrieval support with file metadata
 - Integration tests for DAO behaviour and unit tests for entity and JSON logic
+- Separate project contribution matrix in `CONTRIBUTION_MATRIX.md`
 
 ---
 
@@ -97,11 +101,13 @@ Before running the server or the JDBC integration tests, set:
     - add department
     - update department
     - delete department
+    - retrieve department image data
     - get all products
     - get product by id
     - add product
     - update product
     - delete product
+    - send a structured disconnect request
 
 ---
 
@@ -110,12 +116,14 @@ Before running the server or the JDBC integration tests, set:
 ### 3.1 N-tier overview
 
 - Client layer:
-    - `ClientMain` serializes `ClientRequest` objects to JSON and parses `ServerResponse<T>` replies.
+    - `ClientMain` serialises `ClientRequest` objects to JSON and parses `ServerResponse<T>` replies.
 - Protocol layer:
     - `ClientRequest`, `RequestType`, and `ServerResponse<T>` define the shared request and response contract.
 - Server layer:
     - `ServerMain` accepts socket connections and uses `ExecutorService` so each client runs on a separate thread.
     - `RequestRouter` dispatches each request type to a matching handler.
+- File payload layer:
+    - `FilePayloadBuilder` reads local files and builds Base64 JSON payload fragments with metadata.
 - DAO layer:
     - `DepartmentDao` / `JdbcDepartmentDao`
     - `ProductDao` / `JdbcProductDao`
@@ -133,7 +141,7 @@ Before running the server or the JDBC integration tests, set:
 
 ## 4. JSON Protocol Documentation
 
-> This section documents the socket protocol currently used by the Stage 2 client and server implementation.
+> This section documents the current socket protocol used by the client and server implementation.
 
 ### 4.1 Envelope format
 
@@ -230,20 +238,23 @@ Example department success response:
 
 | Request Type | Payload fields | Success response data | Failure examples |
 |:--|:--|:--|:--|
-| `GET_ALL_DEPARTMENTS` | none (`payload = null`) | `data` = array of department objects | DAO or server error |
-| `GET_DEPARTMENT_BY_ID` | `id:int` | `data` = one department object | missing `id`, department not found |
-| `ADD_DEPARTMENT` | `name:string`, `floor:int`, `zone:int`, `budget:double`, `employeeCount:int`, `isRefrigerated:boolean` | `data` = inserted department with generated `department_id` | missing fields, validation error, DAO error |
+| `GET_ALL_DEPARTMENTS` | none (`payload = null`) | `data` = array of department objects without image bytes | DAO or server error |
+| `GET_DEPARTMENT_BY_ID` | `id:int` | `data` = one department object with metadata only | missing `id`, department not found |
+| `GET_DEPARTMENT_IMAGE_BY_ID` | `id:int` | `data` = one department object including image bytes and metadata | missing `id`, department not found |
+| `ADD_DEPARTMENT` | `name:string`, `floor:int`, `zone:int`, `budget:double`, `employeeCount:int`, `isRefrigerated:boolean`, optional `fileData` or `file_data`, `fileName` or `file_name`, `contentType` or `content_type`, `fileSize` or `file_size` | `data` = inserted department with generated `department_id` | missing fields, invalid file data, validation error, DAO error |
 | `DELETE_DEPARTMENT_BY_ID` | `id:int` | `data` = `null`, success confirmed by message | missing `id`, department not found |
-| `UPDATE_DEPARTMENT` | `id:int`, `name:string`, `floor:int`, `zone:int`, `budget:double`, `employeeCount:int`, `isRefrigerated:boolean` | `data` = updated department object | missing fields, department not found, validation error, DAO error |
-| `GET_ALL_PRODUCTS` | none (`payload = null`) | `data` = array of product objects | DAO or server error |
-| `GET_PRODUCT_BY_ID` | `id:int` | `data` = one product object | missing `id`, product not found |
-| `ADD_PRODUCT` | `name:string`, `price:double`, `isOnSale:boolean` or `is_on_sale:boolean`, `stock:int`, optional `discountPrice:double` or `discount_price:double` | `data` = inserted product with generated `product_id` | missing fields, missing discount price for sale item, validation error, DAO error |
+| `UPDATE_DEPARTMENT` | `id:int`, department fields, optional binary file payload fields | `data` = updated department object | missing fields, invalid file data, department not found, validation error, DAO error |
+| `GET_ALL_PRODUCTS` | none (`payload = null`) | `data` = array of product objects without image bytes | DAO or server error |
+| `GET_PRODUCT_BY_ID` | `id:int` | `data` = one product object with metadata only | missing `id`, product not found |
+| `GET_PRODUCT_IMAGE_BY_ID` | `id:int` | `data` = one product object including image bytes and metadata | missing `id`, product not found |
+| `ADD_PRODUCT` | `name:string`, `price:double`, `isOnSale:boolean` or `is_on_sale:boolean`, `stock:int`, optional `discountPrice:double` or `discount_price:double`, optional binary file payload fields | `data` = inserted product with generated `product_id` | missing fields, missing discount price for sale item, invalid file data, validation error, DAO error |
 | `DELETE_PRODUCT_BY_ID` | `id:int` | `data` = `null`, success confirmed by message | missing `id`, product not found |
-| `UPDATE_PRODUCT` | `id:int`, `name:string`, `price:double`, `isOnSale:boolean` or `is_on_sale:boolean`, `stock:int`, optional `discountPrice:double` or `discount_price:double` | `data` = updated product object | missing fields, missing discount price for sale item, product not found, validation error, DAO error |
+| `UPDATE_PRODUCT` | `id:int`, product fields, optional binary file payload fields | `data` = updated product object | missing fields, missing discount price for sale item, invalid file data, product not found, validation error, DAO error |
+| `DISCONNECT` | none (`payload = null`) | `data` = `null`, success confirmed by message | server error |
 
 ### 4.3 Entity JSON shapes
 
-Department objects are serialized with these JSON keys:
+Department objects are serialised with these JSON keys:
 
 ```json
 {
@@ -253,11 +264,15 @@ Department objects are serialized with these JSON keys:
   "zone": 3,
   "budget": 25000.0,
   "employee_count": 8,
-  "is_refrigerated": false
+  "is_refrigerated": false,
+  "file_name": "bakery.png",
+  "content_type": "image/png",
+  "file_size": 1024,
+  "department_image": null
 }
 ```
 
-Product objects are serialized with these JSON keys:
+Product objects are serialised with these JSON keys:
 
 ```json
 {
@@ -266,7 +281,11 @@ Product objects are serialized with these JSON keys:
   "price": 2.49,
   "is_on_sale": true,
   "discount_price": 1.99,
-  "stock": 30
+  "stock": 30,
+  "file_data": null,
+  "file_name": "milk.jpeg",
+  "content_type": "image/jpeg",
+  "file_size": 2048
 }
 ```
 
@@ -276,25 +295,31 @@ Product objects are serialized with these JSON keys:
 - Responses are always wrapped in `ServerResponse<T>`.
 - Unknown request types return `status = ERROR` with message `Unknown request type: ...`.
 - Missing required payload fields return `status = ERROR` with a descriptive message.
-- `GET`, `ADD`, `UPDATE`, and `DELETE` flows are implemented for both `Department` and `Product`.
+- `GET`, `ADD`, `UPDATE`, `DELETE`, and image retrieval flows are implemented for both `Department` and `Product`.
 - Delete operations return `data = null` and use the response message to confirm success or explain failure.
+- Binary uploads use Base64 file data plus filename, content type, and file size metadata.
+- Image retrieval requests return the stored binary data and metadata for the requested record.
+- The client sends `DISCONNECT` before closing the socket.
 - The current console client demonstrates the protocol by sending a fixed sequence of department and product requests.
 
 
 ---
 
-## 5. Binary File Handling Status
+## 5. Binary File Handling
 
-Binary file handling is not implemented in the current repository state.
+Binary file handling is implemented for both departments and products.
 
-Current status:
+Current implementation:
 
-- No BLOB columns exist in the MySQL schema.
-- No binary upload or retrieval request types exist in `RequestType`.
-- No client or server flow currently transfers files.
-
-This section is kept only to document the present status of the project. If binary handling is added in a later stage,
-this README should be extended with the exact schema, request types, and payload format used.
+- The `departments` table stores `file_name`, `content_type`, `file_size`, and `department_image`.
+- The `products` table stores `file_name`, `content_type`, `file_size`, and `product_image`.
+- `FilePayloadBuilder` reads a local file, Base64-encodes the bytes, and adds metadata to the JSON payload.
+- `RequestRouter` accepts either `fileData` or `file_data`, decodes the Base64 content, validates the file payload, and
+  passes the bytes to the DAO layer.
+- `JdbcDepartmentDao` and `JdbcProductDao` store file bytes through JDBC and provide image retrieval methods.
+- `GET_DEPARTMENT_IMAGE_BY_ID` and `GET_PRODUCT_IMAGE_BY_ID` return the requested entity including binary data and
+  metadata.
+- The department client demo writes retrieved image data to `downloads/departments/`.
 
 ---
 
@@ -353,47 +378,54 @@ this README should be extended with the exact schema, request types, and payload
 
 ---
 
-## 9. Contribution Matrix (Required)
+## 9. Contribution Matrix
 
-> One row per **major task**. “Primary” means who implemented first version. “Contributor/Reviewer” means meaningful
-> review, refactor, debugging, extension, or pair work.
+The full project contribution matrix is maintained in `CONTRIBUTION_MATRIX.md`.
 
-### 9.1 Matrix (example for a 3-person team)
+Domain ownership:
 
-| Major task                                                              | Primary author | Contributor / reviewer | Notes                              |
-|:------------------------------------------------------------------------|:---------------|:-----------------------|:-----------------------------------|
-| Domain proposal email (150–200 words) + entity list for approval        | Student A      | Student B              | Drafted + refined before sending   |
-| Repo setup (private repo, collaborators, branch plan stage1–stage4)     | Student B      | Student C              | Created branches + README skeleton |
-| `mysqlSetup.sql` schema + seed data (10+ rows per table)                | Student C      | Student A              | Re-runnable from scratch           |
-| DTO/entity modelling + validation rules (trim/blank/range checks)       | Student A      | Student C              | Included int/double/string fields  |
-| DAO interfaces (XxxDao) for all entities                                | Student B      | Student A              | Service depends on interfaces only |
-| JDBC DAO implementation: `getAll` + `getById` using `Optional<T>`       | Student B      | Student C              | PreparedStatements throughout      |
-| JDBC DAO implementation: `insert` returning generated keys              | Student C      | Student B              | Verified `getGeneratedKeys()`      |
-| JDBC DAO implementation: `update` + `deleteById`                        | Student B      | Student A              | Consistent return semantics        |
-| Predicate filtering API (`findByFilter(Predicate<T>)`)                  | Student A      | Student B              | Lambda-based filtering             |
-| JSON conversion (toJson/fromJson/listToJson) per entity                 | Student A      | Student C              | Round-trip verified                |
-| Architecture diagram (Mermaid) + annotated tier explanation             | Student C      | Student B              | Updated as architecture evolved    |
-| Multithreaded server (`ExecutorService`, client handler per connection) | Student B      | Student C              | Clean shutdown + logging           |
-| `ServerResponse<T>` wrapper + consistent response mapping               | Student B      | Student A              | No raw types                       |
-| Protocol documentation in README (all request types + payloads)         | Student A      | Student B              | Kept current per stage             |
-| Client features: display all + display by id                            | Student C      | Student A              | Implemented for owned entity       |
-| Client features: insert/update/delete over sockets                      | Student C      | Student B              | Handles failures gracefully        |
-| Error handling: structured failures (no stack traces to client)         | Student B      | Student A              | Includes validation + DB errors    |
-| Binary schema extension (BLOB + metadata columns)                       | Student A      | Student C              | Updated `mysqlSetup.sql`           |
-| Binary upload (Base64 encode/decode + DB storage)                       | Student A      | Student B              | Stored bytes + metadata            |
-| Binary retrieval (reconstruct file on client)                           | Student A      | Student C              | Verified bytes match               |
-| Metadata-only query (no BLOB fetch)                                     | Student B      | Student A              | Separate DAO method                |
-| Disconnect protocol (`DISCONNECT`) + cleanup                            | Student C      | Student B              | Releases thread cleanly            |
-| Stage 3 core tests (DAO read, insert+id, JSON round-trip)               | Student C      | Student A              | 3+ tests each                      |
-| Stage 4 extended tests (server scenario + binary scenario + full DAO)   | Student B      | Student C              | Added 3+ more each                 |
-| Coverage evidence screenshot `/reports/coverage.png`                    | Student A      | Student B              | IntelliJ coverage runner           |
-| Screencast (8–10 min): demo + design iterations                         | Student C      | Student A              | Script + recording + export        |
-| Harvard references + AI usage declaration                               | Student A      | Student B              | All sources cited                  |
-| Final README polish (run steps, protocol, testing, evidence links)      | Student B      | Student C              | Consistent formatting              |
+- Hanna Bokariuk led the Department-related implementation.
+- Nikita Smiichyk led the Product-related implementation.
+
+Selected shared tasks:
+
+| Feature / Task | Primary author | Reviewer / contributor | Notes |
+|:--|:--|:--|:--|
+| F10 - Multithreaded server | Nikita Smiichyk | Hanna Bokariuk | Nikita implemented the `ExecutorService` client pool and multithreaded accept loop; Hanna created the initial socket server skeleton and later updated the client loop for `DISCONNECT`. |
+| F11 - `ServerResponse<T>` wrapper | Hanna Bokariuk | Nikita Smiichyk | Hanna added the initial generic wrapper; Nikita refined it with the starter-compatible structure, `OK`/`ERROR` helpers, and consistent routing usage. |
+| F16 - Shared protocol structure | Nikita Smiichyk | Hanna Bokariuk | Nikita added the shared `RequestType` enum, expanded request types for CRUD, standardised routing/error handling, and refactored shared client request helpers; Hanna created the initial request/response protocol classes and added later protocol types such as `DISCONNECT`. |
+| Architecture diagram | Nikita Smiichyk |  | One-page annotated architecture diagram and updates after architecture changes. |
+| README | Nikita Smiichyk | Hanna Bokariuk | Setup guide, protocol documentation, architecture summary, testing evidence, and references. |
 
 ---
 
-## 10. References (Harvard)
+## 10. Required OOP Features
+
+| Requirement | Project evidence |
+|:--|:--|
+| Javadoc documentation | Main classes include class-level Javadoc with author information. Non-trivial methods should continue to be documented as the project is finalised. |
+| `Optional<T>` | DAO lookup methods such as `getDepartmentById`, `getProductById`, `getDepartmentImageById`, and `getProductImageById` return `Optional<T>` rather than `null`. |
+| Design patterns | DAO is used for persistence abstraction. Router / command-style dispatch is used through `RequestRouter` and request handlers. |
+| Generics | `ServerResponse<T>` is used for typed server replies. Jackson `TypeReference<ServerResponse<List<T>>>` is used in the client for typed parsing. |
+| Functional interfaces and lambdas | `Predicate<T>` is used for entity filtering. `RequestRouter` registers lambda-based request handlers. |
+| Collections | `List<T>` is used for ordered DAO result sets. Handler maps are used for request type lookup. |
+| DRY principle | Shared client request helpers, response printing, and router dispatch reduce repeated request/response code. |
+| Architecture diagram | `docs/architecture.md` documents the client, protocol, server, DAO, database, and binary file handling flow. |
+
+---
+
+## 11. Optional Technical Excellence
+
+This optional component is not required for the base Stage 4 submission. If attempted, the implementation must provide a
+generic service abstraction layer with at least two concrete service types, polymorphic service routing, JUnit tests,
+README design rationale, and an updated architecture diagram.
+
+Suitable pattern choices include Factory, Strategy, Template Method, or Command. The final demo explanation should
+justify why the chosen pattern fits the service architecture.
+
+---
+
+## 12. References (Harvard)
 
 - Oracle (n.d.) *JDBC Basics*. Available at: [https://docs.oracle.com/javase/tutorial/jdbc/basics/index.html](https://docs.oracle.com/javase/tutorial/jdbc/basics/index.html)
 - FasterXML (n.d.) *Jackson Databind*. Available at: [https://github.com/FasterXML/jackson-databind](https://github.com/FasterXML/jackson-databind)
@@ -402,10 +434,7 @@ this README should be extended with the exact schema, request types, and payload
 
 ---
 
-## 11. AI Tool Use Declaration
+## 13. AI Tool Use Declaration
 
 - AI tools were used for limited support tasks such as documentation wording, README restructuring, and example
   formatting.
-- All project-specific content in this README was reviewed and adapted to match the current repository state before it
-  was committed.
-- Code, database schema decisions, protocol behaviour, and project verification remain the responsibility of the team.
