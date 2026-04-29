@@ -70,9 +70,37 @@
 
 </details>
 
-### Stage 4 (F23-F24)</strong></summary>
-  
-| Feature | Hanna | Nikita |
-|---------|-------|--------|
-| F23     |       |        |
-| F24     |       |        |
+<details>
+<summary><strong>Stage 4 (F23-F24)</strong></summary>
+
+### Overview
+
+Stage 4 extends the Stage 3 unit test suite to cover all implemented features across the system and introduces a
+coverage threshold. Where Stage 3 required core tests for the DAO layer and JSON conversion, Stage 4 requires tests for
+every significant layer: DAO, JSON conversion, server-side request handling, and binary file upload/retrieval.
+
+The coverage threshold of `>=70%` applies to this expanded suite and must be evidenced using the IntelliJ IDEA coverage
+runner. A screenshot of the coverage panel must be committed to `reports/coverage.png`.
+
+### Optional Technical Excellence Component
+
+Students may optionally implement a generic service architecture worth 20 marks. This architecture should abstract the
+service layer and support multiple service types through polymorphism. This is an advanced architectural challenge for
+students seeking to demonstrate excellence. See Section 15 of the assignment brief for the full specification.
+
+### Required Features
+
+| #   | Feature             | Specification                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | Hanna | Nikita |
+|-----|---------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------|--------|
+| F23 | Extended Test Suite | Expand the Stage 3 test suite to cover all implemented features. Tests must cover all DAO methods (`getAll`, `getById`, `insert`, `update`, `delete`, `filter`), JSON conversion round-trips, at least one server request/response scenario using a test client or mocked input, and at least one binary file upload and retrieval scenario where a known file is uploaded, retrieved, and checked byte-for-byte. All tests must pass. Minimum 3 additional tests per team member beyond the Stage 3 baseline. |       |        |
+| F24 | Coverage Threshold  | Demonstrate `>=70%` line coverage across the DAO, JSON conversion, and binary file handling classes using the IntelliJ IDEA built-in coverage runner. The committed evidence must be `reports/coverage.png`. Coverage must reflect the full test suite, not a filtered subset of classes.                                                                                                                                                                                         |       |        |
+
+### Final Submission Items
+
+| Item                | Requirement                                                                                                                                                                                                                                                                                                | Hanna | Nikita |
+|---------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------|--------|
+| Screencast          | Record an 8-10 minute screencast as specified in Section 13. Filename: `2025-26-L8-OOP-GCA2-GroupID`.                                                                                                                                                                                                      |       |        |
+| Contribution Matrix | Submit the contribution matrix as described in Section 12.                                                                                                                                                                                                                                                 |       |        |
+| README              | Complete all sections, including the domain overview, how to run, architecture summary, protocol documentation, design pattern justification, test coverage evidence, binary file handling description, and Harvard references. Use the sample README in Moodle as the formatting reference.                  |       |        |
+
+</details>
