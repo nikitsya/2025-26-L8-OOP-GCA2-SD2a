@@ -1,6 +1,7 @@
 # Supermarket Store System
 
-## Project Stage Plan
+<details>
+<summary><strong>Project Stage Plan</strong></summary>
 
 | Stage | Week  | Deadline          | Focus                                                      | Features | Status                      | Weight |
 |-------|-------|-------------------|------------------------------------------------------------|----------|-----------------------------|--------|
@@ -8,6 +9,8 @@
 | 2     | Wk 8  | Sunday 25th March | Client-server integration, all CRUD over sockets           | F10-F16  | Graded                      | 50%    |
 | 3     | Wk 11 | Sunday 26th April | Binary file handling, protocol completion, core unit tests | F17-F22  | Mandatory gate - not graded | -      |
 | 4     | Wk 12 | Sunday 8th May    | Full test suite with coverage, all features stable         | F23-F24  | Graded                      | 50%    |
+
+</details>
 
 <details>
 <summary><strong>Pre-Stage Requirements</strong></summary>
