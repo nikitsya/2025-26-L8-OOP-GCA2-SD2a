@@ -14,6 +14,10 @@ class ProductTest {
 
     private Product product;
 
+    private static Product productWithImage() {
+        return new Product(1, "Product", 20.0, false, null, 45, new byte[]{1, 2, 3}, "product.jpeg", "image/jpeg", 3);
+    }
+
     @BeforeEach
     void setUp() {
         product = new Product(1, "Product", 20.0, false, null, 45, null, null, null, 0);
@@ -432,9 +436,5 @@ class ProductTest {
                 "Product{productId=1, name='Product', price=20.0, onSale=false, discountPrice=null, stock=45, productImage=3 bytes, fileName='product.jpeg', contentType='image/jpeg', fileSize=3}",
                 productWithImage.toString()
         );
-    }
-
-    private static Product productWithImage() {
-        return new Product(1, "Product", 20.0, false, null, 45, new byte[]{1, 2, 3}, "product.jpeg", "image/jpeg", 3);
     }
 }

@@ -1,6 +1,9 @@
 package com.supermarketstore.product;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -33,16 +36,6 @@ class JdbcProductDaoTest {
         dao = new JdbcProductDao(DB_URL, DB_USER, DB_PASS);
     }
 
-    @BeforeEach
-    void setUp() {
-        cleanupTestRows();
-    }
-
-    @AfterEach
-    void tearDown() {
-        cleanupTestRows();
-    }
-
     private static void cleanupTestRows() {
         String sql = "DELETE FROM supermarket_store_system.products WHERE name LIKE ?";
 
@@ -53,6 +46,16 @@ class JdbcProductDaoTest {
         } catch (SQLException e) {
             fail("Failed to cleanup TEST_ products: " + e.getMessage());
         }
+    }
+
+    @BeforeEach
+    void setUp() {
+        cleanupTestRows();
+    }
+
+    @AfterEach
+    void tearDown() {
+        cleanupTestRows();
     }
 
     @Test
