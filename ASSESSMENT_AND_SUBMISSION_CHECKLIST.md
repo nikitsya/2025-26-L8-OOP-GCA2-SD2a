@@ -34,5 +34,4 @@ Tip: keep evidence in easy-to-find folders such as `reports/`, `tests/`, or `dat
 | Screencast | Not required. | Not required. | Not required. | 8-10 minutes; filename `2025-26-L8-OOP-GCA2-GroupID`. |  |  |
 | Contribution matrix | Not required. | Not required. | Not required. | PDF or README table. |  |  |
 | README | Domain overview; architecture diagram link. | Protocol documentation; threading rationale. | Testing summary; binary file handling description. | All sections complete; Harvard references. If Component K is attempted, include a dedicated service architecture section, pattern justification, and design rationale. |  |  |
-| Live demo attendance | All group members present. | All group members present. | All group members present. | All group members present. |  |  |
 | CA Cover Sheet | Not required. | Not required. | Not required. | Signed electronic copy, one per group. |  |  |
