@@ -105,6 +105,33 @@ students seeking to demonstrate excellence. See Section 15 of the assignment bri
 </details>
 
 <details>
+<summary><strong>Unit Testing Requirements</strong></summary>
+
+Unit testing is split across two stages. Stage 3 requires a core test suite as a gate condition, while Stage 4 extends
+that suite to all implemented features and adds a coverage threshold.
+
+| Stage | Requirement | Detail | Hanna | Nikita |
+|-------|-------------|--------|-------|--------|
+| Stage 3 - Core Tests | Minimum test count | At least 3 meaningful JUnit 5 tests per team member. Tests must be in the codebase and passing, not only described in a document. |  |  |
+| Stage 3 - Core Tests | Required categories | Tests must cover: (1) a `getAll` or `getById` DAO method; (2) an insert with the returned auto-generated ID verified; (3) a JSON serialisation/deserialisation round trip. |  |  |
+| Stage 3 - Core Tests | Test quality | Tests must assert correct behaviour, not merely call methods. Each test must have a descriptive name, for example `getPlayerById_returnsEmptyOptional_whenIdDoesNotExist`. |  |  |
+| Stage 3 - Core Tests | Test independence | Tests must not depend on execution order. Use `@BeforeEach` with known test data. Database tests must not corrupt production data; use a dedicated test schema or rollback strategy. |  |  |
+| Stage 3 - Core Tests | Coverage | Coverage is not required at Stage 3. Coverage is assessed at Stage 4. |  |  |
+| Stage 4 - Full Suite with Coverage | Extended scope | Expand the Stage 3 tests to cover all implemented features: all DAO methods, JSON conversion, at least one server request/response scenario, and at least one binary file upload/retrieval scenario where a known file is uploaded, retrieved, and checked byte-for-byte. Add at least 3 additional tests per team member beyond the Stage 3 baseline. |  |  |
+| Stage 4 - Full Suite with Coverage | Coverage threshold | Achieve `>=70%` line coverage across the DAO, JSON conversion, and binary file handling classes, measured using the IntelliJ IDEA built-in coverage runner. |  |  |
+| Stage 4 - Full Suite with Coverage | Coverage evidence | Commit a screenshot of the Coverage panel to `reports/coverage.png`. Coverage must reflect the full suite, not a filtered subset of classes. |  |  |
+| Stage 4 - Full Suite with Coverage | All tests passing | The full suite must pass at the time of Stage 4 submission. Commented-out or assertion-free tests do not contribute to coverage or marks. |  |  |
+
+### Running Coverage in IntelliJ IDEA
+
+1. Right-click the test class or test folder.
+2. Select `Run '<TestName>' with Coverage`.
+3. Check the Coverage panel for line percentage per class.
+4. Save a screenshot of the panel as `reports/coverage.png`.
+
+</details>
+
+<details>
 <summary><strong>Optional Technical Excellence (20 Marks)</strong></summary>
 
 This component is entirely optional. Students who complete only the base requirements can achieve 30/50 in Stage 4.
