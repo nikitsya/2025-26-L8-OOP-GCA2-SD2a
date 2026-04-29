@@ -70,8 +70,7 @@
 
 </details>
 
-<details>
-<summary><strong>Stage 4 (F23-F24)</strong></summary>
+## <strong>Stage 4 (F23-F24)</strong>
 
 ### Overview
 
@@ -102,5 +101,34 @@ students seeking to demonstrate excellence. See Section 15 of the assignment bri
 | Screencast          | Record an 8-10 minute screencast as specified in Section 13. Filename: `2025-26-L8-OOP-GCA2-GroupID`.                                                                                                                                                                                                      |       |        |
 | Contribution Matrix | Submit the contribution matrix as described in Section 12.                                                                                                                                                                                                                                                 |       |        |
 | README              | Complete all sections, including the domain overview, how to run, architecture summary, protocol documentation, design pattern justification, test coverage evidence, binary file handling description, and Harvard references. Use the sample README in Moodle as the formatting reference.                  |       |        |
+
+</details>
+
+<details>
+<summary><strong>Optional Technical Excellence (20 Marks)</strong></summary>
+
+This component is entirely optional. Students who complete only the base requirements can achieve 30/50 in Stage 4.
+This component is for students seeking to demonstrate advanced architectural understanding.
+
+### Objective
+
+Design and implement a generic service abstraction layer that allows the server to handle multiple service types
+polymorphically.
+
+### Requirements
+
+| Area | Requirement |
+|------|-------------|
+| Service Abstraction | Define a `Service` interface or abstract class that establishes the contract for all services. It must include methods for service execution, validation, and result handling. The design must be extensible, so adding a new service type should not require modifying existing service code. |
+| Multiple Concrete Services | Implement at least two distinct, fully functional, and tested service types. Examples include `FileUploadService` with `TaskProcessingService`, `FileUploadService` with `ReportGenerationService`, or `FileUploadService` with another domain-relevant service. Each service must encapsulate its own logic and data requirements. |
+| Polymorphic Service Routing | The server must accept a service request, identify the requested service type, instantiate the appropriate concrete service, and execute it polymorphically. The client specifies the service type in the request, for example `"serviceType": "FILE_UPLOAD"` or `"serviceType": "TASK_PROCESS"`. The server must use polymorphism rather than conditional branching to execute the service. |
+| Design Pattern Application | Apply at least one advanced pattern appropriately. Suitable patterns include Strategy, Factory, Template Method, and Command. The pattern choice must be justified in the README and explained during the demo. |
+| Testing and Documentation | Both services must be tested in the JUnit suite. The README must include a dedicated section explaining the service architecture, pattern choices, and design rationale. The architecture diagram must be updated to show the service abstraction layer. |
+
+### Assessment Focus
+
+Students will be assessed on design quality, pattern application, polymorphic implementation, functionality, and their
+ability to explain the architectural decisions during the demo. See Appendix A.2 of the assignment brief for the full
+component rubric.
 
 </details>
