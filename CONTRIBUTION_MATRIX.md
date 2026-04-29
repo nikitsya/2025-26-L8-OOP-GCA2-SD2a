@@ -37,8 +37,8 @@ two main domain areas first, because the Department and Product features were im
 | F8 - Product filter with predicate | Nikita Smiichyk |  |  | Product filtering using `Predicate<Product>`. |
 | F9 - Department JSON conversion | Hanna Bokariuk |  |  | Department JSON serialisation, deserialisation, and round-trip behaviour. |
 | F9 - Product JSON conversion | Nikita Smiichyk |  |  | Product JSON serialisation, deserialisation, and round-trip behaviour. |
-| F10 - Multithreaded server |  |  |  | Shared socket server and per-client thread handling. |
-| F11 - `ServerResponse<T>` wrapper |  |  |  | Shared generic response wrapper for all server replies. |
+| F10 - Multithreaded server | Nikita Smiichyk | Hanna Bokariuk |  | Nikita implemented the `ExecutorService` client pool and multithreaded accept loop; Hanna created the initial socket server skeleton and later updated the client loop for `DISCONNECT`. |
+| F11 - `ServerResponse<T>` wrapper | Hanna Bokariuk | Nikita Smiichyk |  | Hanna added the initial generic `ServerResponse<T>` wrapper; Nikita later refined it with the starter-compatible structure, `OK`/`ERROR` helper methods, and updated routing code to use it consistently. |
 | F12 - Department display by ID and display all | Hanna Bokariuk |  |  | Department client-server read flows. |
 | F12 - Product display by ID and display all | Nikita Smiichyk |  |  | Product client-server read flows. |
 | F13 - Department add entity | Hanna Bokariuk |  |  | Department client-server insert flow and structured response handling. |
