@@ -132,3 +132,22 @@ ability to explain the architectural decisions during the demo. See Appendix A.2
 component rubric.
 
 </details>
+
+<details>
+<summary><strong>Required OOP Features</strong></summary>
+
+The following requirements apply across the entire codebase. Their absence directly reduces the grade and will be
+checked at every stage demo.
+
+| Requirement | What must be done | Guidance | Done |
+|-------------|-------------------|----------|------|
+| Javadoc Documentation | All classes and non-trivial methods must have Javadoc comments. Class-level Javadoc must identify the primary author and any secondary authors. Trivial methods such as getters, setters, `toString()`, and constructors with no logic may omit Javadoc. | Use the required Section 11 format. Example: `@author Alex Smith (primary), Bea Jones (contributor)`. Method Javadoc must describe purpose, parameters, return values, and any exceptions thrown. |      |
+| `Optional<T>` | Methods that may not find a result must return `Optional<T>` and must never return `null`. This applies to DAO methods such as `getById`, service layer methods, and any method where absence of a value is a valid outcome. | Use `Optional.of(value)` for present values and `Optional.empty()` for absent values. Client code should use `.isPresent()`, `.ifPresent()`, `.orElse()`, or `.orElseThrow()` to reduce `NullPointerException` risk. |      |
+| Design Patterns | Apply at least two patterns covered in class and justify both choices in the README. | Suitable examples include Factory for object creation, Singleton for a shared database connection, Strategy for interchangeable encoding or filtering behaviour, Observer for event propagation, and Adapter for integrating incompatible interfaces. |      |
+| Generics | Use generic types meaningfully in at least two places and avoid raw types throughout. | Minimum examples include `ServerResponse<T>` for all server replies and a generic DAO interface such as `Dao<T, K>`. `Optional<T>` also supports type-safe nullable returns. |      |
+| Functional Interfaces and Lambdas | Use lambda expressions or method references in at least two distinct places. | Examples include `Predicate<T>` for entity filtering, `Function<T, R>` for JSON mapping, or `Comparator` via a lambda in stream operations. Lambdas must replace something meaningful. |      |
+| Collections | Select the most appropriate collection type for each data structure. | Use `List<T>` for ordered results and `Map` for lookup by ID or metadata caching. Document these choices in the README. |      |
+| DRY Principle | Eliminate duplication across DAO methods, JSON converters, and request handlers. | Extract shared SQL-building, JSON-mapping, or response-wrapping logic into helper methods. |      |
+| Architecture Diagram | Provide a one-page annotated diagram showing all tiers and communication paths. The diagram was required at Stage 1 and must be updated if the architecture changes. | The diagram must show `Client -> Server` over sockets, `Server -> DAO -> Database`, the JSON protocol layer, and the binary file upload/retrieval flow. |      |
+
+</details>
