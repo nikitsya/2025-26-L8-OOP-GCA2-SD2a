@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Nikita Smechik
  */
 class ProductTest {
-
     private Product product;
 
     private static Product productWithImage() {
@@ -23,6 +22,7 @@ class ProductTest {
         product = new Product(1, "Product", 20.0, false, null, 45, null, null, null, 0);
     }
 
+    // --- Constructor behaviour ---
     @Test
     void defaultConstructor_initialisesEmptyProductForJackson() {
         Product emptyProduct = new Product();
@@ -87,6 +87,7 @@ class ProductTest {
         );
     }
 
+    // --- Product identity and name validation ---
     @Test
     void setProductId_withValidValue_updatesProductId() {
         product.setProductId(2);
@@ -123,6 +124,7 @@ class ProductTest {
         );
     }
 
+    // --- Price and sale status validation ---
     @Test
     void setPrice_withValidValue_updatesPrice() {
         product.setPrice(30.0);
@@ -180,6 +182,7 @@ class ProductTest {
         );
     }
 
+    // --- Discount price validation ---
     @Test
     void setDiscountPrice_whenOnSaleAndValid_updatesDiscountPrice() {
         product.setOnSale(true);
@@ -275,6 +278,7 @@ class ProductTest {
         assertEquals("Discount price must be less than product price", exception.getMessage());
     }
 
+    // --- Stock validation ---
     @Test
     void setStock_withValidValue_updatesStock() {
         product.setStock(100);
@@ -287,6 +291,7 @@ class ProductTest {
         assertEquals("Stock cannot be negative", exception.getMessage());
     }
 
+    // --- Image data and file metadata validation ---
     @Test
     void setProductImage_withBytes_usesDefensiveCopies() {
         byte[] image = {1, 2, 3};
@@ -359,6 +364,7 @@ class ProductTest {
         assertEquals("image/png", productWithImage.getContentType());
     }
 
+    // --- File size validation ---
     @Test
     void setFileSize_withValidValue_updatesFileSize() {
         product.setFileSize(12);
@@ -393,6 +399,7 @@ class ProductTest {
         assertEquals("Content type must not be null", exception.getMessage());
     }
 
+    // --- Equality and text representation ---
     @Test
     void equals_whenFieldsMatch_returnsTrueAndHashCodesMatch() {
         Product first = productWithImage();

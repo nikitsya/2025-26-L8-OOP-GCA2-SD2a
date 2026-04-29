@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Nikita Smechik
  */
 class JacksonProductJsonConverterTest {
-
     JacksonProductJsonConverter converter = new JacksonProductJsonConverter();
 
     Product product = new Product(1, "cucumber", 0.65, false, null, 98, null, null, null, 0);
@@ -21,6 +20,7 @@ class JacksonProductJsonConverterTest {
             "discount_price\":null,\"stock\":98,\"file_data\":null,\"file_name\":null,\"content_type\":null,\"file_size\":0}";
     String products_json = "[" + product_json + "," + product_json + "]";
 
+    // --- Single product serialisation ---
     @Test
     void productToJson() {
         assertEquals(product_json, converter.productToJson(product));
@@ -35,6 +35,7 @@ class JacksonProductJsonConverterTest {
         assertEquals("Product must not be null", ex.getMessage());
     }
 
+    // --- Single product deserialisation ---
     @Test
     void productFromJson() {
         assertEquals(product, converter.productFromJson(product_json));
@@ -67,6 +68,7 @@ class JacksonProductJsonConverterTest {
         assertEquals("Failed to deserialize Product from JSON: ", ex.getMessage());
     }
 
+    // --- Product list serialisation ---
     @Test
     void productListToJson() {
         assertEquals(products_json, converter.productListToJson(products));
@@ -81,6 +83,7 @@ class JacksonProductJsonConverterTest {
         assertEquals("Product list must not be null", ex.getMessage());
     }
 
+    // --- Product list deserialisation ---
     @Test
     void productListFromJson() {
         assertEquals(products, converter.productListFromJson(products_json));
