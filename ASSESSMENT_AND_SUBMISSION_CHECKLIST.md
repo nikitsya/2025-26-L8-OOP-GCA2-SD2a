@@ -27,8 +27,6 @@ Tip: keep evidence in easy-to-find folders such as `reports/`, `tests/`, or `dat
 
 | Item | Stage 1 - Gate (8th Mar) | Stage 2 - Graded (22nd Mar) | Stage 3 - Gate (26th Apr) | Stage 4 - Graded (3rd May) | Hanna | Nikita |
 |------|---------------------------|------------------------------|----------------------------|-----------------------------|-------|--------|
-| GitHub repo and Moodle link | Repo private; lecturer added as collaborator; URL submitted. | Same repo, updated. | Same repo, updated. | Same repo, final state. |  |  |
-| Branch / Tag | Branch `stage1`; optional tag `stage1-submitted`. | Branch `stage2` from Stage 1. | Branch `stage3` from Stage 2. | Branch `stage4` from Stage 3. |  |  |
 | Java source code | Compiles and runs; entities, DAO, CRUD, filter, and JSON complete (F1-F9). | Client-server features working; two simultaneous clients supported (F10-F16). | Binary file upload and retrieval working; metadata query working; core tests passing (F17-F22). | Extended test suite passing; all prior features stable (F23-F24). |  |  |
 | `mysqlSetup.sql` | Present; recreates schema and seed data. | Updated if schema changed. | Updated with BLOB column and metadata columns. | Final version. |  |  |
 | Architecture diagram | Committed to repo. | Updated if architecture changed. | Updated if architecture changed. | Final version in README. |  |  |
