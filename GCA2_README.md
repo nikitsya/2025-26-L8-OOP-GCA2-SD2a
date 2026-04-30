@@ -407,7 +407,7 @@ Selected shared tasks:
 
 | Requirement | Project evidence |
 |:--|:--|
-| Javadoc documentation | Main classes include class-level Javadoc with author information. Non-trivial methods should continue to be documented as the project is finalised. |
+| Javadoc documentation | Main classes include class-level Javadoc with author information. Generated HTML documentation is kept under `docs/javadoc/index.html` so the repository root stays clean. Non-trivial methods should continue to be documented as the project is finalised. |
 | `Optional<T>` | DAO lookup methods such as `getDepartmentById`, `getProductById`, `getDepartmentImageById`, and `getProductImageById` return `Optional<T>` rather than `null`. |
 | Design patterns | DAO is used for persistence abstraction. Router / command-style dispatch is used through `RequestRouter` and request handlers. |
 | Generics | `ServerResponse<T>` is used for typed server replies. Jackson `TypeReference<ServerResponse<List<T>>>` is used in the client for typed parsing. |
