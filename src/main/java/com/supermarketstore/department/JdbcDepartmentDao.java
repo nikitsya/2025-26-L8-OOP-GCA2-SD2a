@@ -36,7 +36,7 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
     @Override
     public List<Department> getAllDepartments() {
         String sql = "SELECT department_id, name, floor, zone, budget, employee_count, is_refrigerated, " +
-                "file_name, content_type, file_size FROM departments";
+                "file_name, content_type, file_size FROM supermarket_store_system.departments";
 
         try (Connection c = open();
              PreparedStatement ps = c.prepareStatement(sql);
@@ -56,7 +56,7 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
         if (id <= 0) return Optional.empty();
 
         String sql = "SELECT department_id, name, floor, zone, budget, employee_count, is_refrigerated, " +
-                "file_name, content_type, file_size FROM departments WHERE department_id = ?";
+                "file_name, content_type, file_size FROM supermarket_store_system.departments WHERE department_id = ?";
 
         try (Connection c = open();
              PreparedStatement ps = c.prepareStatement(sql)) {
@@ -80,7 +80,7 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
 
         String sql = "SELECT department_id, name, floor, zone, budget, employee_count, is_refrigerated, " +
                 "file_name, content_type, file_size, department_image " +
-                "FROM departments WHERE department_id = ?";
+                "FROM supermarket_store_system.departments WHERE department_id = ?";
 
         try (Connection c = open();
              PreparedStatement ps = c.prepareStatement(sql)) {
@@ -102,7 +102,7 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
     public boolean deleteDepartmentById(int id) {
         if (id <= 0) return false;
 
-        String sql = "DELETE FROM departments WHERE department_id = ?";
+        String sql = "DELETE FROM supermarket_store_system.departments WHERE department_id = ?";
 
         try (Connection c = open();
              PreparedStatement ps = c.prepareStatement(sql)) {
@@ -119,7 +119,7 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
     public Department insertDepartment(Department department) {
         if (department == null) throw new IllegalArgumentException("department is required");
 
-        String sql = "INSERT INTO departments (name, floor, zone, budget, employee_count, is_refrigerated, " +
+        String sql = "INSERT INTO supermarket_store_system.departments (name, floor, zone, budget, employee_count, is_refrigerated, " +
                 "file_name, content_type, file_size, department_image) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
@@ -179,7 +179,7 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
         if (id <= 0) throw new IllegalArgumentException("id must be greater than 0");
         if (department == null) throw new IllegalArgumentException("department is required");
 
-        String sql = "UPDATE departments SET name = ?, floor = ?, zone = ?, budget = ?, employee_count = ?, is_refrigerated = ?, " +
+        String sql = "UPDATE supermarket_store_system.departments SET name = ?, floor = ?, zone = ?, budget = ?, employee_count = ?, is_refrigerated = ?, " +
                 "file_name = ?, content_type = ?, file_size = ?, department_image = ? WHERE department_id = ?";
 
         try (Connection c = open();

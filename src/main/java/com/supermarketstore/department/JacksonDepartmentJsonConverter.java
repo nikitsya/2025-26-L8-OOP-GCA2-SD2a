@@ -26,7 +26,6 @@ public class JacksonDepartmentJsonConverter implements DepartmentJsonConverter {
         }
     }
 
-
     @Override
     public Department departmentFromJson(String json) {
         if (json == null || json.isBlank()) {
