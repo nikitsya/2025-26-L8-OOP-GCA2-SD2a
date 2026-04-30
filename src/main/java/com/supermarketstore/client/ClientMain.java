@@ -270,6 +270,7 @@ public class ClientMain {
             System.out.println(entity);
         }
     }
+
     // TODO: extract this into a reusable helper if file retrieval is later added for other entities such as Product
     private static void requestDepartmentImageById(PrintWriter out, BufferedReader in, int id) throws IOException {
         System.out.println();

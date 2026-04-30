@@ -1,8 +1,6 @@
 package com.supermarketstore.product;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -24,27 +22,24 @@ class JdbcProductDaoTest {
     private static final String DB_PASS = System.getenv("TEST_DB_PASS");
     private static final String TEST_NAME_PATTERN = "TEST_%";
 
-    static Product product1;
-    static Product product2;
-
-    static JdbcProductDao dao;
+    private static JdbcProductDao dao;
 
     @BeforeAll
     static void beforeAll() {
-        if (DB_PASS == null || DB_PASS.isBlank()) fail("Set TEST_DB_PASS in Run Configuration");
-        dao = new JdbcProductDao(DB_URL, DB_USER, DB_PASS);
-        cleanupTestRows();
+        if (DB_PASS == null || DB_PASS.isBlank()) {
+            fail("Set TEST_DB_PASS in Run Configuration");
+        }
 
-        // add test products to the database
-        product1 = new Product(0, "TEST_cucumber", 0.65, false, null, 98, null, null, null, 0);
-        product2 = new Product(0, "TEST_cucumber", 0.70, true, 0.65, 126, null, null, null, 0);
-        dao.insertProduct(product1);
-        dao.insertProduct(product2);
+        dao = new JdbcProductDao(DB_URL, DB_USER, DB_PASS);
     }
 
-    @AfterAll
-    static void afterAll() {
-        dao = null;
+    @BeforeEach
+    void setUp() {
+        cleanupTestRows();
+    }
+
+    @AfterEach
+    void tearDown() {
         cleanupTestRows();
     }
 
@@ -61,21 +56,57 @@ class JdbcProductDaoTest {
     }
 
     @Test
-    void getAllProducts() {
-        List<Product> products = dao.getAllProducts();
-        assertNotNull(products);
-        assertFalse(products.isEmpty());
-        long testCount = products.stream().filter(p -> p.getName().startsWith("TEST_")).count();
-        assertEquals(2, testCount);
+    void constructor_whenUrlIsBlank_throwsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                new JdbcProductDao(" ", DB_USER, DB_PASS)
+        );
 
+        assertEquals("url is required", exception.getMessage());
     }
 
     @Test
-    void getProductById() {
-        int id = product1.getProductId();
-        Optional<Product> found = dao.getProductById(id);
-        assertTrue(found.isPresent());
-        assertEquals(product1, found.get());
+    void getAllProducts_returnsInsertedTestProductsWithoutImageData() {
+        Product first = dao.insertProduct(new Product(0, "TEST_GetAllApples", 1.20, false, null, 12, new byte[]{1, 2}, "apples.jpeg", "image/jpeg", 2));
+        Product second = dao.insertProduct(new Product(0, "TEST_GetAllPears", 1.40, true, 1.10, 8, new byte[]{3, 4}, "pears.jpeg", "image/jpeg", 2));
+
+        List<Product> products = dao.getAllProducts();
+
+        Optional<Product> fetchedFirst = products.stream()
+                .filter(product -> product.getProductId() == first.getProductId())
+                .findFirst();
+        Optional<Product> fetchedSecond = products.stream()
+                .filter(product -> product.getProductId() == second.getProductId())
+                .findFirst();
+
+        assertAll(
+                () -> assertTrue(fetchedFirst.isPresent()),
+                () -> assertTrue(fetchedSecond.isPresent()),
+                () -> assertNull(fetchedFirst.orElseThrow().getProductImage()),
+                () -> assertNull(fetchedSecond.orElseThrow().getProductImage())
+        );
+    }
+
+    @Test
+    void getProductById_whenProductExists_returnsMetadataWithoutImageData() {
+        Product inserted = dao.insertProduct(new Product(0, "TEST_MetadataOnly", 2.50, false, null, 20, new byte[]{5, 6, 7}, "metadata.jpeg", "image/jpeg", 3));
+
+        Optional<Product> fetched = dao.getProductById(inserted.getProductId());
+
+        assertTrue(fetched.isPresent());
+
+        Product actual = fetched.get();
+        assertAll(
+                () -> assertEquals(inserted.getProductId(), actual.getProductId()),
+                () -> assertEquals("TEST_MetadataOnly", actual.getName()),
+                () -> assertEquals(2.50, actual.getPrice()),
+                () -> assertFalse(actual.isOnSale()),
+                () -> assertNull(actual.getDiscountPrice()),
+                () -> assertEquals(20, actual.getStock()),
+                () -> assertEquals("metadata.jpeg", actual.getFileName()),
+                () -> assertEquals("image/jpeg", actual.getContentType()),
+                () -> assertEquals(3, actual.getFileSize()),
+                () -> assertNull(actual.getProductImage())
+        );
     }
 
     @Test
@@ -85,65 +116,200 @@ class JdbcProductDaoTest {
     }
 
     @Test
-    void deleteProductById() {
-        int id = product1.getProductId();
-        assertTrue(dao.deleteProductById(id));
-        assertFalse(dao.getProductById(id).isPresent());
+    void getProductById_whenIdIsNotPositive_returnsEmpty() {
+        assertAll(
+                () -> assertTrue(dao.getProductById(0).isEmpty()),
+                () -> assertTrue(dao.getProductById(-1).isEmpty())
+        );
     }
 
     @Test
-    void insertProduct() {
-        Product toInsert = new Product(0, "TEST_insert_milk", 1.49, false, null, 15, null, null, null, 0);
-        Product inserted = dao.insertProduct(toInsert);
-        assertTrue(inserted.getProductId() > 0);
-        assertEquals(toInsert, inserted);
+    void getProductImageById_whenProductExists_returnsImageBytesAndMetadata() {
+        byte[] image = {9, 8, 7, 6};
+        Product inserted = dao.insertProduct(new Product(0, "TEST_ImageRetrieval", 3.75, true, 2.99, 14, image, "image-retrieval.jpeg", "image/jpeg", image.length));
 
-        Optional<Product> productFromDb = dao.getProductById(inserted.getProductId());
-        assertTrue(productFromDb.isPresent());
-        assertEquals("TEST_insert_milk", productFromDb.get().getName());
+        Optional<Product> fetched = dao.getProductImageById(inserted.getProductId());
+
+        assertTrue(fetched.isPresent());
+
+        Product actual = fetched.get();
+        assertAll(
+                () -> assertEquals(inserted.getProductId(), actual.getProductId()),
+                () -> assertEquals("TEST_ImageRetrieval", actual.getName()),
+                () -> assertEquals("image-retrieval.jpeg", actual.getFileName()),
+                () -> assertEquals("image/jpeg", actual.getContentType()),
+                () -> assertEquals(image.length, actual.getFileSize()),
+                () -> assertArrayEquals(image, actual.getProductImage())
+        );
+    }
+
+    @Test
+    void getProductImageById_whenIdDoesNotExist_returnsEmpty() {
+        Optional<Product> fetched = dao.getProductImageById(999999);
+
+        assertTrue(fetched.isEmpty());
+    }
+
+    @Test
+    void getProductImageById_whenIdIsNotPositive_returnsEmpty() {
+        assertAll(
+                () -> assertTrue(dao.getProductImageById(0).isEmpty()),
+                () -> assertTrue(dao.getProductImageById(-1).isEmpty())
+        );
+    }
+
+    @Test
+    void insertProduct_shouldPersistProductAndGeneratedId() {
+        Product toInsert = new Product(0, "TEST_InsertMilk", 1.49, false, null, 15, null, null, null, 0);
+
+        Product inserted = dao.insertProduct(toInsert);
+        Optional<Product> fetched = dao.getProductById(inserted.getProductId());
+
+        assertTrue(fetched.isPresent());
+
+        Product actual = fetched.get();
+        assertAll(
+                () -> assertTrue(inserted.getProductId() > 0),
+                () -> assertEquals(inserted.getProductId(), actual.getProductId()),
+                () -> assertEquals("TEST_InsertMilk", actual.getName()),
+                () -> assertEquals(1.49, actual.getPrice()),
+                () -> assertFalse(actual.isOnSale()),
+                () -> assertNull(actual.getDiscountPrice()),
+                () -> assertEquals(15, actual.getStock())
+        );
+    }
+
+    @Test
+    void insertProduct_whenProductHasImage_persistsImageMetadataAndBytes() {
+        byte[] image = {1, 3, 5, 7};
+        Product toInsert = new Product(0, "TEST_InsertImage", 4.99, false, null, 6, image, "insert-image.jpeg", "image/jpeg", image.length);
+
+        Product inserted = dao.insertProduct(toInsert);
+        Optional<Product> fetched = dao.getProductImageById(inserted.getProductId());
+
+        assertTrue(fetched.isPresent());
+
+        Product actual = fetched.get();
+        assertAll(
+                () -> assertEquals("insert-image.jpeg", actual.getFileName()),
+                () -> assertEquals("image/jpeg", actual.getContentType()),
+                () -> assertEquals(image.length, actual.getFileSize()),
+                () -> assertArrayEquals(image, actual.getProductImage())
+        );
     }
 
     @Test
     void insertProduct_whenProductIsNull_throwsIllegalArgumentException() {
-        IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> dao.insertProduct(null)
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                dao.insertProduct(null)
         );
-        assertEquals("product is required", ex.getMessage());
+
+        assertEquals("product is required", exception.getMessage());
     }
 
     @Test
-    void updateProduct() {
-        int id = product2.getProductId();
-        Product toUpdate = new Product(333, "TEST_tomato", 0.35, false, null, 70, null, null, null, 0);
-        Product updated = dao.updateProduct(id, toUpdate);
-        assertEquals(toUpdate.getName(), updated.getName());
-        assertEquals(toUpdate, updated);
+    void updateProduct_shouldPersistUpdatedValuesAndImage() {
+        Product inserted = dao.insertProduct(new Product(0, "TEST_UpdateOriginal", 2.30, false, null, 9, new byte[]{1, 1}, "original.jpeg", "image/jpeg", 2));
+        byte[] updatedImage = {2, 4, 6};
+        Product changes = new Product(0, "TEST_UpdateChanged", 2.80, true, 2.10, 18, updatedImage, "updated.jpeg", "image/jpeg", updatedImage.length);
+
+        Product updated = dao.updateProduct(inserted.getProductId(), changes);
+        Optional<Product> fetched = dao.getProductImageById(inserted.getProductId());
+
+        assertTrue(fetched.isPresent());
+
+        Product actual = fetched.get();
+        assertAll(
+                () -> assertEquals(inserted.getProductId(), updated.getProductId()),
+                () -> assertEquals(inserted.getProductId(), actual.getProductId()),
+                () -> assertEquals("TEST_UpdateChanged", actual.getName()),
+                () -> assertEquals(2.80, actual.getPrice()),
+                () -> assertTrue(actual.isOnSale()),
+                () -> assertEquals(2.10, actual.getDiscountPrice()),
+                () -> assertEquals(18, actual.getStock()),
+                () -> assertEquals("updated.jpeg", actual.getFileName()),
+                () -> assertEquals("image/jpeg", actual.getContentType()),
+                () -> assertEquals(updatedImage.length, actual.getFileSize()),
+                () -> assertArrayEquals(updatedImage, actual.getProductImage())
+        );
     }
 
     @Test
     void updateProduct_whenProductIsNull_throwsIllegalArgumentException() {
-        IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> dao.updateProduct(1, null)
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                dao.updateProduct(1, null)
         );
-        assertEquals("product is required", ex.getMessage());
+
+        assertEquals("product is required", exception.getMessage());
     }
 
     @Test
-    void findProductsByFilter() {
-        List<Product> filtered = dao.findProductsByFilter(p -> p.getName().startsWith("TEST_") && p.getPrice() >= 0.70);
+    void updateProduct_whenIdIsNotPositive_throwsIllegalArgumentException() {
+        Product changes = new Product(0, "TEST_InvalidUpdate", 1.99, false, null, 4, null, null, null, 0);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                dao.updateProduct(0, changes)
+        );
+
+        assertEquals("id must be positive", exception.getMessage());
+    }
+
+    @Test
+    void updateProduct_whenIdDoesNotExist_throwsRuntimeException() {
+        Product changes = new Product(0, "TEST_MissingUpdate", 1.99, false, null, 4, null, null, null, 0);
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () ->
+                dao.updateProduct(999999, changes)
+        );
+
+        assertTrue(exception.getMessage().startsWith("Failed to update product: update failed"));
+    }
+
+    @Test
+    void deleteProductById_whenProductExists_removesProduct() {
+        Product inserted = dao.insertProduct(new Product(0, "TEST_DeleteMilk", 1.25, false, null, 11, null, null, null, 0));
+
+        boolean deleted = dao.deleteProductById(inserted.getProductId());
+
+        assertAll(
+                () -> assertTrue(deleted),
+                () -> assertTrue(dao.getProductById(inserted.getProductId()).isEmpty())
+        );
+    }
+
+    @Test
+    void deleteProductById_whenIdDoesNotExist_returnsFalse() {
+        assertFalse(dao.deleteProductById(999999));
+    }
+
+    @Test
+    void deleteProductById_whenIdIsNotPositive_returnsFalse() {
+        assertAll(
+                () -> assertFalse(dao.deleteProductById(0)),
+                () -> assertFalse(dao.deleteProductById(-1))
+        );
+    }
+
+    @Test
+    void findProductsByFilter_returnsOnlyMatchingProducts() {
+        dao.insertProduct(new Product(0, "TEST_FilterLowPrice", 0.60, false, null, 30, null, null, null, 0));
+        dao.insertProduct(new Product(0, "TEST_FilterHighPrice", 2.40, true, 1.95, 12, null, null, null, 0));
+
+        List<Product> filtered = dao.findProductsByFilter(product ->
+                product.getName().startsWith("TEST_") && product.getPrice() >= 2.00
+        );
+
         assertFalse(filtered.isEmpty());
-        assertTrue(filtered.stream().allMatch(p -> p.getName().startsWith("TEST_")));
-        assertTrue(filtered.stream().allMatch(p -> p.getPrice() >= 0.70));
+        assertTrue(filtered.stream().allMatch(product -> product.getName().startsWith("TEST_")));
+        assertTrue(filtered.stream().allMatch(product -> product.getPrice() >= 2.00));
     }
 
     @Test
     void findProductsByFilter_whenFilterIsNull_throwsIllegalArgumentException() {
-        IllegalArgumentException ex = assertThrows(
-                IllegalArgumentException.class,
-                () -> dao.findProductsByFilter(null)
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                dao.findProductsByFilter(null)
         );
-        assertEquals("filter is required", ex.getMessage());
+
+        assertEquals("filter is required", exception.getMessage());
     }
 }
