@@ -135,9 +135,43 @@ Before running the server or the JDBC integration tests, set:
 
 ### 3.2 Architecture diagram
 
-- Path: `docs/architecture.md`
-- Diagram format: Mermaid
-- The diagram already matches the current client -> protocol -> server -> DAO -> database flow.
+The project uses an N-tier architecture. The client communicates with the server through a JSON protocol over sockets.
+The server routes each request to the correct handler, delegates persistence to DAO interfaces and JDBC implementations,
+and stores data in the MySQL database.
+
+```mermaid
+flowchart LR
+    C["Client Layer<br/>ClientMain"]
+    J["JSON Protocol Layer<br/>ClientRequest, RequestType, ServerResponse<T>"]
+    S["Server Layer<br/>ServerMain, ExecutorService, RequestRouter"]
+    F["File Payload Layer<br/>FilePayloadBuilder + Base64 metadata"]
+    D["DAO Layer<br/>DepartmentDao, ProductDao, JDBC implementations"]
+    DB[("MySQL Database<br/>supermarket_store_system")]
+
+    C --> J
+    J --> S
+    C --> F
+    F --> J
+    S --> D
+    D --> DB
+```
+
+Architecture annotations:
+
+- `Client Layer`: sends JSON requests, receives typed `ServerResponse<T>` replies, and reconstructs retrieved image
+  files.
+- `JSON Protocol Layer`: defines the shared request envelope, request types, and response wrapper used by both client
+  and server.
+- `Server Layer`: accepts socket connections, handles clients concurrently with `ExecutorService`, and routes request
+  types through `RequestRouter`.
+- `File Payload Layer`: reads local image files, Base64-encodes binary data, and attaches filename, content type, and
+  file size metadata to upload requests.
+- `DAO Layer`: hides persistence logic behind `DepartmentDao` and `ProductDao`, with JDBC implementations for CRUD,
+  filtering, and binary image retrieval.
+- `Database Layer`: stores departments, products, product-department relationships, image BLOBs, and image metadata in
+  MySQL.
+
+The separate architecture source file is also kept at `docs/architecture.md`.
 
 ---
 
