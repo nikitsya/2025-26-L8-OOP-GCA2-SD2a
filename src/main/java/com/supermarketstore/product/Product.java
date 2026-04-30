@@ -23,7 +23,7 @@ public class Product {
     private int fileSize;
 
     /**
-     * Creates an empty product instance for Jackson deserialization.
+     * Creates an empty product instance for Jackson deserialisation.
      */
     public Product() {
     }

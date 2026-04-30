@@ -194,14 +194,14 @@ public class ClientMain {
     // === Helpers ===
 
     /**
-     * Sends a typed request to the server and deserializes the JSON response.
+     * Sends a typed request to the server and deserialises the JSON response.
      *
-     * @param out          the socket writer used to send the serialized request
+     * @param out          the socket writer used to send the serialised request
      * @param in           the socket reader used to receive the response line
      * @param type         the protocol request type to send
      * @param payload      the optional JSON payload, or null when no payload is required
-     * @param responseType the Jackson type reference used to deserialize the typed server response
-     * @return the deserialized server response for the request
+     * @param responseType the Jackson type reference used to deserialise the typed server response
+     * @return the deserialised server response for the request
      * @throws IOException if the request cannot be written or the response cannot be read or parsed
      */
     private static <T> ServerResponse<T> sendRequest(PrintWriter out, BufferedReader in, RequestType type, JsonNode payload, TypeReference<ServerResponse<T>> responseType) throws IOException {
@@ -219,7 +219,7 @@ public class ClientMain {
      * @param in           the socket reader used to receive responses
      * @param title        the message printed before sending the request
      * @param requestType  the request type used to fetch all entities
-     * @param responseType the type reference used to deserialize the response body
+     * @param responseType the type reference used to deserialise the response body
      * @param <T>          the entity type returned by the server
      * @throws IOException if client-server communication fails
      */
@@ -247,7 +247,7 @@ public class ClientMain {
      * @param id           the entity id
      * @param title        the message printed before sending the request
      * @param requestType  the request type used to fetch the entity
-     * @param responseType the type reference used to deserialize the response body
+     * @param responseType the type reference used to deserialise the response body
      * @param <T>          the entity type returned by the server
      * @throws IOException if client-server communication fails
      */
@@ -271,14 +271,14 @@ public class ClientMain {
      * Requests one entity by id when the response is expected to include attached file bytes.
      * Unlike requestEntityById, this helper also prints file metadata and saves the returned
      * file content to the configured output directory.
-     * Jackson handles the Base64 decoding when the JSON response is deserialized into byte arrays.
+     * Jackson handles the Base64 decoding when the JSON response is deserialised into byte arrays.
      *
      * @param out               the socket writer used to send requests
      * @param in                the socket reader used to receive responses
      * @param id                the entity id
      * @param title             the message printed before sending the request
      * @param requestType       the request type used to fetch the entity file
-     * @param responseType      the type reference used to deserialize the response body
+     * @param responseType      the type reference used to deserialise the response body
      * @param fileDescription   the human-readable file description used in log messages
      * @param outputDirectory   the directory where the returned file should be saved
      * @param fileDataGetter    extracts the file bytes from the returned entity
@@ -363,11 +363,23 @@ public class ClientMain {
         printResponse(response);
     }
 
+    /**
+     * Prints the status and message from a server response.
+     *
+     * @param response the response to print
+     */
     private static void printResponse(ServerResponse<?> response) {
         System.out.println("Status: " + response.getStatus());
         System.out.println("Message: " + response.getMessage());
     }
 
+    /**
+     * Sends the disconnect request and prints the server acknowledgement.
+     *
+     * @param out the socket writer used to send requests
+     * @param in  the socket reader used to receive responses
+     * @throws IOException if client-server communication fails
+     */
     private static void disconnectClient(PrintWriter out, BufferedReader in) throws IOException {
         System.out.println();
         System.out.println("Disconnecting client...");
@@ -383,6 +395,14 @@ public class ClientMain {
 
     // === Department Helpers ===
 
+    /**
+     * Sends a demo department creation request with an attached image.
+     *
+     * @param out the socket writer used to send requests
+     * @param in  the socket reader used to receive responses
+     * @return the department returned by the server, or null when creation fails
+     * @throws IOException if client-server communication fails or the image cannot be read
+     */
     private static Department addDemoDepartment(PrintWriter out, BufferedReader in) throws IOException {
         System.out.println();
         System.out.println("Adding a new department...");
@@ -416,6 +436,14 @@ public class ClientMain {
         return addedDepartment;
     }
 
+    /**
+     * Requests a department with its image data and saves the returned file locally.
+     *
+     * @param out the socket writer used to send requests
+     * @param in  the socket reader used to receive responses
+     * @param id  the department identifier
+     * @throws IOException if client-server communication fails
+     */
     private static void requestDepartmentImageById(PrintWriter out, BufferedReader in, int id) throws IOException {
         requestEntityFileById(
                 out, in,
@@ -433,6 +461,14 @@ public class ClientMain {
         );
     }
 
+    /**
+     * Sends a demo department update request with replacement image data.
+     *
+     * @param out          the socket writer used to send requests
+     * @param in           the socket reader used to receive responses
+     * @param departmentId the department identifier to update
+     * @throws IOException if client-server communication fails or the image cannot be read
+     */
     private static void updateDemoDepartment(PrintWriter out, BufferedReader in, int departmentId) throws IOException {
         System.out.println();
         System.out.println("Updating the department by id...");
@@ -468,6 +504,14 @@ public class ClientMain {
 
     // === Product Helpers ===
 
+    /**
+     * Sends a demo product creation request with an attached image.
+     *
+     * @param out the socket writer used to send requests
+     * @param in  the socket reader used to receive responses
+     * @return the product returned by the server, or null when creation fails
+     * @throws IOException if client-server communication fails or the image cannot be read
+     */
     private static Product addDemoProduct(PrintWriter out, BufferedReader in) throws IOException {
         System.out.println();
         System.out.println("Adding a new product...");
@@ -498,6 +542,14 @@ public class ClientMain {
         return addedProduct;
     }
 
+    /**
+     * Requests a product with its image data and saves the returned file locally.
+     *
+     * @param out the socket writer used to send requests
+     * @param in  the socket reader used to receive responses
+     * @param id  the product identifier
+     * @throws IOException if client-server communication fails
+     */
     private static void requestProductImageById(PrintWriter out, BufferedReader in, int id) throws IOException {
         requestEntityFileById(
                 out, in,
@@ -515,6 +567,14 @@ public class ClientMain {
         );
     }
 
+    /**
+     * Sends a demo product update request with replacement image data.
+     *
+     * @param out       the socket writer used to send requests
+     * @param in        the socket reader used to receive responses
+     * @param productId the product identifier to update
+     * @throws IOException if client-server communication fails or the image cannot be read
+     */
     private static void updateDemoProduct(PrintWriter out, BufferedReader in, int productId) throws IOException {
         System.out.println();
         System.out.println("Updating the product by id...");

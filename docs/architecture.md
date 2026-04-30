@@ -20,7 +20,7 @@ flowchart LR
 ## Annotations
 
 - `Client`: sends requests and receives responses.
-- `JSON Protocol Layer`: serialises and deserialises payloads to JSON.
+- `JSON Protocol Layer`: serializes and deserializes payloads to JSON.
 - `Server Layer`: receives requests and delegates operations.
 - `DAO Layer`: isolates persistence behind DAO interfaces and JDBC implementations.
 - `Database`: stores persistent data in MySQL tables.

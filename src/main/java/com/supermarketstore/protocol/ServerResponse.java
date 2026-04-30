@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * Represents a standard JSON response sent from the server to a client.
  *
- * @param <T> The type of the response data payload.
+ * @param <T> the type of the response data payload
  */
 public class ServerResponse<T> {
     // === Fields ===
@@ -17,7 +17,7 @@ public class ServerResponse<T> {
 
     /**
      * Creates an empty response.
-     * Required for Jackson deserialization.
+     * Required for Jackson deserialisation.
      */
     public ServerResponse() {
     }
@@ -38,10 +38,25 @@ public class ServerResponse<T> {
 
     // === Methods ===
 
+    /**
+     * Creates a successful response.
+     *
+     * @param message the response message
+     * @param data    the optional response payload
+     * @param <T>     the response payload type
+     * @return a response with OK status
+     */
     public static <T> ServerResponse<T> ok(String message, T data) {
         return new ServerResponse<>("OK", message, data);
     }
 
+    /**
+     * Creates an error response without a data payload.
+     *
+     * @param message the response message
+     * @param <T>     the response payload type
+     * @return a response with ERROR status
+     */
     public static <T> ServerResponse<T> error(String message) {
         return new ServerResponse<>("ERROR", message, null);
     }
@@ -76,7 +91,7 @@ public class ServerResponse<T> {
      * Convenience helper for Java code only.
      * It should not appear in JSON.
      *
-     * @return True when the status is OK.
+     * @return true when the status is OK
      */
     @JsonIgnore
     public boolean isOk() {

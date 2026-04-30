@@ -11,7 +11,6 @@ import java.util.Objects;
  *
  * @author Hanna Bokariuk
  */
-
 public class Department {
     private int departmentId;
     private String name;
@@ -25,10 +24,24 @@ public class Department {
     private int fileSize;
     private byte[] departmentImage;
 
-
+    /**
+     * Creates an empty department instance for Jackson deserialisation.
+     */
     public Department() {
     }
 
+    /**
+     * Creates a department without attached image metadata.
+     *
+     * @param departmentId   the department identifier
+     * @param name           the department name
+     * @param floor          the floor where the department is located
+     * @param zone           the department zone on the floor
+     * @param budget         the allocated department budget
+     * @param employeeCount  the number of employees assigned to the department
+     * @param isRefrigerated whether the department requires refrigeration
+     * @throws IllegalArgumentException when any core department value is invalid
+     */
     public Department(int departmentId, String name, int floor, int zone, double budget, int employeeCount, boolean isRefrigerated) {
         setDepartmentId(departmentId);
         setName(name);
@@ -43,6 +56,22 @@ public class Department {
         setDepartmentImage(null);
     }
 
+    /**
+     * Creates a department with optional attached image metadata.
+     *
+     * @param departmentId    the department identifier
+     * @param name            the department name
+     * @param floor           the floor where the department is located
+     * @param zone            the department zone on the floor
+     * @param budget          the allocated department budget
+     * @param employeeCount   the number of employees assigned to the department
+     * @param isRefrigerated  whether the department requires refrigeration
+     * @param fileName        the attached image file name when image data is present
+     * @param contentType     the attached image content type when image data is present
+     * @param fileSize        the attached image size in bytes when image data is present
+     * @param departmentImage the optional attached image bytes
+     * @throws IllegalArgumentException when any core department value is invalid
+     */
     public Department(int departmentId, String name, int floor, int zone, double budget, int employeeCount, boolean isRefrigerated, String fileName, String contentType, int fileSize, byte[] departmentImage) {
         this(departmentId, name, floor, zone, budget, employeeCount, isRefrigerated);
         setFileName(fileName);

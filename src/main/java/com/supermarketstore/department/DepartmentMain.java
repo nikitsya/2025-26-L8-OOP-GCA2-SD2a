@@ -8,6 +8,11 @@ import java.util.List;
  */
 public class DepartmentMain {
 
+    /**
+     * Runs a manual department DAO smoke test against the configured local database.
+     *
+     * @param args command-line arguments
+     */
     public static void main(String[] args) {
         String dbPass = System.getenv("TEST_DB_PASS");
 

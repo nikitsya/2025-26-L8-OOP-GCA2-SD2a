@@ -12,9 +12,16 @@ import java.util.function.Predicate;
  *
  * @author Hanna Bokariuk
  */
-
 public record JdbcDepartmentDao(String _url, String _user, String _pass) implements DepartmentDao {
 
+    /**
+     * Creates a department DAO using the supplied JDBC connection settings.
+     *
+     * @param _url  the JDBC URL
+     * @param _user the database user
+     * @param _pass the database password
+     * @throws IllegalArgumentException if the JDBC URL is missing
+     */
     public JdbcDepartmentDao(String _url, String _user, String _pass) {
         if (_url == null || _url.isBlank()) throw new IllegalArgumentException("url is required");
         this._url = _url.trim();
@@ -22,7 +29,6 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
         this._pass = _pass;
     }
 
-    // Opens: a new database connection using the configured JDBC credentials
     private Connection open() throws SQLException {
         return DriverManager.getConnection(_url, _user, _pass);
     }
@@ -228,7 +234,13 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
         return getAllDepartments().stream().filter(filter).toList();
     }
 
-    // // Maps: a single SQL ResultSet row to a Department object with file metadata only
+    /**
+     * Maps one result-set row to a department without loading the image bytes.
+     *
+     * @param resultSet the current result-set row
+     * @return the mapped department
+     * @throws SQLException if a column cannot be read
+     */
     private Department mapRow(ResultSet resultSet) throws SQLException {
         int departmentId = resultSet.getInt("department_id");
         String name = resultSet.getString("name");
@@ -244,7 +256,13 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
         return new Department(departmentId, name, floor, zone, budget, employeeCount, refrigerated, fileName, contentType, fileSize, null);
     }
 
-    // Maps: a single SQL ResultSet row to a Department object including image data
+    /**
+     * Maps one result-set row to a department including image bytes.
+     *
+     * @param resultSet the current result-set row
+     * @return the mapped department with image data
+     * @throws SQLException if a column cannot be read
+     */
     private Department mapRowWithImage(ResultSet resultSet) throws SQLException {
         int departmentId = resultSet.getInt("department_id");
         String name = resultSet.getString("name");

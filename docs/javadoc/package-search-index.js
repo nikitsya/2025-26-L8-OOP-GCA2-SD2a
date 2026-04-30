@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.supermarketstore.client"},{"l":"com.supermarketstore.client.upload"},{"l":"com.supermarketstore.department"},{"l":"com.supermarketstore.product"},{"l":"com.supermarketstore.protocol"},{"l":"com.supermarketstore.server"},{"l":"com.supermarketstore.server.routing"}];updateSearchResults();

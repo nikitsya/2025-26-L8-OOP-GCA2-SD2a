@@ -62,6 +62,12 @@
 <details>
 <summary><strong>Stage 3 (F17-F22)</strong></summary>
 
+Stage 3 introduces binary file storage and retrieval between clients and the database, and a mandatory unit test suite. At least one entity table must be extended with a BLOB column to store binary data (for example, image files, audio clips, or documents relevant to the domain). Clients must be able to upload a binary file to the server, which stores it in the database, and subsequently request it back - receiving the reconstructed file. Metadata (`filename`, `content type`, `file size`) must be stored alongside the binary data and must be independently queryable without downloading the full payload.
+
+The JUnit 5 test suite must be passing at this stage, covering core DAO and JSON conversion behaviour. This stage is a mandatory gate - all features listed below must be demonstrated before proceeding to Stage 4. All features from Stages 1 and 2 must remain working.
+
+#### Required Features
+
 | #   | Feature                   | Specification                                                                                                                                                                                                                                                                          | Hanna | Nikita |
 |-----|---------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------|--------|
 | F17 | Binary Schema Extension   | Extend at least one entity table with a BLOB column and associated metadata columns: `file_name VARCHAR`, `content_type VARCHAR`, `file_size INT`. Update `sql/mysqlSetup.sql` to recreate this schema. The entity DTO must include a `byte[]` field for the binary data and corresponding metadata fields. | ✅   | ✅    |
@@ -82,7 +88,8 @@ client. The client then writes the bytes to `downloads/departments/` or `downloa
 
 </details>
 
-## <strong>Stage 4 (F23-F24)</strong>
+<details>
+<summary><strong>Stage 4 (F23-F24)</strong></summary>
 
 ### Overview
 
@@ -180,7 +187,7 @@ checked at every stage demo.
 
 | Requirement | What must be done | Guidance | Done |
 |-------------|-------------------|----------|------|
-| Javadoc Documentation | All classes and non-trivial methods must have Javadoc comments. Class-level Javadoc must identify the primary author and any secondary authors. Trivial methods such as getters, setters, `toString()`, and constructors with no logic may omit Javadoc. | Use the required Section 11 format. Example: `@author Alex Smith (primary), Bea Jones (contributor)`. Method Javadoc must describe purpose, parameters, return values, and any exceptions thrown. |      |
+| Javadoc Documentation | All classes and non-trivial methods must have Javadoc comments. Class-level Javadoc must identify the primary author and any secondary authors. Trivial methods such as getters, setters, `toString()`, and constructors with no logic may omit Javadoc. Generated HTML output is kept in `docs/javadoc/index.html`. | Use the required Section 11 format. Example: `@author Alex Smith (primary), Bea Jones (contributor)`. Method Javadoc must describe purpose, parameters, return values, and any exceptions thrown. Regenerate the HTML output into `docs/javadoc/`, not the repository root. |      |
 | `Optional<T>` | Methods that may not find a result must return `Optional<T>` and must never return `null`. This applies to DAO methods such as `getById`, service layer methods, and any method where absence of a value is a valid outcome. | Use `Optional.of(value)` for present values and `Optional.empty()` for absent values. Client code should use `.isPresent()`, `.ifPresent()`, `.orElse()`, or `.orElseThrow()` to reduce `NullPointerException` risk. |      |
 | Design Patterns | Apply at least two patterns covered in class and justify both choices in the README. | Suitable examples include Factory for object creation, Singleton for a shared database connection, Strategy for interchangeable encoding or filtering behaviour, Observer for event propagation, and Adapter for integrating incompatible interfaces. |      |
 | Generics | Use generic types meaningfully in at least two places and avoid raw types throughout. | Minimum examples include `ServerResponse<T>` for all server replies and a generic DAO interface such as `Dao<T, K>`. `Optional<T>` also supports type-safe nullable returns. |      |
