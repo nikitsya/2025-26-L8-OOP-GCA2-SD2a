@@ -58,6 +58,7 @@ class JdbcProductDaoTest {
         cleanupTestRows();
     }
 
+    // --- DAO construction validation ---
     @Test
     void constructor_whenUrlIsBlank_throwsIllegalArgumentException() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
@@ -67,6 +68,7 @@ class JdbcProductDaoTest {
         assertEquals("url is required", exception.getMessage());
     }
 
+    // --- Product list and metadata retrieval ---
     @Test
     void getAllProducts_returnsInsertedTestProductsWithoutImageData() {
         Product first = dao.insertProduct(new Product(0, "TEST_GetAllApples", 1.20, false, null, 12, new byte[]{1, 2}, "apples.jpeg", "image/jpeg", 2));
@@ -126,6 +128,7 @@ class JdbcProductDaoTest {
         );
     }
 
+    // --- Product image retrieval ---
     @Test
     void getProductImageById_whenProductExists_returnsImageBytesAndMetadata() {
         byte[] image = {9, 8, 7, 6};
@@ -161,6 +164,7 @@ class JdbcProductDaoTest {
         );
     }
 
+    // --- Product creation ---
     @Test
     void insertProduct_shouldPersistProductAndGeneratedId() {
         Product toInsert = new Product(0, "TEST_InsertMilk", 1.49, false, null, 15, null, null, null, 0);
@@ -210,6 +214,7 @@ class JdbcProductDaoTest {
         assertEquals("product is required", exception.getMessage());
     }
 
+    // --- Product updates ---
     @Test
     void updateProduct_shouldPersistUpdatedValuesAndImage() {
         Product inserted = dao.insertProduct(new Product(0, "TEST_UpdateOriginal", 2.30, false, null, 9, new byte[]{1, 1}, "original.jpeg", "image/jpeg", 2));
@@ -268,6 +273,7 @@ class JdbcProductDaoTest {
         assertTrue(exception.getMessage().startsWith("Failed to update product: update failed"));
     }
 
+    // --- Product deletion ---
     @Test
     void deleteProductById_whenProductExists_removesProduct() {
         Product inserted = dao.insertProduct(new Product(0, "TEST_DeleteMilk", 1.25, false, null, 11, null, null, null, 0));
@@ -293,6 +299,7 @@ class JdbcProductDaoTest {
         );
     }
 
+    // --- Product filtering ---
     @Test
     void findProductsByFilter_returnsOnlyMatchingProducts() {
         dao.insertProduct(new Product(0, "TEST_FilterLowPrice", 0.60, false, null, 30, null, null, null, 0));
