@@ -364,7 +364,7 @@ public class ClientMain {
 
         FilePayloadBuilder filePayloadBuilder = new FilePayloadBuilder();
         ObjectNode departmentImagePayload = filePayloadBuilder.buildUploadPayload(Path.of(
-                "src/main/resources/images/departments/bakery.png"));
+                "src/main/resources/images/departments/bakery.png "));
 
         departmentPayload.put("name", "TEST_NewDepartment");
         departmentPayload.put("floor", 1);
