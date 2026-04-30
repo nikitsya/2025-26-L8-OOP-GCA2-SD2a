@@ -31,6 +31,9 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         this._pass = _pass;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Product> getAllProducts() {
         String sql = "SELECT product_id, name, price, is_on_sale, discount_price, stock, file_name, " +
@@ -45,6 +48,9 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Product> getProductById(int id) {
         if (id <= 0) return Optional.empty();
@@ -65,6 +71,9 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         return Optional.empty();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Product> getProductImageById(int id) {
         if (id <= 0) return Optional.empty();
@@ -85,6 +94,9 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         return Optional.empty();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean deleteProductById(int id) {
         if (id <= 0) return false;
@@ -99,6 +111,9 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Product insertProduct(Product product) {
         if (product == null) throw new IllegalArgumentException("product is required");
@@ -123,6 +138,9 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         return product;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Product updateProduct(int id, Product product) {
         if (product == null) throw new IllegalArgumentException("product is required");
@@ -144,6 +162,9 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         return product;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Product> findProductsByFilter(Predicate<Product> filter) {
         if (filter == null) throw new IllegalArgumentException("filter is required");

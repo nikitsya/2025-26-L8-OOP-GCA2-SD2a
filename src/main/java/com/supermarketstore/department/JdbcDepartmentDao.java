@@ -33,6 +33,9 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
         return DriverManager.getConnection(_url, _user, _pass);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Department> getAllDepartments() {
         String sql = "SELECT department_id, name, floor, zone, budget, employee_count, is_refrigerated, " +
@@ -51,6 +54,9 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Department> getDepartmentById(int id) {
         if (id <= 0) return Optional.empty();
@@ -74,6 +80,9 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
         return Optional.empty();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Optional<Department> getDepartmentImageById(int id) {
         if (id <= 0) return Optional.empty();
@@ -98,6 +107,9 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
         return Optional.empty();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean deleteDepartmentById(int id) {
         if (id <= 0) return false;
@@ -115,6 +127,9 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Department insertDepartment(Department department) {
         if (department == null) throw new IllegalArgumentException("department is required");
@@ -174,6 +189,9 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Department updateDepartment(int id, Department department) {
         if (id <= 0) throw new IllegalArgumentException("id must be greater than 0");
@@ -227,6 +245,9 @@ public record JdbcDepartmentDao(String _url, String _user, String _pass) impleme
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Department> findDepartmentsByFilter(Predicate<Department> filter) {
         if (filter == null) throw new IllegalArgumentException("filter is required");
