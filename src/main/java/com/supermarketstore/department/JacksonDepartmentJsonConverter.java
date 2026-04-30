@@ -13,6 +13,9 @@ public class JacksonDepartmentJsonConverter implements DepartmentJsonConverter {
 
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String departmentToJson(Department entity) {
         if (entity == null) {
@@ -26,6 +29,9 @@ public class JacksonDepartmentJsonConverter implements DepartmentJsonConverter {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Department departmentFromJson(String json) {
         if (json == null || json.isBlank()) {
@@ -39,6 +45,9 @@ public class JacksonDepartmentJsonConverter implements DepartmentJsonConverter {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String departmentListToJson(List<Department> list) {
         if (list == null) {
@@ -52,6 +61,9 @@ public class JacksonDepartmentJsonConverter implements DepartmentJsonConverter {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Department> departmentListFromJson(String json) {
         if (json == null || json.isBlank()) {

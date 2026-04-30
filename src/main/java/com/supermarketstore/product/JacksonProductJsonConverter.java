@@ -15,6 +15,9 @@ public class JacksonProductJsonConverter implements ProductJsonConverter {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String productToJson(Product product) {
         if (product == null) throw new IllegalArgumentException("Product must not be null");
@@ -25,6 +28,9 @@ public class JacksonProductJsonConverter implements ProductJsonConverter {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Product productFromJson(String json) {
         if (json == null || json.isBlank())
@@ -36,6 +42,9 @@ public class JacksonProductJsonConverter implements ProductJsonConverter {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String productListToJson(List<Product> products) {
         if (products == null) throw new IllegalArgumentException("Product list must not be null");
@@ -46,6 +55,9 @@ public class JacksonProductJsonConverter implements ProductJsonConverter {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Product> productListFromJson(String json) {
         if (json == null || json.isBlank())
