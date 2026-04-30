@@ -14,8 +14,12 @@ import com.supermarketstore.protocol.ServerResponse;
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Locale;
+import java.util.function.Function;
+import java.util.function.ToIntFunction;
 
 /**
  * Entry point for the supermarket client application.
@@ -25,7 +29,6 @@ import java.util.List;
  * @author Hanna Bokariuk (primary - department client flow)
  * @author Nikita Smiichyk (contributor - product client flow, file upload payloads, and refactoring)
  */
-
 public class ClientMain {
     // === Static Fields ===
     private static final String HOST = "localhost";
@@ -106,16 +109,7 @@ public class ClientMain {
                 }
         );
 
-//        requestEntityById(
-//                out, in,
-//                departmentId,
-//                "Requesting the department with image by id...",
-//                RequestType.GET_DEPARTMENT_IMAGE_BY_ID,
-//                new TypeReference<ServerResponse<Department>>() {
-//                }
-//        );
         requestDepartmentImageById(out, in, departmentId);
-
 
         deleteEntityById(
                 out, in,
@@ -181,6 +175,7 @@ public class ClientMain {
                 new TypeReference<ServerResponse<Product>>() {
                 }
         );
+        requestProductImageById(out, in, productId);
         deleteEntityById(
                 out, in,
                 productId,
@@ -199,14 +194,14 @@ public class ClientMain {
     // === Helpers ===
 
     /**
-     * Sends a typed request to the server and deserializes the JSON response.
+     * Sends a typed request to the server and deserialises the JSON response.
      *
-     * @param out          the socket writer used to send the serialized request
+     * @param out          the socket writer used to send the serialised request
      * @param in           the socket reader used to receive the response line
      * @param type         the protocol request type to send
      * @param payload      the optional JSON payload, or null when no payload is required
-     * @param responseType the Jackson type reference used to deserialize the typed server response
-     * @return the deserialized server response for the request
+     * @param responseType the Jackson type reference used to deserialise the typed server response
+     * @return the deserialised server response for the request
      * @throws IOException if the request cannot be written or the response cannot be read or parsed
      */
     private static <T> ServerResponse<T> sendRequest(PrintWriter out, BufferedReader in, RequestType type, JsonNode payload, TypeReference<ServerResponse<T>> responseType) throws IOException {
@@ -224,7 +219,7 @@ public class ClientMain {
      * @param in           the socket reader used to receive responses
      * @param title        the message printed before sending the request
      * @param requestType  the request type used to fetch all entities
-     * @param responseType the type reference used to deserialize the response body
+     * @param responseType the type reference used to deserialise the response body
      * @param <T>          the entity type returned by the server
      * @throws IOException if client-server communication fails
      */
@@ -245,13 +240,14 @@ public class ClientMain {
 
     /**
      * Requests one entity by id and prints the server response and returned entity.
+     * This helper is intended for regular entity data and does not save attached file bytes.
      *
      * @param out          the socket writer used to send requests
      * @param in           the socket reader used to receive responses
      * @param id           the entity id
      * @param title        the message printed before sending the request
      * @param requestType  the request type used to fetch the entity
-     * @param responseType the type reference used to deserialize the response body
+     * @param responseType the type reference used to deserialise the response body
      * @param <T>          the entity type returned by the server
      * @throws IOException if client-server communication fails
      */
@@ -271,41 +267,72 @@ public class ClientMain {
         }
     }
 
-    // TODO: extract this into a reusable helper if file retrieval is later added for other entities such as Product
-    private static void requestDepartmentImageById(PrintWriter out, BufferedReader in, int id) throws IOException {
+    /**
+     * Requests one entity by id when the response is expected to include attached file bytes.
+     * Unlike requestEntityById, this helper also prints file metadata and saves the returned
+     * file content to the configured output directory.
+     * Jackson handles the Base64 decoding when the JSON response is deserialised into byte arrays.
+     *
+     * @param out               the socket writer used to send requests
+     * @param in                the socket reader used to receive responses
+     * @param id                the entity id
+     * @param title             the message printed before sending the request
+     * @param requestType       the request type used to fetch the entity file
+     * @param responseType      the type reference used to deserialise the response body
+     * @param fileDescription   the human-readable file description used in log messages
+     * @param outputDirectory   the directory where the returned file should be saved
+     * @param fileDataGetter    extracts the file bytes from the returned entity
+     * @param fileNameGetter    extracts the file name from the returned entity
+     * @param contentTypeGetter extracts the content type from the returned entity
+     * @param fileSizeGetter    extracts the file size from the returned entity
+     * @param <T>               the entity type returned by the server
+     * @throws IOException if client-server communication fails
+     */
+    private static <T> void requestEntityFileById(PrintWriter out, BufferedReader in, int id, String title, RequestType requestType, TypeReference<ServerResponse<T>> responseType, String fileDescription, Path outputDirectory, Function<T, byte[]> fileDataGetter, Function<T, String> fileNameGetter, Function<T, String> contentTypeGetter, ToIntFunction<T> fileSizeGetter) throws IOException {
         System.out.println();
-        System.out.println("Requesting the department with image by id...");
+        System.out.println(title);
 
         ObjectNode payload = MAPPER.createObjectNode();
         payload.put("id", id);
 
-        ServerResponse<Department> response = sendRequest(
+        ServerResponse<T> response = sendRequest(
                 out, in,
-                RequestType.GET_DEPARTMENT_IMAGE_BY_ID, payload,
-                new TypeReference<>() {
-                }
+                requestType, payload,
+                responseType
         );
         printResponse(response);
 
-        Department department = response.getData();
-        if (department != null) {
-            System.out.println(department);
-            System.out.println("Retrieved file name: " + department.getFileName());
-            System.out.println("Retrieved content type: " + department.getContentType());
-            System.out.println("Retrieved file size: " + department.getFileSize() + " bytes");
+        T entity = response.getData();
+        if (entity != null) {
+            System.out.println(entity);
 
-            byte[] imageBytes = department.getDepartmentImage();
-            String fileName = department.getFileName();
+            String fileName = fileNameGetter.apply(entity);
+            System.out.println("Retrieved file name: " + fileName);
+            System.out.println("Retrieved content type: " + contentTypeGetter.apply(entity));
+            System.out.println("Retrieved file size: " + fileSizeGetter.applyAsInt(entity) + " bytes");
 
-            if (imageBytes != null && fileName != null && !fileName.isBlank()) {
-                Path outputPath = Path.of("downloads", "departments", fileName);
-                try {
-                    java.nio.file.Files.createDirectories(outputPath.getParent());
-                    java.nio.file.Files.write(outputPath, imageBytes);
-                    System.out.println("Department image saved to: " + outputPath);
-                } catch (IOException e) {
-                    System.out.println("Failed to save department image: " + e.getMessage());
-                }
+            saveRetrievedFile(outputDirectory, fileDescription, fileName, fileDataGetter.apply(entity));
+        }
+    }
+
+    /**
+     * Saves returned file bytes to the requested output directory when both
+     * the file content and file name are present, preserving the original file name and extension.
+     *
+     * @param outputDirectory the directory where the file should be saved
+     * @param fileDescription the human-readable file description used in log messages
+     * @param fileName        the name of the file to create
+     * @param fileBytes       the returned file content
+     */
+    private static void saveRetrievedFile(Path outputDirectory, String fileDescription, String fileName, byte[] fileBytes) {
+        if (fileBytes != null && fileName != null && !fileName.isBlank()) {
+            Path outputPath = outputDirectory.resolve(fileName);
+            try {
+                Files.createDirectories(outputPath.getParent());
+                Files.write(outputPath, fileBytes);
+                System.out.println(fileDescription + " saved to: " + outputPath);
+            } catch (IOException e) {
+                System.out.println("Failed to save " + fileDescription.toLowerCase(Locale.ROOT) + ": " + e.getMessage());
             }
         }
     }
@@ -364,7 +391,7 @@ public class ClientMain {
 
         FilePayloadBuilder filePayloadBuilder = new FilePayloadBuilder();
         ObjectNode departmentImagePayload = filePayloadBuilder.buildUploadPayload(Path.of(
-                "src/main/resources/images/departments/bakery.png "));
+                "src/main/resources/images/departments/bakery.png"));
 
         departmentPayload.put("name", "TEST_NewDepartment");
         departmentPayload.put("floor", 1);
@@ -387,6 +414,23 @@ public class ClientMain {
             System.out.println(addedDepartment);
         }
         return addedDepartment;
+    }
+
+    private static void requestDepartmentImageById(PrintWriter out, BufferedReader in, int id) throws IOException {
+        requestEntityFileById(
+                out, in,
+                id,
+                "Requesting the department with image by id...",
+                RequestType.GET_DEPARTMENT_IMAGE_BY_ID,
+                new TypeReference<>() {
+                },
+                "Department image",
+                Path.of("downloads", "departments"),
+                Department::getDepartmentImage,
+                Department::getFileName,
+                Department::getContentType,
+                Department::getFileSize
+        );
     }
 
     private static void updateDemoDepartment(PrintWriter out, BufferedReader in, int departmentId) throws IOException {
@@ -452,6 +496,23 @@ public class ClientMain {
             System.out.println(addedProduct);
         }
         return addedProduct;
+    }
+
+    private static void requestProductImageById(PrintWriter out, BufferedReader in, int id) throws IOException {
+        requestEntityFileById(
+                out, in,
+                id,
+                "Requesting the product with image by id...",
+                RequestType.GET_PRODUCT_IMAGE_BY_ID,
+                new TypeReference<>() {
+                },
+                "Product image",
+                Path.of("downloads", "products"),
+                Product::getProductImage,
+                Product::getFileName,
+                Product::getContentType,
+                Product::getFileSize
+        );
     }
 
     private static void updateDemoProduct(PrintWriter out, BufferedReader in, int productId) throws IOException {
