@@ -92,11 +92,24 @@ public class RequestRouter {
 
     // === Department Helpers ===
 
+    /**
+     * Handles a request for all department records.
+     *
+     * @param departmentDao the DAO used to read departments
+     * @return a successful response containing department metadata
+     */
     private ServerResponse<List<Department>> handleGetAllDepartments(DepartmentDao departmentDao) {
         List<Department> departments = departmentDao.getAllDepartments();
         return ServerResponse.ok("Departments retrieved successfully", departments);
     }
 
+    /**
+     * Handles a request for one department by id.
+     *
+     * @param request       the incoming client request
+     * @param departmentDao the DAO used to read departments
+     * @return a response containing the department or an error message
+     */
     private ServerResponse<?> handleGetDepartmentById(ClientRequest request, DepartmentDao departmentDao) {
         JsonNode payload = request.getPayload();
         JsonNode idNode = getPayloadField(payload, "id", "id");
@@ -112,6 +125,13 @@ public class RequestRouter {
                 .orElseGet(() -> ServerResponse.error("Department not found for id: " + id));
     }
 
+    /**
+     * Handles a request for one department including its image bytes.
+     *
+     * @param request       the incoming client request
+     * @param departmentDao the DAO used to read departments
+     * @return a response containing the department with image data or an error message
+     */
     private ServerResponse<?> handleGetDepartmentImageById(ClientRequest request, DepartmentDao departmentDao) {
         JsonNode payload = request.getPayload();
         JsonNode idNode = getPayloadField(payload, "id", "id");
@@ -126,6 +146,13 @@ public class RequestRouter {
                 .orElseGet(() -> ServerResponse.error("Department not found for id: " + id));
     }
 
+    /**
+     * Handles a request to delete one department by id.
+     *
+     * @param request       the incoming client request
+     * @param departmentDao the DAO used to delete departments
+     * @return a success response when the row is deleted, otherwise an error response
+     */
     private ServerResponse<?> handleDeleteDepartmentById(ClientRequest request, DepartmentDao departmentDao) {
         JsonNode payload = request.getPayload();
         JsonNode idNode = getPayloadField(payload, "id", "id");
@@ -144,6 +171,13 @@ public class RequestRouter {
         return ServerResponse.ok("Department deleted successfully", null);
     }
 
+    /**
+     * Handles a request to replace an existing department, including optional image data.
+     *
+     * @param request       the incoming client request
+     * @param departmentDao the DAO used to update departments
+     * @return a response containing the updated department or an error message
+     */
     private ServerResponse<?> handleUpdateDepartment(ClientRequest request, DepartmentDao departmentDao) {
         JsonNode payload = request.getPayload();
         JsonNode idNode = getPayloadField(payload, "id", "id");
@@ -214,6 +248,13 @@ public class RequestRouter {
         return ServerResponse.ok("Department updated successfully", result);
     }
 
+    /**
+     * Handles a request to add a department, including optional image data.
+     *
+     * @param request       the incoming client request
+     * @param departmentDao the DAO used to insert departments
+     * @return a response containing the inserted department or an error message
+     */
     private ServerResponse<?> handleAddDepartment(ClientRequest request, DepartmentDao departmentDao) {
         JsonNode payload = request.getPayload();
         JsonNode nameNode = getPayloadField(payload, "name", "name");
@@ -278,11 +319,24 @@ public class RequestRouter {
 
     // === Product Helpers ===
 
+    /**
+     * Handles a request for all product records.
+     *
+     * @param productDao the DAO used to read products
+     * @return a successful response containing product metadata
+     */
     private ServerResponse<List<Product>> handleGetAllProducts(ProductDao productDao) {
         List<Product> products = productDao.getAllProducts();
         return ServerResponse.ok("Products retrieved successfully", products);
     }
 
+    /**
+     * Handles a request for one product by id.
+     *
+     * @param request    the incoming client request
+     * @param productDao the DAO used to read products
+     * @return a response containing the product or an error message
+     */
     private ServerResponse<?> handleGetProductById(ClientRequest request, ProductDao productDao) {
         JsonNode payload = request.getPayload();
         JsonNode idNode = getPayloadField(payload, "id", "id");
@@ -293,6 +347,13 @@ public class RequestRouter {
                 .orElseGet(() -> ServerResponse.error("Product not found for id: " + id));
     }
 
+    /**
+     * Handles a request for one product including its image bytes.
+     *
+     * @param request    the incoming client request
+     * @param productDao the DAO used to read products
+     * @return a response containing the product with image data or an error message
+     */
     private ServerResponse<?> handleGetProductImageById(ClientRequest request, ProductDao productDao) {
         JsonNode payload = request.getPayload();
         JsonNode idNode = getPayloadField(payload, "id", "id");
@@ -303,6 +364,13 @@ public class RequestRouter {
                 .orElseGet(() -> ServerResponse.error("Product not found for id: " + id));
     }
 
+    /**
+     * Handles a request to add a product, including optional image data.
+     *
+     * @param request    the incoming client request
+     * @param productDao the DAO used to insert products
+     * @return a response containing the inserted product or an error message
+     */
     private ServerResponse<?> handleAddProduct(ClientRequest request, ProductDao productDao) {
         JsonNode payload = request.getPayload();
         JsonNode nameNode = getPayloadField(payload, "name", "name");
@@ -366,6 +434,13 @@ public class RequestRouter {
         return ServerResponse.ok("Product added successfully", insertedProduct);
     }
 
+    /**
+     * Handles a request to delete one product by id.
+     *
+     * @param request    the incoming client request
+     * @param productDao the DAO used to delete products
+     * @return a success response when the row is deleted, otherwise an error response
+     */
     private ServerResponse<?> handleDeleteProductById(ClientRequest request, ProductDao productDao) {
         JsonNode payload = request.getPayload();
         JsonNode idNode = getPayloadField(payload, "id", "id");
@@ -376,6 +451,13 @@ public class RequestRouter {
         return ServerResponse.ok("Product deleted successfully", null);
     }
 
+    /**
+     * Handles a request to replace an existing product, including optional image data.
+     *
+     * @param request    the incoming client request
+     * @param productDao the DAO used to update products
+     * @return a response containing the updated product or an error message
+     */
     private ServerResponse<?> handleUpdateProduct(ClientRequest request, ProductDao productDao) {
         JsonNode payload = request.getPayload();
         JsonNode idNode = getPayloadField(payload, "id", "id");
@@ -445,6 +527,11 @@ public class RequestRouter {
         return ServerResponse.ok("Product updated successfully", savedProduct);
     }
 
+    /**
+     * Handles a client disconnect request.
+     *
+     * @return a success response confirming the disconnect
+     */
     private ServerResponse<?> handleDisconnect() {
         return ServerResponse.ok("Client disconnected successfully", null);
     }

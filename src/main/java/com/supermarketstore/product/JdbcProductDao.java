@@ -16,6 +16,14 @@ import java.util.function.Predicate;
  */
 public record JdbcProductDao(String _url, String _user, String _pass) implements ProductDao {
 
+    /**
+     * Creates a product DAO using the supplied JDBC connection settings.
+     *
+     * @param _url  the JDBC URL
+     * @param _user the database user
+     * @param _pass the database password
+     * @throws IllegalArgumentException if the JDBC URL is missing
+     */
     public JdbcProductDao(String _url, String _user, String _pass) {
         if (_url == null || _url.isBlank()) throw new IllegalArgumentException("url is required");
         this._url = _url.trim();
@@ -154,6 +162,14 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         return mapRow(resultSet, true);
     }
 
+    /**
+     * Maps one result-set row to a product, optionally including image bytes.
+     *
+     * @param resultSet    the current result-set row
+     * @param includeImage whether the product image column should be loaded
+     * @return the mapped product
+     * @throws SQLException if a column cannot be read
+     */
     private Product mapRow(ResultSet resultSet, boolean includeImage) throws SQLException {
         int productId = resultSet.getInt("product_id");
         String name = resultSet.getString("name");
@@ -169,6 +185,13 @@ public record JdbcProductDao(String _url, String _user, String _pass) implements
         return new Product(productId, name, price, onSale, discountPrice, stock, productImage, fileName, contentType, fileSize);
     }
 
+    /**
+     * Binds product values to the insert or update prepared statement.
+     *
+     * @param ps      the prepared statement receiving product values
+     * @param product the product values to bind
+     * @throws SQLException if a statement parameter cannot be set
+     */
     private void bindProductParams(PreparedStatement ps, Product product) throws SQLException {
         ps.setString(1, product.getName());
         ps.setDouble(2, product.getPrice());

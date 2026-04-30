@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Converts Product objects to/from JSON using Jackson.
+ * Converts Product objects to and from JSON using Jackson.
  *
  * @author Nikita Smiichyk (primary)
  */

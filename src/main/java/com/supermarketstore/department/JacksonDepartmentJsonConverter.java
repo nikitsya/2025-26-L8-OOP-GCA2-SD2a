@@ -6,6 +6,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
+/**
+ * Converts Department objects to and from JSON using Jackson.
+ */
 public class JacksonDepartmentJsonConverter implements DepartmentJsonConverter {
 
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper();

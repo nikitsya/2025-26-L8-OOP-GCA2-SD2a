@@ -363,11 +363,23 @@ public class ClientMain {
         printResponse(response);
     }
 
+    /**
+     * Prints the status and message from a server response.
+     *
+     * @param response the response to print
+     */
     private static void printResponse(ServerResponse<?> response) {
         System.out.println("Status: " + response.getStatus());
         System.out.println("Message: " + response.getMessage());
     }
 
+    /**
+     * Sends the disconnect request and prints the server acknowledgement.
+     *
+     * @param out the socket writer used to send requests
+     * @param in  the socket reader used to receive responses
+     * @throws IOException if client-server communication fails
+     */
     private static void disconnectClient(PrintWriter out, BufferedReader in) throws IOException {
         System.out.println();
         System.out.println("Disconnecting client...");
@@ -383,6 +395,14 @@ public class ClientMain {
 
     // === Department Helpers ===
 
+    /**
+     * Sends a demo department creation request with an attached image.
+     *
+     * @param out the socket writer used to send requests
+     * @param in  the socket reader used to receive responses
+     * @return the department returned by the server, or null when creation fails
+     * @throws IOException if client-server communication fails or the image cannot be read
+     */
     private static Department addDemoDepartment(PrintWriter out, BufferedReader in) throws IOException {
         System.out.println();
         System.out.println("Adding a new department...");
@@ -416,6 +436,14 @@ public class ClientMain {
         return addedDepartment;
     }
 
+    /**
+     * Requests a department with its image data and saves the returned file locally.
+     *
+     * @param out the socket writer used to send requests
+     * @param in  the socket reader used to receive responses
+     * @param id  the department identifier
+     * @throws IOException if client-server communication fails
+     */
     private static void requestDepartmentImageById(PrintWriter out, BufferedReader in, int id) throws IOException {
         requestEntityFileById(
                 out, in,
@@ -433,6 +461,14 @@ public class ClientMain {
         );
     }
 
+    /**
+     * Sends a demo department update request with replacement image data.
+     *
+     * @param out          the socket writer used to send requests
+     * @param in           the socket reader used to receive responses
+     * @param departmentId the department identifier to update
+     * @throws IOException if client-server communication fails or the image cannot be read
+     */
     private static void updateDemoDepartment(PrintWriter out, BufferedReader in, int departmentId) throws IOException {
         System.out.println();
         System.out.println("Updating the department by id...");
@@ -468,6 +504,14 @@ public class ClientMain {
 
     // === Product Helpers ===
 
+    /**
+     * Sends a demo product creation request with an attached image.
+     *
+     * @param out the socket writer used to send requests
+     * @param in  the socket reader used to receive responses
+     * @return the product returned by the server, or null when creation fails
+     * @throws IOException if client-server communication fails or the image cannot be read
+     */
     private static Product addDemoProduct(PrintWriter out, BufferedReader in) throws IOException {
         System.out.println();
         System.out.println("Adding a new product...");
@@ -498,6 +542,14 @@ public class ClientMain {
         return addedProduct;
     }
 
+    /**
+     * Requests a product with its image data and saves the returned file locally.
+     *
+     * @param out the socket writer used to send requests
+     * @param in  the socket reader used to receive responses
+     * @param id  the product identifier
+     * @throws IOException if client-server communication fails
+     */
     private static void requestProductImageById(PrintWriter out, BufferedReader in, int id) throws IOException {
         requestEntityFileById(
                 out, in,
@@ -515,6 +567,14 @@ public class ClientMain {
         );
     }
 
+    /**
+     * Sends a demo product update request with replacement image data.
+     *
+     * @param out       the socket writer used to send requests
+     * @param in        the socket reader used to receive responses
+     * @param productId the product identifier to update
+     * @throws IOException if client-server communication fails or the image cannot be read
+     */
     private static void updateDemoProduct(PrintWriter out, BufferedReader in, int productId) throws IOException {
         System.out.println();
         System.out.println("Updating the product by id...");

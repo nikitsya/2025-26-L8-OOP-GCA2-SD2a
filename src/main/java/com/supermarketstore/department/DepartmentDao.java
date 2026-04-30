@@ -10,28 +10,65 @@ import java.util.function.Predicate;
  *
  * @author Hanna Bokariuk
  */
-
 public interface DepartmentDao {
 
-    // Gets: all departments from the data store
+    /**
+     * Retrieves all departments without loading image bytes.
+     *
+     * @return all departments stored in the data source
+     */
     List<Department> getAllDepartments();
 
-    // Gets: a department by its id
+    /**
+     * Retrieves one department without loading image bytes.
+     *
+     * @param id the department identifier
+     * @return the matching department, or an empty optional when no department exists
+     */
     Optional<Department> getDepartmentById(int id);
 
-    // Deletes: a department by id
+    /**
+     * Deletes one department.
+     *
+     * @param id the department identifier
+     * @return true when a department was deleted, otherwise false
+     */
     boolean deleteDepartmentById(int id);
 
-    // Inserts: a new department
+    /**
+     * Inserts a new department and returns the stored entity with its generated identifier.
+     *
+     * @param department the department to insert
+     * @return the inserted department with its generated identifier
+     * @throws IllegalArgumentException if the department is null
+     */
     Department insertDepartment(Department department);
 
-    // Updates: an existing department
+    /**
+     * Updates an existing department.
+     *
+     * @param id         the department identifier
+     * @param department the replacement department values
+     * @return the updated department
+     * @throws IllegalArgumentException if the id or department is invalid
+     */
     Department updateDepartment(int id, Department department);
 
-    // Finds: departments matching a filter
+    /**
+     * Filters departments in memory using the supplied predicate.
+     *
+     * @param filter the predicate used to select departments
+     * @return departments that match the predicate
+     * @throws IllegalArgumentException if the filter is null
+     */
     List<Department> findDepartmentsByFilter(Predicate<Department> filter);
 
-    // Gets: a department including its image by id
+    /**
+     * Retrieves one department including its image bytes.
+     *
+     * @param id the department identifier
+     * @return the matching department with image data, or an empty optional when no department exists
+     */
     Optional<Department> getDepartmentImageById(int id);
 
 }

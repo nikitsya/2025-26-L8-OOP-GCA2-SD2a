@@ -17,7 +17,7 @@ public class ClientRequest {
     // === Constructors ===
 
     /**
-     * Creates an empty request required for JSON deserialization.
+     * Creates an empty request required for JSON deserialisation.
      */
     public ClientRequest() {
         _type = "";
