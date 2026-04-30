@@ -20,6 +20,17 @@ class JacksonProductJsonConverterTest {
             "discount_price\":null,\"stock\":98,\"file_data\":null,\"file_name\":null,\"content_type\":null,\"file_size\":0}";
     String products_json = "[" + product_json + "," + product_json + "]";
 
+    private static class BrokenProduct extends Product {
+        BrokenProduct() {
+            super(1, "cucumber", 0.65, false, null, 98, null, null, null, 0);
+        }
+
+        @Override
+        public String getName() {
+            throw new RuntimeException("Broken getter");
+        }
+    }
+
     // --- Single product serialisation ---
     @Test
     void productToJson() {
@@ -34,6 +45,18 @@ class JacksonProductJsonConverterTest {
         );
         assertEquals("Product must not be null", ex.getMessage());
     }
+
+    @Test
+    void productToJson_whenProductCannotBeSerialised_throwsIllegalArgumentException() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> converter.productToJson(new BrokenProduct())
+        );
+
+        assertEquals("Failed to serialize Product to JSON", ex.getMessage());
+        assertNotNull(ex.getCause());
+    }
+
 
     // --- Single product deserialisation ---
     @Test
@@ -82,6 +105,18 @@ class JacksonProductJsonConverterTest {
         );
         assertEquals("Product list must not be null", ex.getMessage());
     }
+
+    @Test
+    void productListToJson_whenProductCannotBeSerialised_throwsIllegalArgumentException() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> converter.productListToJson(List.of(new BrokenProduct()))
+        );
+
+        assertEquals("Failed to serialize Product list to JSON", ex.getMessage());
+        assertNotNull(ex.getCause());
+    }
+
 
     // --- Product list deserialisation ---
     @Test
