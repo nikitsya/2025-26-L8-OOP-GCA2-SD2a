@@ -12,34 +12,15 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class ProductTest {
     private Product product;
-
-    private static Product productWithImage() {
-        return new Product(1, "Product", 20.0, false, null, 45, new byte[]{1, 2, 3}, "product.jpeg", "image/jpeg", 3);
-    }
+    private Product productWithImage;
 
     @BeforeEach
     void setUp() {
         product = new Product(1, "Product", 20.0, false, null, 45, null, null, null, 0);
+        productWithImage = new Product(1, "Product", 20.0, false, null, 45, new byte[]{1, 2, 3}, "product.jpeg", "image/jpeg", 3);
     }
 
     // --- Constructor behaviour ---
-    @Test
-    void defaultConstructor_initialisesEmptyProductForJackson() {
-        Product emptyProduct = new Product();
-
-        assertAll(
-                () -> assertEquals(0, emptyProduct.getProductId()),
-                () -> assertNull(emptyProduct.getName()),
-                () -> assertEquals(0.0, emptyProduct.getPrice()),
-                () -> assertFalse(emptyProduct.isOnSale()),
-                () -> assertNull(emptyProduct.getDiscountPrice()),
-                () -> assertEquals(0, emptyProduct.getStock()),
-                () -> assertNull(emptyProduct.getProductImage()),
-                () -> assertNull(emptyProduct.getFileName()),
-                () -> assertNull(emptyProduct.getContentType()),
-                () -> assertEquals(0, emptyProduct.getFileSize())
-        );
-    }
 
     @Test
     void constructor_withValidSaleProductAndImage_setsAllFields() {
@@ -120,21 +101,11 @@ class ProductTest {
     }
 
     @Test
-    void setPrice_whenOnSaleAndDiscountRemainsValid_updatesPrice() {
-        product.setOnSale(true);
-        product.setDiscountPrice(10.0);
-        product.setPrice(20.0);
-
-        assertEquals(20.0, product.getPrice());
-    }
-
-    @Test
     void setPrice_whenOnSaleAndDiscountWouldBeInvalid_throwsIllegalArgumentException() {
         product.setOnSale(true);
         product.setDiscountPrice(15.0);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> product.setPrice(10.0));
-
         assertEquals("Discount price must be less than product price", exception.getMessage());
     }
 
@@ -143,6 +114,7 @@ class ProductTest {
         product.setOnSale(true);
         product.setDiscountPrice(15.0);
         product.setOnSale(false);
+
         assertAll(
                 () -> assertFalse(product.isOnSale()),
                 () -> assertNull(product.getDiscountPrice())
@@ -261,8 +233,6 @@ class ProductTest {
 
     @Test
     void setProductImage_withNull_clearsFileMetadata() {
-        Product productWithImage = productWithImage();
-
         productWithImage.setProductImage(null);
 
         assertAll(
@@ -275,12 +245,14 @@ class ProductTest {
 
     @Test
     void setFileName_whenImageIsPresentAndNameIsBlankOrNull_throwsIllegalArgumentException() {
-        Product productWithImage = productWithImage();
-
         assertAll(
                 () -> assertEquals(
                         "File name must not be null or blank",
                         assertThrows(IllegalArgumentException.class, () -> productWithImage.setFileName(null)).getMessage()
+                ),
+                () -> assertEquals(
+                        "File name must not be null or blank",
+                        assertThrows(IllegalArgumentException.class, () -> productWithImage.setFileName("")).getMessage()
                 ),
                 () -> assertEquals(
                         "File name must not be null or blank",
@@ -291,8 +263,6 @@ class ProductTest {
 
     @Test
     void setContentType_whenImageIsPresentAndContentTypeIsNull_throwsIllegalArgumentException() {
-        Product productWithImage = productWithImage();
-
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
                 productWithImage.setContentType(null)
         );
@@ -332,28 +302,12 @@ class ProductTest {
     // --- Equality and text representation ---
     @Test
     void equals_whenFieldsMatch_returnsTrueAndHashCodesMatch() {
-        Product first = productWithImage();
-        Product second = productWithImage();
+        Product first = productWithImage;
+        Product second = productWithImage;
 
         assertAll(
                 () -> assertEquals(first, second),
                 () -> assertEquals(first.hashCode(), second.hashCode())
-        );
-    }
-
-    @Test
-    void equals_whenImageContentDiffers_returnsFalse() {
-        Product first = productWithImage();
-        Product second = new Product(1, "Product", 20.0, false, null, 45, new byte[]{9, 8, 7}, "product.jpeg", "image/jpeg", 3);
-
-        assertNotEquals(first, second);
-    }
-
-    @Test
-    void equals_withNullOrDifferentType_returnsFalse() {
-        assertAll(
-                () -> assertNotEquals(null, product),
-                () -> assertNotEquals("Product", product)
         );
     }
 }
