@@ -1,0 +1,7 @@
+com.supermarketstore.client
+com.supermarketstore.client.upload
+com.supermarketstore.department
+com.supermarketstore.product
+com.supermarketstore.protocol
+com.supermarketstore.server
+com.supermarketstore.server.routing
