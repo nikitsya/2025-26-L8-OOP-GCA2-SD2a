@@ -60,9 +60,29 @@ class JdbcProductDaoTest {
 
     // --- DAO construction validation ---
     @Test
+    void constructor_whenValidValues_storesConnectionSettings() {
+        JdbcProductDao dao = new JdbcProductDao(DB_URL, DB_USER, DB_PASS);
+
+        assertAll(
+                () -> assertEquals(DB_URL, dao._url()),
+                () -> assertEquals(DB_USER, dao._user()),
+                () -> assertEquals(DB_PASS, dao._pass())
+        );
+    }
+
+    @Test
     void constructor_whenUrlIsBlank_throwsIllegalArgumentException() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
                 new JdbcProductDao(" ", DB_USER, DB_PASS)
+        );
+
+        assertEquals("url is required", exception.getMessage());
+    }
+
+    @Test
+    void constructor_whenUrlIsNull_throwsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                new JdbcProductDao(null, DB_USER, DB_PASS)
         );
 
         assertEquals("url is required", exception.getMessage());
@@ -89,6 +109,19 @@ class JdbcProductDaoTest {
                 () -> assertNull(fetchedFirst.orElseThrow().getProductImage()),
                 () -> assertNull(fetchedSecond.orElseThrow().getProductImage())
         );
+    }
+
+    @Test
+    void getAllProducts_whenConnectionFails_throwsRuntimeException() {
+        JdbcProductDao brokenDao = new JdbcProductDao(
+                "jdbc:mysql://localhost:1/supermarket_store_system",
+                DB_USER,
+                DB_PASS
+        );
+        RuntimeException exception = assertThrows(RuntimeException.class, brokenDao::getAllProducts);
+
+        assertFalse(exception.getMessage().isBlank());
+        assertNotNull(exception.getCause());
     }
 
     @Test
@@ -128,6 +161,18 @@ class JdbcProductDaoTest {
         );
     }
 
+    @Test
+    void getProductById_whenConnectionFails_throwsRuntimeException() {
+        JdbcProductDao brokenDao = new JdbcProductDao(
+                "jdbc:mysql://localhost:1/supermarket_store_system",
+                DB_USER,
+                DB_PASS
+        );
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> brokenDao.getProductById(1));
+
+        assertNotNull(exception.getCause());
+    }
+
     // --- Product image retrieval ---
     @Test
     void getProductImageById_whenProductExists_returnsImageBytesAndMetadata() {
@@ -152,7 +197,6 @@ class JdbcProductDaoTest {
     @Test
     void getProductImageById_whenIdDoesNotExist_returnsEmpty() {
         Optional<Product> fetched = dao.getProductImageById(999999);
-
         assertTrue(fetched.isEmpty());
     }
 
@@ -162,6 +206,22 @@ class JdbcProductDaoTest {
                 () -> assertTrue(dao.getProductImageById(0).isEmpty()),
                 () -> assertTrue(dao.getProductImageById(-1).isEmpty())
         );
+    }
+
+    @Test
+    void getProductImageById_whenConnectionFails_throwsRuntimeException() {
+        JdbcProductDao brokenDao = new JdbcProductDao(
+                "jdbc:mysql://localhost:1/supermarket_store_system",
+                DB_USER,
+                DB_PASS
+        );
+
+        RuntimeException exception = assertThrows(
+                RuntimeException.class,
+                () -> brokenDao.getProductImageById(1)
+        );
+
+        assertNotNull(exception.getCause());
     }
 
     // --- Product creation ---
@@ -212,6 +272,22 @@ class JdbcProductDaoTest {
         );
 
         assertEquals("product is required", exception.getMessage());
+    }
+
+    @Test
+    void insertProduct_whenConnectionFails_throwsRuntimeException() {
+        JdbcProductDao brokenDao = new JdbcProductDao(
+                "jdbc:mysql://localhost:1/supermarket_store_system",
+                DB_USER,
+                DB_PASS
+        );
+
+        Product product = new Product(0, "TEST_InsertFailure", 1.99, false, null, 5, null, null, null, 0);
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> brokenDao.insertProduct(product));
+
+        assertTrue(exception.getMessage().startsWith("Failed to insert product:"));
+        assertNotNull(exception.getCause());
     }
 
     // --- Product updates ---
@@ -297,6 +373,18 @@ class JdbcProductDaoTest {
                 () -> assertFalse(dao.deleteProductById(0)),
                 () -> assertFalse(dao.deleteProductById(-1))
         );
+    }
+
+    @Test
+    void deleteProductById_whenConnectionFails_throwsRuntimeException() {
+        JdbcProductDao brokenDao = new JdbcProductDao(
+                "jdbc:mysql://localhost:1/supermarket_store_system",
+                DB_USER,
+                DB_PASS
+        );
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> brokenDao.deleteProductById(1));
+
+        assertNotNull(exception.getCause());
     }
 
     // --- Product filtering ---
