@@ -7,17 +7,6 @@
 | Hanna Bokariuk | `D00283065` |
 | Nikita Smiichyk | `D00283070` |
 
-## Summary of Contribution Split
-
-| Area | Hanna Bokariuk | Nikita Smiichyk |
-|:--|:--|:--|
-| Department vertical slice | Primary owner | Support, refactoring, documentation |
-| Product vertical slice | Support, review | Primary owner |
-| Shared server and protocol | Department route support, disconnect flow | Primary owner |
-| Binary file handling | Department upload/retrieval | Shared helper and Product upload/retrieval |
-| Testing | Department tests | Product tests and broader Product coverage |
-| Documentation | Minor completion/status updates | Final README, protocol docs, checklists, Javadocs organisation |
-
 ## Detailed Contribution Matrix
 
 | Work item | Hanna Bokariuk contribution | Nikita Smiichyk contribution | Primary owner | Approx. split | Git evidence / notes |
