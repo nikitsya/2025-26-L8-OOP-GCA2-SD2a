@@ -472,11 +472,15 @@ Before final upload, confirm these items:
 
 ## 14. References
 
-- FasterXML (n.d.) *Jackson Databind*. Available at: <https://github.com/FasterXML/jackson-databind> (Accessed: 1 May 2026).
-- JUnit Team (n.d.) *JUnit 5 User Guide*. Available at: <https://junit.org/junit5/docs/current/user-guide/> (Accessed: 1 May 2026).
-- MySQL (n.d.) *MySQL Connector/J Developer Guide*. Available at: <https://dev.mysql.com/doc/connector-j/en/> (Accessed: 1 May 2026).
-- Oracle (n.d.) *JDBC Basics*. Available at: <https://docs.oracle.com/javase/tutorial/jdbc/basics/index.html> (Accessed: 1 May 2026).
-- Oracle (n.d.) *ExecutorService Interface*. Available at: <https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ExecutorService.html> (Accessed: 1 May 2026).
+- Baeldung (n.d.) *Apache Maven Tutorial*. Available at: <https://www.baeldung.com/maven> (Accessed: 1 May 2026).
+- GeeksforGeeks (n.d.) *Maven Tutorial*. Available at: <https://www.geeksforgeeks.org/advance-java/maven-tutorial/> (Accessed: 1 May 2026).
+- Oracle (n.d.) *Using Prepared Statements*. Available at: <https://docs.oracle.com/javase/tutorial/jdbc/basics/prepared.html> (Accessed: 1 May 2026).
+- Apache Maven Project (n.d.) *Introduction to the Standard Directory Layout*. Available at: <https://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html> (Accessed: 1 May 2026).
+- Baeldung (n.d.) *Maven Directory Structure*. Available at: <https://www.baeldung.com/maven-directory-structure> (Accessed: 1 May 2026).
+- Oracle (n.d.) *Documentation Comment Specification for the Standard Doclet*. Available at: <https://docs.oracle.com/en/java/javase/17/docs/specs/javadoc/doc-comment-spec.html> (Accessed: 1 May 2026).
+- Baeldung (n.d.) *Guide to Javadoc*. Available at: <https://www.baeldung.com/javadoc> (Accessed: 1 May 2026).
+- Oracle (n.d.) *All About Sockets*. Available at: <https://docs.oracle.com/javase/tutorial/networking/sockets/> (Accessed: 1 May 2026).
+- GeeksforGeeks (n.d.) *Socket Programming in Java*. Available at: <https://www.geeksforgeeks.org/java/socket-programming-in-java/> (Accessed: 1 May 2026).
 
 ## 15. AI Tool Use Declaration
 
