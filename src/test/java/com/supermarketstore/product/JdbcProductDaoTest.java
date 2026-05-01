@@ -348,6 +348,18 @@ class JdbcProductDaoTest {
         );
     }
 
+    @Test
+    void deleteProductById_whenConnectionFails_throwsRuntimeException() {
+        JdbcProductDao brokenDao = new JdbcProductDao(
+                "jdbc:mysql://localhost:1/supermarket_store_system",
+                DB_USER,
+                DB_PASS
+        );
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> brokenDao.deleteProductById(1));
+
+        assertNotNull(exception.getCause());
+    }
+
     // --- Product filtering ---
     @Test
     void findProductsByFilter_returnsOnlyMatchingProducts() {
