@@ -20,17 +20,6 @@ class JacksonProductJsonConverterTest {
             "discount_price\":null,\"stock\":98,\"file_data\":null,\"file_name\":null,\"content_type\":null,\"file_size\":0}";
     String products_json = "[" + product_json + "," + product_json + "]";
 
-    private static class BrokenProduct extends Product {
-        BrokenProduct() {
-            super(1, "cucumber", 0.65, false, null, 98, null, null, null, 0);
-        }
-
-        @Override
-        public String getName() {
-            throw new RuntimeException("Broken getter");
-        }
-    }
-
     // --- Single product serialisation ---
     @Test
     void productToJson() {
@@ -56,7 +45,6 @@ class JacksonProductJsonConverterTest {
         assertEquals("Failed to serialize Product to JSON", ex.getMessage());
         assertNotNull(ex.getCause());
     }
-
 
     // --- Single product deserialisation ---
     @Test
@@ -117,7 +105,6 @@ class JacksonProductJsonConverterTest {
         assertNotNull(ex.getCause());
     }
 
-
     // --- Product list deserialisation ---
     @Test
     void productListFromJson() {
@@ -155,5 +142,16 @@ class JacksonProductJsonConverterTest {
                 () -> converter.productListFromJson("[{bad json}]")
         );
         assertEquals("Failed to deserialize Product list from JSON", ex.getMessage());
+    }
+
+    private static class BrokenProduct extends Product {
+        BrokenProduct() {
+            super(1, "cucumber", 0.65, false, null, 98, null, null, null, 0);
+        }
+
+        @Override
+        public String getName() {
+            throw new RuntimeException("Broken getter");
+        }
     }
 }
