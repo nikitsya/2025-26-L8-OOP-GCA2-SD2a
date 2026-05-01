@@ -3,7 +3,7 @@
 ## Team Members
 
 | Team member | Student ID |
-|:--|:--|:--|
+|:--|:--|
 | Hanna Bokariuk | `D00283065` |
 | Nikita Smiichyk | `D00283070` |
 
