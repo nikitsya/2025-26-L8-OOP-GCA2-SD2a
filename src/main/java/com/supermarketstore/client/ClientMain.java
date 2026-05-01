@@ -33,6 +33,7 @@ public class ClientMain {
     // === Static Fields ===
     private static final String HOST = "localhost";
     private static final int PORT = 9000;
+    private static final Path DOWNLOAD_OUTPUT_DIRECTORY = Path.of("target", "downloads");
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
     // === Methods ===
@@ -453,7 +454,7 @@ public class ClientMain {
                 new TypeReference<>() {
                 },
                 "Department image",
-                Path.of("downloads", "departments"),
+                DOWNLOAD_OUTPUT_DIRECTORY.resolve("departments"),
                 Department::getDepartmentImage,
                 Department::getFileName,
                 Department::getContentType,
@@ -559,7 +560,7 @@ public class ClientMain {
                 new TypeReference<>() {
                 },
                 "Product image",
-                Path.of("downloads", "products"),
+                DOWNLOAD_OUTPUT_DIRECTORY.resolve("products"),
                 Product::getProductImage,
                 Product::getFileName,
                 Product::getContentType,
