@@ -177,8 +177,6 @@ flowchart LR
     J --> DB
 ```
 
-The separate architecture diagram source is also kept in `docs/architecture.md`.
-
 ## 7. Stage 1 Evidence: DAO Layer and Full CRUD
 
 | Feature | Requirement | Project evidence |
