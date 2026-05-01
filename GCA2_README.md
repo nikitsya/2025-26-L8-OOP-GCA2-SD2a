@@ -461,20 +461,7 @@ Router / Command-style Dispatch:
 `RequestRouter` stores request handlers in a `Map<String, RequestHandler>`. Each request type maps to a handler lambda,
 which keeps request dispatch centralised and avoids a long conditional chain inside the server loop.
 
-## 13. Repository Evidence
-
-| Item | Path |
-|:--|:--|
-| Main README | `GCA2_README.md` |
-| Original stage checklist README | `README.md` |
-| Database setup | `sql/mysqlSetup.sql` |
-| Architecture diagram | `docs/architecture.md` |
-| Generated Javadoc | `docs/javadoc/index.html` |
-| Contribution matrix | Section 2.1 in this README |
-| Tests | `src/test/java` |
-| Source code | `src/main/java` |
-
-## 14. Known Final Submission Items To Check
+## 13. Known Final Submission Items To Check
 
 Before final upload, confirm these items:
 
@@ -485,7 +472,7 @@ Before final upload, confirm these items:
 - The database can be recreated from `sql/mysqlSetup.sql`.
 - The server and client run from a clean checkout after setting `TEST_DB_PASS`.
 
-## 15. References
+## 14. References
 
 - FasterXML (n.d.) *Jackson Databind*. Available at: <https://github.com/FasterXML/jackson-databind> (Accessed: 1 May 2026).
 - JUnit Team (n.d.) *JUnit 5 User Guide*. Available at: <https://junit.org/junit5/docs/current/user-guide/> (Accessed: 1 May 2026).
@@ -493,7 +480,7 @@ Before final upload, confirm these items:
 - Oracle (n.d.) *JDBC Basics*. Available at: <https://docs.oracle.com/javase/tutorial/jdbc/basics/index.html> (Accessed: 1 May 2026).
 - Oracle (n.d.) *ExecutorService Interface*. Available at: <https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/ExecutorService.html> (Accessed: 1 May 2026).
 
-## 16. AI Tool Use Declaration
+## 15. AI Tool Use Declaration
 
 AI tools were used for support with documentation wording, README restructuring, checklist interpretation, and code
 review prompts. The implementation remains the responsibility of the project team.
