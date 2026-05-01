@@ -103,6 +103,41 @@ the documentation and test evidence required for final submission.
 | Testing | JUnit 5 |
 | Documentation | Markdown, Mermaid, Javadoc |
 
+### 3.1 Project Structure
+
+The project follows the standard Maven directory layout, with additional folders for database scripts, generated
+documentation, coverage evidence, and runtime output.
+
+```text
+OOP-GCA2/
+├── README.md                         # Final project documentation and submission evidence
+├── pom.xml                           # Maven configuration, dependencies, and build settings
+├── sql/
+│   └── mysqlSetup.sql                # Recreates and seeds the MySQL database from scratch
+├── src/
+│   ├── main/
+│   │   ├── java/com/supermarketstore/
+│   │   │   ├── client/               # Console client and socket request helpers
+│   │   │   ├── client/upload/        # Binary file payload creation for uploads
+│   │   │   ├── department/           # Department DTO, DAO interface, JDBC DAO, and JSON converter
+│   │   │   ├── product/              # Product DTO, DAO interface, JDBC DAO, and JSON converter
+│   │   │   ├── protocol/             # ClientRequest, RequestType, and ServerResponse classes
+│   │   │   └── server/               # Multithreaded server, routing, and request handling
+│   │   └── resources/images/         # Sample department and product image files
+│   └── test/java/com/supermarketstore/
+│       ├── department/               # Department DAO, JSON, and binary handling tests
+│       └── product/                  # Product DAO, JSON, validation, and binary handling tests
+├── docs/
+│   └── javadoc/                      # Generated Javadoc website, including index.html
+├── reports/
+│   └── coverage.png                  # IntelliJ IDEA coverage evidence for Stage 4
+├── lib/                              # Local library folder, if required by the environment
+└── target/                           # Maven build output generated locally
+    └── downloads/
+        ├── departments/              # Reconstructed department files downloaded by the client
+        └── products/                 # Reconstructed product files downloaded by the client
+```
+
 ## 4. Domain Model and Database
 
 ### 4.1 Entities
@@ -201,7 +236,7 @@ The console client demonstrates:
 - add, update, and delete a department;
 - add, update, and delete a product;
 - upload image data with metadata during add/update operations;
-- retrieve image data and reconstruct files under `downloads/departments/` and `downloads/products/`;
+- retrieve image data and reconstruct files under `target/downloads/departments/` and `target/downloads/products/`;
 - send a structured `DISCONNECT` request before closing the socket.
 
 ## 6. Architecture Summary
@@ -372,7 +407,7 @@ Binary file retrieval is implemented for both departments and products. The clie
 using `GET_DEPARTMENT_IMAGE_BY_ID` or `GET_PRODUCT_IMAGE_BY_ID`. The server routes the request to the relevant DAO
 method, which fetches the BLOB column with `ResultSet.getBytes()` and returns the entity inside `ServerResponse<T>`.
 Jackson serialises the returned `byte[]` as Base64 in the JSON response and deserialises it back into a `byte[]` on the
-client. The client then writes the bytes to `downloads/departments/` or `downloads/products/` using the stored
+client. The client then writes the bytes to `target/downloads/departments/` or `target/downloads/products/` using the stored
 `file_name`, preserving the original filename and extension.
 
 ### 10.2 F20 Metadata-Only Retrieval Notes
