@@ -24,11 +24,11 @@ extension work. All group members are expected to understand every part of the c
 | Product predicate filtering | Nikita Smiichyk | Hanna Bokariuk | 2 | Implemented `findProductsByFilter(Predicate<Product>)`. |
 | Department JSON conversion | Hanna Bokariuk | Nikita Smiichyk | 4 | Implemented department to/from JSON and list conversion with Jackson. |
 | Product JSON conversion | Nikita Smiichyk | Hanna Bokariuk | 5 | Implemented product to/from JSON, list conversion, and error handling with Jackson. |
-| Architecture diagram and tier explanation | Nikita Smiichyk | Hanna Bokariuk | 3 | Created Mermaid architecture documentation showing client, protocol, server, DAO, and database layers. |
+| Architecture diagram and tier explanation | Nikita Smiichyk | Hanna Bokariuk | 2 | Created Mermaid architecture documentation showing client, protocol, server, DAO, and database layers. |
 | Multithreaded server with `ExecutorService` | Nikita Smiichyk | Hanna Bokariuk | 7 | Built socket server setup, router wiring, client handling, and per-client thread pool execution. |
 | `ServerResponse<T>` wrapper and response mapping | Nikita Smiichyk | Hanna Bokariuk | 4 | Standardised server replies with `status`, `message`, and `data`; used typed responses throughout. |
 | Shared request protocol classes | Nikita Smiichyk | Hanna Bokariuk | 4 | Maintained `ClientRequest`, `RequestType`, and shared request/response structure. |
-| Protocol documentation in README | Nikita Smiichyk | Hanna Bokariuk | 6 | Documented request types, payloads, response shapes, binary handling, and error responses. Hanna mainly added small status/protocol notes. |
+| Protocol documentation in README | Nikita Smiichyk | Hanna Bokariuk | 3 | Documented request types, payloads, response shapes, binary handling, and error responses. Hanna mainly added small status/protocol notes. |
 | Department client feature: display all and display by ID | Hanna Bokariuk | Nikita Smiichyk | 3 | Implemented and demonstrated department read requests over sockets. |
 | Product client feature: display all and display by ID | Nikita Smiichyk | Hanna Bokariuk | 3 | Implemented and demonstrated product read requests over sockets. |
 | Department client feature: insert/update/delete over sockets | Hanna Bokariuk | Nikita Smiichyk | 5 | Implemented department add, update, delete handlers and client demo verification. |
@@ -52,11 +52,11 @@ extension work. All group members are expected to understand every part of the c
 | Product binary tests | Nikita Smiichyk | Hanna Bokariuk | 4 | Added product metadata-only read tests, image retrieval tests, and binary byte assertions. |
 | Product extended validation and failure tests | Nikita Smiichyk | Hanna Bokariuk | 8 | Added product constructor, validation, JSON failure, DAO connection failure, and database failure tests. |
 | Test clean-up and fixture management | Nikita Smiichyk | Hanna Bokariuk | 4 | Added test row cleanup for product DAO tests and removed low-value product tests. |
-| Generated Javadocs and documentation organisation | Nikita Smiichyk | Hanna Bokariuk | 5 | Generated and organised Javadocs under `docs/javadoc`; Hanna added department class documentation. |
-| Final GCA2 README | Nikita Smiichyk | Hanna Bokariuk | 8 | Wrote final project overview, run instructions, protocol docs, stage evidence, binary notes, OOP features, references, and submission checklist. |
-| Contribution matrix | Nikita Smiichyk | Hanna Bokariuk | 4 | Reworked the matrix into the final Stage 4 table format based on Git history and task ownership. |
-| Assessment checklist and final submission notes | Nikita Smiichyk | Hanna Bokariuk | 4 | Added final checklist, assessment rubric notes, stage tracking, and final submission reminders. |
+| Generated Javadocs and documentation organisation | Nikita Smiichyk | Hanna Bokariuk | 3 | Generated and organised Javadocs under `docs/javadoc`; Hanna added department class documentation. |
+| Final GCA2 README | Nikita Smiichyk | Hanna Bokariuk | 2 | Wrote final project overview, run instructions, protocol docs, stage evidence, binary notes, OOP features, references, and submission checklist. |
+| Contribution matrix | Nikita Smiichyk | Hanna Bokariuk | 3 | Reworked the matrix into the final Stage 4 table format based on Git history and task ownership. |
+| Assessment checklist and final submission notes | Nikita Smiichyk | Hanna Bokariuk | 1 | Added final checklist, assessment rubric notes, stage tracking, and final submission reminders. |
 | Coverage evidence screenshot `/reports/coverage.png` | Nikita Smiichyk | Hanna Bokariuk | 1 | Must be generated in IntelliJ IDEA using the full test suite before final submission. |
 | Screencast planning and export | Hanna Bokariuk | Nikita Smiichyk | 3 | Should cover both vertical slices, server/client demo, binary handling, tests, and design explanation. |
 | Harvard references and AI usage declaration | Nikita Smiichyk | Hanna Bokariuk | 2 | Added references and AI tool use declaration in the final README. |
-| Final code formatting and clean-up | Nikita Smiichyk | Hanna Bokariuk | 5 | Performed project-wide formatting, package clean-up, unused asset removal, and shared refactoring. |
+| Final code formatting and clean-up | Nikita Smiichyk | Hanna Bokariuk | 3 | Performed project-wide formatting, package clean-up, unused asset removal, and shared refactoring. |
