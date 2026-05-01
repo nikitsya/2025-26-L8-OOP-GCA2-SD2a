@@ -26,7 +26,7 @@ extension work. All group members are expected to understand every part of the c
 | Product JSON conversion | Nikita Smiichyk | Hanna Bokariuk | 5 | Implemented product to/from JSON, list conversion, and error handling with Jackson. |
 | Architecture diagram and tier explanation | Nikita Smiichyk | Hanna Bokariuk | 2 | Created Mermaid architecture documentation showing client, protocol, server, DAO, and database layers. |
 | Multithreaded server with `ExecutorService` | Nikita Smiichyk | Hanna Bokariuk | 7 | Built socket server setup, router wiring, client handling, and per-client thread pool execution. |
-| `ServerResponse<T>` wrapper and response mapping | Nikita Smiichyk | Hanna Bokariuk | 4 | Standardised server replies with `status`, `message`, and `data`; used typed responses throughout. |
+| `ServerResponse<T>` wrapper and response mapping |  Hanna Bokariuk | Nikita Smiichyk | 4 | Standardised server replies with `status`, `message`, and `data`; used typed responses throughout. |
 | Shared request protocol classes | Nikita Smiichyk | Hanna Bokariuk | 4 | Maintained `ClientRequest`, `RequestType`, and shared request/response structure. |
 | Protocol documentation in README | Nikita Smiichyk | Hanna Bokariuk | 3 | Documented request types, payloads, response shapes, binary handling, and error responses. Hanna mainly added small status/protocol notes. |
 | Department client feature: display all and display by ID | Hanna Bokariuk | Nikita Smiichyk | 3 | Implemented and demonstrated department read requests over sockets. |
