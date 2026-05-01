@@ -1,15 +1,11 @@
 # Project Contribution Matrix
 
-This document records the main contributions made by each team member during the Supermarket Store System project. It
-is based on the Git history and on the agreed vertical ownership model: Hanna led the Department side of the system,
-while Nikita led the Product side and most shared server/protocol/documentation work.
-
 ## Team Members
 
-| Team member | Student ID |  Main responsibility |
+| Team member | Student ID |
 |:--|:--|:--|
-| Hanna Bokariuk | `D00283065` | Department model, Department DAO, Department JSON, Department client/server flow, Department binary handling, and Department tests |
-| Nikita Smiichyk | `D00283070` | Product model, Product DAO, Product JSON, shared server/protocol work, Product binary handling, Product tests, and final documentation |
+| Hanna Bokariuk | `D00283065` |
+| Nikita Smiichyk | `D00283070` |
 
 ## Summary of Contribution Split
 
