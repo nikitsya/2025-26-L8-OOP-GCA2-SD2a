@@ -162,7 +162,6 @@ class JdbcProductDaoTest {
         assertNotNull(exception.getCause());
     }
 
-
     // --- Product image retrieval ---
     @Test
     void getProductImageById_whenProductExists_returnsImageBytesAndMetadata() {
@@ -187,7 +186,6 @@ class JdbcProductDaoTest {
     @Test
     void getProductImageById_whenIdDoesNotExist_returnsEmpty() {
         Optional<Product> fetched = dao.getProductImageById(999999);
-
         assertTrue(fetched.isEmpty());
     }
 
@@ -197,6 +195,22 @@ class JdbcProductDaoTest {
                 () -> assertTrue(dao.getProductImageById(0).isEmpty()),
                 () -> assertTrue(dao.getProductImageById(-1).isEmpty())
         );
+    }
+
+    @Test
+    void getProductImageById_whenConnectionFails_throwsRuntimeException() {
+        JdbcProductDao brokenDao = new JdbcProductDao(
+                "jdbc:mysql://localhost:1/supermarket_store_system",
+                DB_USER,
+                DB_PASS
+        );
+
+        RuntimeException exception = assertThrows(
+                RuntimeException.class,
+                () -> brokenDao.getProductImageById(1)
+        );
+
+        assertNotNull(exception.getCause());
     }
 
     // --- Product creation ---
