@@ -1,14 +1,5 @@
 # Supermarket Store System
 
-### F19 Implementation Notes
-
-Binary file retrieval is implemented for both departments and products. The client sends a request with the target `id`
-using `GET_DEPARTMENT_IMAGE_BY_ID` or `GET_PRODUCT_IMAGE_BY_ID`. The server routes the request to the relevant DAO
-method, which fetches the BLOB column with `ResultSet.getBytes()` and returns the entity inside `ServerResponse<T>`.
-Jackson serialises the returned `byte[]` as Base64 in the JSON response and deserialises it back into a `byte[]` on the
-client. The client then writes the bytes to `downloads/departments/` or `downloads/products/` using the stored
-`file_name`, preserving the original filename and extension.
-
 ## Stage 4 Overview
 
 Stage 4 extends the Stage 3 unit test suite to cover all implemented features across the system and introduces a
