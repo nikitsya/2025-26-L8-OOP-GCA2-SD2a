@@ -7,7 +7,7 @@ while Nikita led the Product side and most shared server/protocol/documentation 
 ## Team Members
 
 | Team member | Student ID |  Main responsibility |
-|:--|:--|:--|:--|
+|:--|:--|:--|
 | Hanna Bokariuk | `D00283065` | Department model, Department DAO, Department JSON, Department client/server flow, Department binary handling, and Department tests |
 | Nikita Smiichyk | `D00283070` | Product model, Product DAO, Product JSON, shared server/protocol work, Product binary handling, Product tests, and final documentation |
 
