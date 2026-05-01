@@ -1,55 +1,62 @@
 # Project Contribution Matrix
 
-## Team Members
+This matrix follows the Stage 4 submission format. The primary author is the person who wrote the initial
+implementation for that task. The contributor/reviewer column records meaningful review, debugging, refactoring, or
+extension work. All group members are expected to understand every part of the code for the final interview.
 
-| Team member | Student ID |
-|:--|:--|
-| Hanna Bokariuk | `D00283065` |
-| Nikita Smiichyk | `D00283070` |
-
-## Detailed Contribution Matrix
-
-| Work item | Hanna Bokariuk contribution | Nikita Smiichyk contribution | Primary owner | Approx. split |
-|:--|:--|:--|:--|:--|
-| Project setup and database file structure | Added the departments table and department seed data. | Moved the setup script into `sql/`, added explanatory SQL comments, and added the department-product bridge table. | Shared | Hanna 45% / Nikita 55% |
-| Supermarket domain design | Defined the Department side of the supermarket domain, including floor, zone, budget, employee count, refrigeration, and image metadata. | Defined the Product side of the domain, including price, stock, sale state, discount price, and image metadata. | Shared | Hanna 50% / Nikita 50% |
-| Department entity implementation | Created and maintained `Department`, including constructors, getters, setters, validation, `toString()`, equality, hash code, binary fields, and Javadocs. | Helped with formatting, documentation consistency, and later project-wide code clean-up. | Hanna | Hanna 85% / Nikita 15% |
-| Product entity implementation | Reviewed and integrated product-side work into the shared project. | Created and maintained `Product`, including validation, sale/discount rules, Jackson properties, equality, hash code, defensive byte array copying, image fields, and Javadocs. | Nikita | Hanna 10% / Nikita 90% |
-| Department JSON conversion | Implemented `DepartmentJsonConverter`, `JacksonDepartmentJsonConverter`, single-object conversion, list conversion, and related error handling. | Added later documentation and formatting support for converter methods. | Hanna | Hanna 85% / Nikita 15% |
-| Product JSON conversion | Reviewed integration and used the shared JSON protocol in the department flow. | Implemented `ProductJsonConverter`, `JacksonProductJsonConverter`, product serialisation/deserialisation, list conversion, and error handling. | Nikita | Hanna 10% / Nikita 90% |
-| Department DAO interface and JDBC implementation | Created `DepartmentDao`, `JdbcDepartmentDao`, JDBC connection setup, row mapping, get all, get by ID, delete, insert, update, filter, metadata fields, image upload, and image retrieval. | Added schema-qualified query support and inherited DAO Javadocs. | Hanna | Hanna 85% / Nikita 15% |
-| Product DAO interface and JDBC implementation | Supported integration with the shared schema and client/server flow. | Created and maintained `ProductDao`, `JdbcProductDao`, prepared SQL, generated-key insert, update, delete, get all, get by ID, predicate filtering, metadata-only reads, image retrieval, shared parameter binding, and error handling. | Nikita | Hanna 5% / Nikita 95% |
-| PreparedStatement and SQL safety | Used `PreparedStatement` throughout the Department DAO implementation. | Used `PreparedStatement` throughout Product DAO and helped schema-qualify queries. | Shared | Hanna 45% / Nikita 55% |
-| Predicate filtering | Implemented department filtering through `Predicate<Department>`. | Implemented product filtering through `Predicate<Product>`. | Shared | Hanna 50% / Nikita 50% |
-| Manual DAO smoke test runner | Added department manual runner logic and filter demo. | Renamed and cleaned the entry point and comments. | Hanna | Hanna 70% / Nikita 30% |
-| Client application structure | Added department-specific demo steps over time. | Built the main client structure, host/port constants, request helper methods, shared response printing, generic list/get/delete helpers, and separated department/product demo methods. | Nikita | Hanna 25% / Nikita 75% |
-| Server application structure | Added department route usage and later disconnect handling. | Built server configuration validation, router creation, client handling extraction, socket accept loop, and `ExecutorService` client pool. | Nikita | Hanna 20% / Nikita 80% |
-| Request and response protocol classes | Added and used department-related request types. | Built and maintained `ClientRequest`, `RequestType`, `ServerResponse<T>`, helper methods, and protocol consistency. | Nikita | Hanna 25% / Nikita 75% |
-| Request routing architecture | Added department handlers and department route updates. | Created and refactored `RequestRouter`, handler maps, helper methods, route registration, and routing package structure. | Nikita | Hanna 30% / Nikita 70% |
-| Department display, add, update, and delete over sockets | Implemented and verified department client-server read/update/delete flows and handlers. | Helped integrate generic client helpers and shared routing structure. | Hanna | Hanna 75% / Nikita 25% |
-| Product display, add, update, and delete over sockets | Supported shared demo execution. | Implemented product client-server display, insert, update, delete, and structured response handling. | Nikita | Hanna 10% / Nikita 90% |
-| Structured error responses | Added department validation paths and not-found responses in handlers. | Centralised routing error handling, unknown request handling, and product error responses using `ServerResponse.error(...)`. | Nikita | Hanna 35% / Nikita 65% |
-| Server logging | Used the logging output during server runs and demo flow. | Replaced simple console output with `java.util.logging.Logger` for connection, disconnection, invalid JSON, and handler failure logs. | Nikita | Hanna 0% / Nikita 100% |
-| Disconnect flow | Added `DISCONNECT` request type, registered it, implemented router handling, updated the server loop, and sent the disconnect request from the client. | Helped integrate the shared protocol and client/server structure. | Hanna | Hanna 80% / Nikita 20% |
-| Department binary schema extension | Added department BLOB and metadata columns and changed the department image column to `MEDIUMBLOB`. | Supported SQL formatting and shared binary schema consistency. | Hanna | Hanna 85% / Nikita 15% |
-| Product binary schema extension | Supported schema integration with departments. | Added product BLOB and metadata columns and later adjusted product image/file column naming and type. | Nikita | Hanna 10% / Nikita 90% |
-| Department binary DTO support | Added file metadata and image byte fields to `Department`. | Helped maintain formatting/documentation consistency. | Hanna | Hanna 90% / Nikita 10% |
-| Product binary DTO support | Reviewed shared binary approach. | Added file metadata fields, image byte field, validation, JSON properties, defensive copying, and clean `toString()` handling. | Nikita | Hanna 5% / Nikita 95% |
-| Shared file upload payload helper | Used the helper in department add/update demo flows. | Created `FilePayloadBuilder`, Base64 encoding, file metadata construction, and Javadocs. | Nikita | Hanna 25% / Nikita 75% |
-| Department binary upload | Added department file payload handling to add/update requests and DAO storage with file metadata. | Provided shared Base64/file payload helper and routing structure. | Hanna | Hanna 75% / Nikita 25% |
-| Product binary upload | Supported shared binary design. | Added product file payload handling, Base64 decoding, validation, DAO binding, and demo upload for product create/update. | Nikita | Hanna 5% / Nikita 95% |
-| Department binary retrieval and file reconstruction | Added department image request type, router registration, image handler, client retrieval call, file saving, and metadata printing. | Helped extract reusable client retrieval helpers later. | Hanna | Hanna 75% / Nikita 25% |
-| Product binary retrieval and metadata-only separation | Supported shared client retrieval helper use. | Added product image retrieval request type, product image handler, metadata-only mapping, separate image mapping, and product retrieval route. | Nikita | Hanna 5% / Nikita 95% |
-| Demo image assets | Added department demo images and fixed department image file extension. | Added product image asset structure and cleaned unused downloaded assets. | Shared | Hanna 55% / Nikita 45% |
-| Department unit tests | Added department validation tests for name trimming, blank names, budget, employee count, and zone validation. | Helped maintain project formatting and later documentation. | Hanna | Hanna 90% / Nikita 10% |
-| Department JSON tests | Added department JSON converter tests for single objects, lists, blank JSON, empty arrays, and malformed JSON. | Helped update docs and converter method Javadocs. | Hanna | Hanna 90% / Nikita 10% |
-| Department DAO tests | Added department DAO setup, insert/getById, delete, update, missing ID, filter, and Stage 3 file field checks. | Helped with broader project test structure and documentation. | Hanna | Hanna 90% / Nikita 10% |
-| Product unit tests | Reviewed product-side behaviour through demo flow. | Added product constructor, validation, sale/discount, default constructor, equality, file metadata, image constructor, and defensive copy tests. | Nikita | Hanna 0% / Nikita 100% |
-| Product JSON tests | Reviewed final JSON behaviour through protocol use. | Added product JSON converter tests for serialisation, deserialisation, lists, empty arrays, malformed JSON, null inputs, and serialisation failures. | Nikita | Hanna 0% / Nikita 100% |
-| Product DAO tests | Reviewed final product demo behaviour. | Added and expanded product DAO tests for constructor validation, setup/cleanup, get all, get by ID, insert, update, delete, filter, metadata-only reads, image retrieval, and database failure cases. | Nikita | Hanna 0% / Nikita 100% |
-| Test clean-up and coverage preparation | Maintained department tests. | Removed low-value product tests, added missing failure cases, cleaned test rows, and improved product test coverage. | Nikita | Hanna 20% / Nikita 80% |
-| Javadocs and generated documentation | Added Javadocs to department classes. | Generated and organised Javadocs under `docs/javadoc`, added inherited Javadocs, converter method docs, and improved documentation coverage. | Nikita | Hanna 25% / Nikita 75% |
-| Architecture diagram | Used and explained the architecture for department features. | Created the Stage 1 Mermaid architecture diagram and embedded/maintained architecture documentation. | Nikita | Hanna 10% / Nikita 90% |
-| README and protocol documentation | Made minor README updates, mainly marking completed work and adding small department/protocol status notes. | Created and repeatedly updated README documents, protocol tables, stage plans, binary handling notes, testing notes, and the final GCA2 README. | Nikita | Hanna 5% / Nikita 95% |
-| Assessment checklist and final submission documents | No major content ownership; reviewed final submission needs during project work. | Added the final checklist, assessment rubric, Stage 4 submission requirements, screencast filename notes, contribution documentation, and final README submission wording. | Nikita | Hanna 0% / Nikita 100% |
-| Code formatting and project clean-up | Made targeted formatting fixes in department files and demo images. | Performed most project-wide formatting, package clean-up, unused asset removal, test clean-up, and shared refactoring. | Nikita | Hanna 20% / Nikita 80% |
+| Feature / Task | Primary author | Reviewer / contributor | Estimated effort (hours) | Notes |
+|:--|:--|:--|--:|:--|
+| Domain proposal and entity list | Nikita Smiichyk | Hanna Bokariuk | 2 | Supermarket domain selected with Departments and Products as the main entities. |
+| Repository setup, branch structure, and Maven project setup | Nikita Smiichyk | Hanna Bokariuk | 4 | Maven Java 17 project with Jackson, MySQL Connector/J, and JUnit 5 dependencies. |
+| `mysqlSetup.sql` department schema and department seed data | Hanna Bokariuk | Nikita Smiichyk | 4 | Created department table, department fields, validation-aligned columns, and seed records. |
+| `mysqlSetup.sql` product schema, product seed data, and bridge table | Nikita Smiichyk | Hanna Bokariuk | 5 | Added product table, product seed data, and `department_products` relationship table. |
+| Department DTO/entity modelling and validation | Hanna Bokariuk | Nikita Smiichyk | 6 | Implemented department fields, constructors, getters/setters, validation, equality, and Javadocs. |
+| Product DTO/entity modelling and validation | Nikita Smiichyk | Hanna Bokariuk | 8 | Implemented product fields, sale/discount validation, JSON properties, equality, defensive byte array copying, and Javadocs. |
+| Department DAO interface | Hanna Bokariuk | Nikita Smiichyk | 2 | Created `DepartmentDao` contract with CRUD, filtering, and image retrieval methods. |
+| Product DAO interface | Nikita Smiichyk | Hanna Bokariuk | 2 | Created `ProductDao` contract with CRUD, filtering, and image retrieval methods. |
+| Department JDBC DAO: `getAll` and `getById` | Hanna Bokariuk | Nikita Smiichyk | 4 | Implemented metadata-only department reads using `Optional<Department>` and `PreparedStatement`. |
+| Product JDBC DAO: `getAll` and `getById` | Nikita Smiichyk | Hanna Bokariuk | 4 | Implemented metadata-only product reads using `Optional<Product>` and `PreparedStatement`. |
+| Department JDBC DAO: insert with generated keys | Hanna Bokariuk | Nikita Smiichyk | 3 | Implemented insert and returned the generated `department_id`. |
+| Product JDBC DAO: insert with generated keys | Nikita Smiichyk | Hanna Bokariuk | 4 | Implemented insert, shared parameter binding, generated key handling, and validation. |
+| Department JDBC DAO: update and delete | Hanna Bokariuk | Nikita Smiichyk | 4 | Implemented department update/delete with consistent return and error behaviour. |
+| Product JDBC DAO: update and delete | Nikita Smiichyk | Hanna Bokariuk | 4 | Implemented product update/delete with row-count checks and clearer SQL error handling. |
+| Department predicate filtering | Hanna Bokariuk | Nikita Smiichyk | 2 | Implemented `findDepartmentsByFilter(Predicate<Department>)`. |
+| Product predicate filtering | Nikita Smiichyk | Hanna Bokariuk | 2 | Implemented `findProductsByFilter(Predicate<Product>)`. |
+| Department JSON conversion | Hanna Bokariuk | Nikita Smiichyk | 4 | Implemented department to/from JSON and list conversion with Jackson. |
+| Product JSON conversion | Nikita Smiichyk | Hanna Bokariuk | 5 | Implemented product to/from JSON, list conversion, and error handling with Jackson. |
+| Architecture diagram and tier explanation | Nikita Smiichyk | Hanna Bokariuk | 3 | Created Mermaid architecture documentation showing client, protocol, server, DAO, and database layers. |
+| Multithreaded server with `ExecutorService` | Nikita Smiichyk | Hanna Bokariuk | 7 | Built socket server setup, router wiring, client handling, and per-client thread pool execution. |
+| `ServerResponse<T>` wrapper and response mapping | Nikita Smiichyk | Hanna Bokariuk | 4 | Standardised server replies with `status`, `message`, and `data`; used typed responses throughout. |
+| Shared request protocol classes | Nikita Smiichyk | Hanna Bokariuk | 4 | Maintained `ClientRequest`, `RequestType`, and shared request/response structure. |
+| Protocol documentation in README | Nikita Smiichyk | Hanna Bokariuk | 6 | Documented request types, payloads, response shapes, binary handling, and error responses. Hanna mainly added small status/protocol notes. |
+| Department client feature: display all and display by ID | Hanna Bokariuk | Nikita Smiichyk | 3 | Implemented and demonstrated department read requests over sockets. |
+| Product client feature: display all and display by ID | Nikita Smiichyk | Hanna Bokariuk | 3 | Implemented and demonstrated product read requests over sockets. |
+| Department client feature: insert/update/delete over sockets | Hanna Bokariuk | Nikita Smiichyk | 5 | Implemented department add, update, delete handlers and client demo verification. |
+| Product client feature: insert/update/delete over sockets | Nikita Smiichyk | Hanna Bokariuk | 5 | Implemented product add, update, delete handlers and client demo verification. |
+| Shared client request helper/refactoring | Nikita Smiichyk | Hanna Bokariuk | 5 | Extracted reusable request sending, entity fetching, list display, delete, and response printing helpers. |
+| Error handling and server logging | Nikita Smiichyk | Hanna Bokariuk | 4 | Added structured error responses and server-side logging for invalid JSON, unknown requests, connection events, and handler failures. |
+| Department binary schema extension | Hanna Bokariuk | Nikita Smiichyk | 3 | Added department image BLOB and metadata columns, later using `MEDIUMBLOB`. |
+| Product binary schema extension | Nikita Smiichyk | Hanna Bokariuk | 3 | Added product image BLOB and metadata columns, later using `MEDIUMBLOB`. |
+| Department binary DTO and DAO support | Hanna Bokariuk | Nikita Smiichyk | 5 | Added department image bytes, file metadata, DAO storage, and image retrieval. |
+| Product binary DTO and DAO support | Nikita Smiichyk | Hanna Bokariuk | 6 | Added product image bytes, metadata validation, DAO storage, metadata-only mapping, and image retrieval. |
+| Shared binary upload payload builder | Nikita Smiichyk | Hanna Bokariuk | 4 | Created `FilePayloadBuilder` to read files, Base64-encode bytes, and add file metadata to JSON payloads. |
+| Department binary upload over sockets | Hanna Bokariuk | Nikita Smiichyk | 4 | Added department file payload handling to add/update requests and stored bytes/metadata in the database. |
+| Product binary upload over sockets | Nikita Smiichyk | Hanna Bokariuk | 4 | Added product file payload handling, Base64 decoding, validation, and database storage. |
+| Department binary retrieval and client file reconstruction | Hanna Bokariuk | Nikita Smiichyk | 5 | Implemented department image retrieval request, DAO BLOB fetch, client-side metadata printing, and file saving. |
+| Product binary retrieval and client file reconstruction | Nikita Smiichyk | Hanna Bokariuk | 5 | Implemented product image retrieval request, DAO BLOB fetch, metadata-only separation, and file retrieval flow. |
+| Metadata-only query without BLOB fetch | Nikita Smiichyk | Hanna Bokariuk | 3 | Implemented through `GET_DEPARTMENT_BY_ID` and `GET_PRODUCT_BY_ID`, where DAO SQL selects metadata but not BLOB columns. |
+| Disconnect protocol and cleanup | Hanna Bokariuk | Nikita Smiichyk | 3 | Added `DISCONNECT`, route handling, client request before shutdown, and clean server client-loop exit. |
+| Department Stage 3 core tests | Hanna Bokariuk | Nikita Smiichyk | 5 | Added department DAO read/insert/update/delete/filter tests and JSON round-trip tests. |
+| Product Stage 3 core tests | Nikita Smiichyk | Hanna Bokariuk | 6 | Added product DAO read/insert/update/delete/filter tests and JSON round-trip tests. |
+| Department binary tests | Hanna Bokariuk | Nikita Smiichyk | 3 | Added department DAO file metadata and image byte assertions. |
+| Product binary tests | Nikita Smiichyk | Hanna Bokariuk | 4 | Added product metadata-only read tests, image retrieval tests, and binary byte assertions. |
+| Product extended validation and failure tests | Nikita Smiichyk | Hanna Bokariuk | 8 | Added product constructor, validation, JSON failure, DAO connection failure, and database failure tests. |
+| Test clean-up and fixture management | Nikita Smiichyk | Hanna Bokariuk | 4 | Added test row cleanup for product DAO tests and removed low-value product tests. |
+| Generated Javadocs and documentation organisation | Nikita Smiichyk | Hanna Bokariuk | 5 | Generated and organised Javadocs under `docs/javadoc`; Hanna added department class documentation. |
+| Final GCA2 README | Nikita Smiichyk | Hanna Bokariuk | 8 | Wrote final project overview, run instructions, protocol docs, stage evidence, binary notes, OOP features, references, and submission checklist. |
+| Contribution matrix | Nikita Smiichyk | Hanna Bokariuk | 4 | Reworked the matrix into the final Stage 4 table format based on Git history and task ownership. |
+| Assessment checklist and final submission notes | Nikita Smiichyk | Hanna Bokariuk | 4 | Added final checklist, assessment rubric notes, stage tracking, and final submission reminders. |
+| Coverage evidence screenshot `/reports/coverage.png` | Nikita Smiichyk | Hanna Bokariuk | 1 | Must be generated in IntelliJ IDEA using the full test suite before final submission. |
+| Screencast planning and export | Hanna Bokariuk | Nikita Smiichyk | 3 | Should cover both vertical slices, server/client demo, binary handling, tests, and design explanation. |
+| Harvard references and AI usage declaration | Nikita Smiichyk | Hanna Bokariuk | 2 | Added references and AI tool use declaration in the final README. |
+| Final code formatting and clean-up | Nikita Smiichyk | Hanna Bokariuk | 5 | Performed project-wide formatting, package clean-up, unused asset removal, and shared refactoring. |
