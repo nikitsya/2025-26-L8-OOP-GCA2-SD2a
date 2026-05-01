@@ -263,6 +263,22 @@ class JdbcProductDaoTest {
         assertEquals("product is required", exception.getMessage());
     }
 
+    @Test
+    void insertProduct_whenConnectionFails_throwsRuntimeException() {
+        JdbcProductDao brokenDao = new JdbcProductDao(
+                "jdbc:mysql://localhost:1/supermarket_store_system",
+                DB_USER,
+                DB_PASS
+        );
+
+        Product product = new Product(0, "TEST_InsertFailure", 1.99, false, null, 5, null, null, null, 0);
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> brokenDao.insertProduct(product));
+
+        assertTrue(exception.getMessage().startsWith("Failed to insert product:"));
+        assertNotNull(exception.getCause());
+    }
+
     // --- Product updates ---
     @Test
     void updateProduct_shouldPersistUpdatedValuesAndImage() {
