@@ -68,6 +68,15 @@ class JdbcProductDaoTest {
         assertEquals("url is required", exception.getMessage());
     }
 
+    @Test
+    void constructor_whenUrlIsNull_throwsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                new JdbcProductDao(null, DB_USER, DB_PASS)
+        );
+
+        assertEquals("url is required", exception.getMessage());
+    }
+
     // --- Product list and metadata retrieval ---
     @Test
     void getAllProducts_returnsInsertedTestProductsWithoutImageData() {
