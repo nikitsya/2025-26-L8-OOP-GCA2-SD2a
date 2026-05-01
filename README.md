@@ -62,8 +62,6 @@
 <details>
 <summary><strong>Stage 3 (F17-F22)</strong></summary>
 
-#### Required Features
-
 | #   | Feature                   | Specification                                                                                                                                                                                                                                                                          | Hanna | Nikita |
 |-----|---------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------|--------|
 | F17 | Binary Schema Extension   | Extend at least one entity table with a BLOB column and associated metadata columns: `file_name VARCHAR`, `content_type VARCHAR`, `file_size INT`. Update `sql/mysqlSetup.sql` to recreate this schema. The entity DTO must include a `byte[]` field for the binary data and corresponding metadata fields. | ✅   | ✅    |
