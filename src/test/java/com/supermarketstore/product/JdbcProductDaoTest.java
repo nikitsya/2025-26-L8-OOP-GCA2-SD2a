@@ -101,6 +101,23 @@ class JdbcProductDaoTest {
     }
 
     @Test
+    void getAllProducts_whenConnectionFails_throwsRuntimeException() {
+        JdbcProductDao brokenDao = new JdbcProductDao(
+                "jdbc:mysql://localhost:1/supermarket_store_system",
+                DB_USER,
+                DB_PASS
+        );
+
+        RuntimeException exception = assertThrows(
+                RuntimeException.class,
+                brokenDao::getAllProducts
+        );
+
+        assertFalse(exception.getMessage().isBlank());
+        assertNotNull(exception.getCause());
+    }
+
+    @Test
     void getProductById_whenProductExists_returnsMetadataWithoutImageData() {
         Product inserted = dao.insertProduct(new Product(0, "TEST_MetadataOnly", 2.50, false, null, 20, new byte[]{5, 6, 7}, "metadata.jpeg", "image/jpeg", 3));
 
