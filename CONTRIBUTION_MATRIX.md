@@ -6,10 +6,10 @@ while Nikita led the Product side and most shared server/protocol/documentation 
 
 ## Team Members
 
-| Team member | Student ID | Git identity used in commits | Main responsibility |
+| Team member | Student ID |  Main responsibility |
 |:--|:--|:--|:--|
-| Hanna Bokariuk | `D00283065` | `HannaBProjects <hannabokariuk@gmail.com>` | Department model, Department DAO, Department JSON, Department client/server flow, Department binary handling, and Department tests |
-| Nikita Smiichyk | `D00283070` | `nikitsya <nikitasmiichyk@gmail.com>`, `Nikita Smiichyk <157646619+nikitsya@users.noreply.github.com>` | Product model, Product DAO, Product JSON, shared server/protocol work, Product binary handling, Product tests, and final documentation |
+| Hanna Bokariuk | `D00283065` | Department model, Department DAO, Department JSON, Department client/server flow, Department binary handling, and Department tests |
+| Nikita Smiichyk | `D00283070` | Product model, Product DAO, Product JSON, shared server/protocol work, Product binary handling, Product tests, and final documentation |
 
 ## Summary of Contribution Split
 
