@@ -480,5 +480,7 @@ Before final upload, confirm these items:
 
 ## 15. AI Tool Use Declaration
 
-AI tools were used for support with documentation wording, README restructuring, checklist interpretation, and code
-review prompts. The implementation remains the responsibility of the project team.
+AI tools were used to generate the main body of this README, interpret the assessment checklist,
+and review wording for clarity. AI tools also helped generate the main body of the code docstrings, suggested
+descriptive test method names, and suggested names for some methods and functions. The implementation, testing,
+review, and final submission decisions remain the responsibility of the project team.
