@@ -60,6 +60,17 @@ class JdbcProductDaoTest {
 
     // --- DAO construction validation ---
     @Test
+    void constructor_whenValidValues_storesConnectionSettings() {
+        JdbcProductDao dao = new JdbcProductDao(DB_URL, DB_USER, DB_PASS);
+
+        assertAll(
+                () -> assertEquals(DB_URL, dao._url()),
+                () -> assertEquals(DB_USER, dao._user()),
+                () -> assertEquals(DB_PASS, dao._pass())
+        );
+    }
+
+    @Test
     void constructor_whenUrlIsBlank_throwsIllegalArgumentException() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
                 new JdbcProductDao(" ", DB_USER, DB_PASS)
