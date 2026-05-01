@@ -485,5 +485,5 @@ and review wording for clarity. AI tools also helped generate the main body of t
 descriptive test method names, and suggested names for some methods and functions. AI tools were also used to help
 draft the contribution matrix and estimate each team member's contribution by reviewing the project history and completed
 tasks. The matrix was then checked, edited, and finalised by the team rather than being accepted as a fully automatic
-assessment. The implementation, testing, review, and final submission decisions remain the responsibility of the project
-team.
+assessment. AI tools also helped suggest commit message wording from short descriptions of completed changes. The
+implementation, testing, review, and final submission decisions remain the responsibility of the project team.
