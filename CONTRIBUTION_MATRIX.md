@@ -1,9 +1,5 @@
 # Project Contribution Matrix
 
-This matrix follows the Stage 4 submission format. The primary author is the person who wrote the initial
-implementation for that task. The contributor/reviewer column records meaningful review, debugging, refactoring, or
-extension work. All group members are expected to understand every part of the code for the final interview.
-
 | Feature / Task | Primary author | Reviewer / contributor | Estimated effort (hours) | Notes |
 |:--|:--|:--|--:|:--|
 | Domain proposal and entity list | Nikita Smiichyk | Hanna Bokariuk | 2 | Supermarket domain selected with Departments and Products as the main entities. |
