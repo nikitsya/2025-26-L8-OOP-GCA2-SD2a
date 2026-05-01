@@ -107,11 +107,7 @@ class JdbcProductDaoTest {
                 DB_USER,
                 DB_PASS
         );
-
-        RuntimeException exception = assertThrows(
-                RuntimeException.class,
-                brokenDao::getAllProducts
-        );
+        RuntimeException exception = assertThrows(RuntimeException.class, brokenDao::getAllProducts);
 
         assertFalse(exception.getMessage().isBlank());
         assertNotNull(exception.getCause());
@@ -153,6 +149,19 @@ class JdbcProductDaoTest {
                 () -> assertTrue(dao.getProductById(-1).isEmpty())
         );
     }
+
+    @Test
+    void getProductById_whenConnectionFails_throwsRuntimeException() {
+        JdbcProductDao brokenDao = new JdbcProductDao(
+                "jdbc:mysql://localhost:1/supermarket_store_system",
+                DB_USER,
+                DB_PASS
+        );
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> brokenDao.getProductById(1));
+
+        assertNotNull(exception.getCause());
+    }
+
 
     // --- Product image retrieval ---
     @Test
