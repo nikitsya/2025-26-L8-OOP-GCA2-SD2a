@@ -173,12 +173,6 @@ The server and department JDBC tests read the database password from `TEST_DB_PA
 export TEST_DB_PASS=<your_mysql_password>
 ```
 
-On the local development machine used for the latest verification run, tests were executed with:
-
-```bash
-TEST_DB_PASS=smiichyk mvn test
-```
-
 ### 5.4 Run the server
 
 Run this main class:
