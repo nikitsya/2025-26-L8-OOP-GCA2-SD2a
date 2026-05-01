@@ -57,6 +57,6 @@ extension work. All group members are expected to understand every part of the c
 | Contribution matrix | Nikita Smiichyk | Hanna Bokariuk | 3 | Reworked the matrix into the final Stage 4 table format based on Git history and task ownership. |
 | Assessment checklist and final submission notes | Nikita Smiichyk | Hanna Bokariuk | 1 | Added final checklist, assessment rubric notes, stage tracking, and final submission reminders. |
 | Coverage evidence screenshot `/reports/coverage.png` |  |  | 1 | Must be generated in IntelliJ IDEA using the full test suite before final submission. |
-| Screencast planning and export | Hanna Bokariuk | Nikita Smiichyk | 3 | Should cover both vertical slices, server/client demo, binary handling, tests, and design explanation. |
+| Screencast planning and export |  |  | 3 | Should cover both vertical slices, server/client demo, binary handling, tests, and design explanation. |
 | Harvard references and AI usage declaration | Nikita Smiichyk | Hanna Bokariuk | 2 | Added references and AI tool use declaration in the final README. |
 | Final code formatting and clean-up | Nikita Smiichyk | Hanna Bokariuk | 3 | Performed project-wide formatting, package clean-up, unused asset removal, and shared refactoring. |
