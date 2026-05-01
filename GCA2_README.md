@@ -401,7 +401,7 @@ Current test classes:
 Run the suite with:
 
 ```bash
-TEST_DB_PASS=smiichyk mvn test
+TEST_DB_PASS=<your_mysql_password> mvn test
 ```
 
 Latest local verification:
