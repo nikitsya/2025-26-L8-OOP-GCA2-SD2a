@@ -53,7 +53,7 @@ extension work. All group members are expected to understand every part of the c
 | Product extended validation and failure tests | Nikita Smiichyk | Hanna Bokariuk | 8 | Added product constructor, validation, JSON failure, DAO connection failure, and database failure tests. |
 | Test clean-up and fixture management | Nikita Smiichyk | Hanna Bokariuk | 4 | Added test row cleanup for product DAO tests and removed low-value product tests. |
 | Generated Javadocs and documentation organisation | Nikita Smiichyk | Hanna Bokariuk | 3 | Generated and organised Javadocs under `docs/javadoc`; Hanna added department class documentation. |
-| Final GCA2 README | Nikita Smiichyk | Hanna Bokariuk | 2 | Wrote final project overview, run instructions, protocol docs, stage evidence, binary notes, OOP features, references, and submission checklist. |
+| Final README | Nikita Smiichyk | Hanna Bokariuk | 2 | Wrote final project overview, run instructions, protocol docs, stage evidence, binary notes, OOP features, references, and submission checklist. |
 | Contribution matrix | Nikita Smiichyk | Hanna Bokariuk | 3 | Reworked the matrix into the final Stage 4 table format based on Git history and task ownership. |
 | Assessment checklist and final submission notes | Nikita Smiichyk | Hanna Bokariuk | 1 | Added final checklist, assessment rubric notes, stage tracking, and final submission reminders. |
 | Coverage evidence screenshot `/reports/coverage.png` |  |  | 1 | Must be generated in IntelliJ IDEA using the full test suite before final submission. |
