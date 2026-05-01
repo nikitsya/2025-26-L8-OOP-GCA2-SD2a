@@ -15,6 +15,8 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Entry point for the supermarket server application.
@@ -26,6 +28,7 @@ import java.util.concurrent.Executors;
  */
 public class ServerMain {
     // === Static Fields ===
+    private static final Logger LOGGER = Logger.getLogger(ServerMain.class.getName());
     private static final int PORT = 9000;
     private static final String DB_URL = "jdbc:mysql://localhost:3306/supermarket_store_system";
     private static final String DB_USER = "root";
@@ -78,18 +81,18 @@ public class ServerMain {
      * @throws IOException if the server socket cannot be opened or used
      */
     private static void start(RequestRouter router) throws IOException {
-        System.out.println("Server listening on port " + PORT);
+        LOGGER.info(() -> "Server listening on port " + PORT);
 
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             while (!Thread.currentThread().isInterrupted()) {
                 Socket clientSocket = serverSocket.accept();
-                System.out.println("Client connected: " + clientSocket.getInetAddress());
+                LOGGER.info(() -> "Client connected: " + clientSocket.getInetAddress());
 
                 CLIENT_POOL.submit(() -> {
                     try {
                         handleClient(clientSocket, router);
                     } catch (IOException e) {
-                        System.out.println("Client handling error: " + e.getMessage());
+                        LOGGER.log(Level.WARNING, "Client handling error", e);
                     }
                 });
             }
@@ -113,7 +116,7 @@ public class ServerMain {
 
             String line;
             while ((line = in.readLine()) != null) {
-                System.out.println("Received: " + line);
+                LOGGER.fine("Received request: " + line);
 
                 ServerResponse<?> response;
 
@@ -123,6 +126,7 @@ public class ServerMain {
                     request = MAPPER.readValue(line, ClientRequest.class);
                     response = router.route(request);
                 } catch (Exception e) {
+                    LOGGER.log(Level.WARNING, "Invalid JSON request received", e);
                     response = ServerResponse.error("Invalid request: " + e.getMessage());
                 }
 
@@ -132,7 +136,7 @@ public class ServerMain {
                     break;
                 }
             }
-            System.out.println("Client disconnected");
+            LOGGER.info("Client disconnected");
         }
     }
 }

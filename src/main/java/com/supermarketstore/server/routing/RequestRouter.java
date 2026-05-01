@@ -14,6 +14,8 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Routes incoming requests to the appropriate handler by type.
@@ -23,6 +25,7 @@ import java.util.Map;
  */
 public class RequestRouter {
     // === Fields ===
+    private static final Logger LOGGER = Logger.getLogger(RequestRouter.class.getName());
     private final Map<String, RequestHandler> _handlers = new HashMap<>();
 
     // === Constructor ===
@@ -79,13 +82,22 @@ public class RequestRouter {
      * if the request type is unknown or handler execution fails
      */
     public ServerResponse<?> route(ClientRequest request) {
+        if (request == null) {
+            LOGGER.warning("Received null request");
+            return ServerResponse.error("Request must not be null");
+        }
+
         RequestHandler handler = _handlers.get(request.getType());
 
-        if (handler == null) return ServerResponse.error("Unknown request type: " + request.getType());
+        if (handler == null) {
+            LOGGER.warning(() -> "Unknown request type: " + request.getType());
+            return ServerResponse.error("Unknown request type: " + request.getType());
+        }
 
         try {
             return handler.handle(request);
         } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Request handling failed for type: " + request.getType(), e);
             return ServerResponse.error("Server error: " + e.getMessage());
         }
     }
