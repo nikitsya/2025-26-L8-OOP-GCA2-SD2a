@@ -1,8 +1,6 @@
 ---
 title: "Supermarket Store System"
-subtitle: "Final README"
 module: "COMP C8Z03 Object-Oriented Programming"
-stage: "Stage 4 Final Submission"
 group: "2025-26-L8-OOP-GCA2-SD2a"
 ---
 
@@ -22,10 +20,10 @@ the documentation and test evidence required for final submission.
 
 ## 2. Team Details
 
-| Name | Student ID | Main area |
-|:--|:--|:--|
-| Hanna Bokariuk | `D00283065` | Department entity, DAO, JSON, client-server flow, binary handling, and tests |
-| Nikita Smiichyk | `D00283070` | Product entity, DAO, JSON, client-server flow, binary handling, server integration, and tests |
+| Name | Student ID |
+|:--|:--|
+| Hanna Bokariuk | `D00283065` |
+| Nikita Smiichyk | `D00283070` |
 
 ### 2.1 Contribution Matrix
 
