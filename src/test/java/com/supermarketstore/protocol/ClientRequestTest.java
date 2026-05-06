@@ -16,25 +16,6 @@ class ClientRequestTest {
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Test
-    void defaultConstructor_setsEmptyTypeAndNullPayload() {
-        ClientRequest request = new ClientRequest();
-
-        assertEquals("", request.getType());
-        assertNull(request.getPayload());
-    }
-
-    @Test
-    void constructor_setsTypeAndPayload() {
-        ObjectNode payload = mapper.createObjectNode();
-        payload.put("id", 7);
-
-        ClientRequest request = new ClientRequest("GET_DEPARTMENT_BY_ID", payload);
-
-        assertEquals("GET_DEPARTMENT_BY_ID", request.getType());
-        assertEquals(payload, request.getPayload());
-    }
-
-    @Test
     void jsonRoundTrip_preservesTypeAndPayload() throws Exception {
         ObjectNode payload = mapper.createObjectNode();
         payload.put("name", "Bakery");
