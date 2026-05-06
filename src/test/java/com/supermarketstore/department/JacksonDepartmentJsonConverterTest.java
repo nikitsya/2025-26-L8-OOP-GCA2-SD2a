@@ -33,6 +33,16 @@ class JacksonDepartmentJsonConverterTest {
     }
 
     @Test
+    void departmentToJson_whenDepartmentIsNull_throwsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> converter.departmentToJson(null)
+        );
+
+        assertEquals("Department must not be null", exception.getMessage());
+    }
+
+    @Test
     void departmentFromJson_returnsExpectedDepartment() {
         assertEquals(department, converter.departmentFromJson(departmentJson));
     }
@@ -70,6 +80,16 @@ class JacksonDepartmentJsonConverterTest {
     @Test
     void departmentListToJson_returnsExpectedJsonArray() {
         assertEquals(departmentsJson, converter.departmentListToJson(departments));
+    }
+
+    @Test
+    void departmentListToJson_whenListIsNull_throwsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> converter.departmentListToJson(null)
+        );
+
+        assertEquals("Department list must not be null", exception.getMessage());
     }
 
     @Test
