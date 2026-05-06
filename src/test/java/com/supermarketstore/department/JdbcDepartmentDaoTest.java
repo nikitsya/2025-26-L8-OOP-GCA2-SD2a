@@ -130,6 +130,14 @@ class JdbcDepartmentDaoTest {
     }
 
     @Test
+    void getDepartmentById_whenIdIsNotPositive_returnsEmpty() {
+        assertAll(
+                () -> assertTrue(dao.getDepartmentById(0).isEmpty()),
+                () -> assertTrue(dao.getDepartmentById(-1).isEmpty())
+        );
+    }
+
+    @Test
     void findDepartmentsByFilter_shouldReturnOnlyMatchingDepartments() {
         Department lowBudget = new Department(0, "TEST_FilterBakery", 0, 2, 7000.0, 4, false, "filter-bakery.jpg", "image/jpeg", 3, new byte[]{1, 2, 3});
         Department highBudget = new Department(0, "TEST_FilterFrozen", 1, 5, 18000.0, 7, true, "filter-frozen.jpg", "image/jpeg", 4, new byte[]{4, 5, 6, 7});
