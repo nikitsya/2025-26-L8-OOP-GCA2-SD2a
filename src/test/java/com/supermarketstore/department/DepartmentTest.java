@@ -11,14 +11,23 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class DepartmentTest {
 
     @Test
-    void shouldTrimDepartmentName() {
+    void constructor_whenNameHasSurroundingWhitespace_trimsName() {
         Department department = new Department(1, "  Bakery  ", 0, 2, 12000.0, 5, false);
 
         assertEquals("Bakery", department.getName());
     }
 
     @Test
-    void shouldRejectBlankDepartmentName() {
+    void constructor_whenNameIsNull_throwsIllegalArgumentException() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
+                new Department(1, null, 0, 2, 12000.0, 5, false)
+        );
+
+        assertEquals("Department name must not be null or blank", exception.getMessage());
+    }
+
+    @Test
+    void constructor_whenNameIsBlank_throwsIllegalArgumentException() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
                 new Department(1, " ", 0, 2, 12000.0, 5, false)
         );
@@ -26,7 +35,7 @@ public class DepartmentTest {
     }
 
     @Test
-    void shouldRejectNegativeDepartmentBudget() {
+    void constructor_whenBudgetIsNegative_throwsIllegalArgumentException() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
                 new Department(1, "Bakery", 0, 2, -1.0, 5, false)
         );
@@ -35,7 +44,7 @@ public class DepartmentTest {
     }
 
     @Test
-    void shouldRejectNegativeEmployeeCount() {
+    void constructor_whenEmployeeCountIsNegative_throwsIllegalArgumentException() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
                 new Department(1, "Bakery", 0, 2, 12000.0, -1, false)
         );
@@ -44,7 +53,7 @@ public class DepartmentTest {
     }
 
     @Test
-    void constructorShouldRejectInvalidZone() {
+    void constructor_whenZoneIsNegative_throwsIllegalArgumentException() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () ->
                 new Department(1, "Bakery", 0, -1, 12000.0, 5, false)
         );
