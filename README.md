@@ -372,7 +372,7 @@ Failure responses use `status = "ERROR"` and usually return `data = null`.
   "is_on_sale": true,
   "discount_price": 2.50,
   "stock": 60,
-  "file_data": null,
+  "product_image": null,
   "file_name": "sauce.jpeg",
   "content_type": "image/jpeg",
   "file_size": 1234
