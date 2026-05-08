@@ -110,32 +110,34 @@ documentation, coverage evidence, and runtime output.
 
 ```text
 OOP-GCA2/
-├── README.md                         # Final project documentation and submission evidence
-├── pom.xml                           # Maven configuration, dependencies, and build settings
-├── sql/
-│   └── mysqlSetup.sql                # Recreates and seeds the MySQL database from scratch
-├── src/
-│   ├── main/
-│   │   ├── java/com/supermarketstore/
-│   │   │   ├── client/               # Console client and socket request helpers
-│   │   │   ├── client/upload/        # Binary file payload creation for uploads
-│   │   │   ├── department/           # Department DTO, DAO interface, JDBC DAO, and JSON converter
-│   │   │   ├── product/              # Product DTO, DAO interface, JDBC DAO, and JSON converter
-│   │   │   ├── protocol/             # ClientRequest, RequestType, and ServerResponse classes
-│   │   │   └── server/               # Multithreaded server, routing, and request handling
-│   │   └── resources/images/         # Sample department and product image files
-│   └── test/java/com/supermarketstore/
-│       ├── department/               # Department DAO, JSON, and binary handling tests
-│       └── product/                  # Product DAO, JSON, validation, and binary handling tests
-├── docs/
-│   └── javadoc/                      # Generated Javadoc website, including index.html
-├── reports/
-│   └── coverage.png                  # IntelliJ IDEA coverage evidence for Stage 4
-├── lib/                              # Local library folder, if required by the environment
-└── target/                           # Maven build output generated locally
-    └── downloads/
-        ├── departments/              # Reconstructed department files downloaded by the client
-        └── products/                 # Reconstructed product files downloaded by the client
++-- README.md                         # Final project documentation and submission evidence
++-- pom.xml                           # Maven configuration, dependencies, and build settings
++-- sql/
+�   +-- mysqlSetup.sql                # Recreates and seeds the MySQL database from scratch
++-- src/
+�   +-- main/
+�   �   +-- java/com/supermarketstore/
+�   �   �   +-- client/               # Console client and socket request helpers
+�   �   �   +-- client/upload/        # Binary file payload creation for uploads
+�   �   �   +-- department/           # Department DTO, DAO interface, JDBC DAO, and JSON converter
+�   �   �   +-- product/              # Product DTO, DAO interface, JDBC DAO, and JSON converter
+�   �   �   +-- protocol/             # ClientRequest, RequestType, and ServerResponse classes
+�   �   �   +-- server/               # Multithreaded server, routing, and request handling
+�   �   +-- resources/images/         # Sample department and product image files
+�   +-- test/java/com/supermarketstore/
+�       +-- department/               # Department DAO, JSON, and binary handling tests
+�       +-- product/                  # Product DAO, JSON, validation, and binary handling tests
+�       +-- protocol/                 # Shared protocol wrapper and Base64 round-trip tests
+�       +-- server/routing/           # RequestRouter request/response scenario tests
++-- docs/
+�   +-- javadoc/                      # Generated Javadoc website, including index.html
++-- reports/
+�   +-- coverage.png                  # IntelliJ IDEA coverage evidence for Stage 4
++-- lib/                              # Local library folder, if required by the environment
++-- target/                           # Maven build output generated locally
+    +-- downloads/
+        +-- departments/              # Reconstructed department files downloaded by the client
+        +-- products/                 # Reconstructed product files downloaded by the client
 ```
 
 ## 4. Domain Model and Database
@@ -200,7 +202,7 @@ jdbc:mysql://localhost:3306/supermarket_store_system
 
 ### 5.3 Configure the database password
 
-The server and department JDBC tests read the database password from `TEST_DB_PASS`.
+The server and JDBC DAO tests read the database password from `TEST_DB_PASS`.
 
 ```bash
 export TEST_DB_PASS=<your_mysql_password>
@@ -428,13 +430,26 @@ Current test classes:
 | `ProductTest` | Product validation, sale rules, binary metadata rules, defensive byte array copies |
 | `JacksonDepartmentJsonConverterTest` | Department JSON serialisation and deserialisation |
 | `JacksonProductJsonConverterTest` | Product JSON serialisation and deserialisation |
-| `JdbcDepartmentDaoTest` | Department insert, update, delete, read, filter, and binary bytes |
+| `JdbcDepartmentDaoTest` | Department getAll, getById, insert, update, delete, filter, metadata-only reads, and binary bytes |
 | `JdbcProductDaoTest` | Product constructor, CRUD, read, filter, metadata-only reads, image reads, and binary bytes |
+| `ServerResponseTest` | Generic `ServerResponse<T>` success, error, and JSON serialisation behaviour |
+| `ClientRequestTest` | Shared `ClientRequest` JSON round-trip behaviour |
+| `Base64EncodingTest` | Binary Base64 encode/decode round-trip assertions |
+| `RequestRouterTest` | Server request/response routing scenarios, including errors, success paths, and disconnect |
 
 Run the suite with:
 
 ```bash
 TEST_DB_PASS=<your_mysql_password> mvn test
+```
+
+The Stage 4 suite covers all implemented DAO methods, JSON conversion round-trips, shared protocol helpers, at least
+one server request/response scenario, and binary upload/retrieval assertions with known byte arrays.
+
+Current suite size:
+
+```text
+104 JUnit 5 @Test methods across department, product, protocol, and router test classes
 ```
 
 Latest local verification:
@@ -526,3 +541,4 @@ draft the contribution matrix and estimate each team member's contribution by re
 tasks. The matrix was then checked, edited, and finalised by the team rather than being accepted as a fully automatic
 assessment. AI tools also helped suggest commit message wording from short descriptions of completed changes. The
 implementation, testing, review, and final submission decisions remain the responsibility of the project team.
+
