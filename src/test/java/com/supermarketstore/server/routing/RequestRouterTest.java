@@ -225,6 +225,19 @@ class RequestRouterTest {
     }
 
     @Test
+    void route_whenRequestTypeIsUnknown_returnsErrorResponse() {
+        RequestRouter router = new RequestRouter(emptyDepartmentDao(), emptyProductDao());
+
+        ClientRequest request = new ClientRequest("NOT_A_REAL_REQUEST", null);
+
+        ServerResponse<?> response = router.route(request);
+
+        assertEquals("ERROR", response.getStatus());
+        assertEquals("Unknown request type: NOT_A_REAL_REQUEST", response.getMessage());
+        assertNull(response.getData());
+    }
+
+    @Test
     void route_whenDisconnectRequestIsSent_returnsOkResponse() {
         RequestRouter router = new RequestRouter(emptyDepartmentDao(), emptyProductDao());
 
