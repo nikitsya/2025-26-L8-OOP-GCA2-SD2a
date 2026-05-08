@@ -56,6 +56,27 @@ class JdbcDepartmentDaoTest {
     }
 
     @Test
+    void getAllDepartments_returnsInsertedTestDepartmentsWithoutImageData() {
+        Department first = new Department(0, "TEST_AllBakery", 0, 2, 12000.0, 5, false, "all-bakery.jpg", "image/jpeg", 3, new byte[]{1, 2, 3});
+        Department second = new Department(0, "TEST_AllFrozen", 1, 5, 18000.0, 7, true, "all-frozen.jpg", "image/jpeg", 4, new byte[]{4, 5, 6, 7});
+
+        dao.insertDepartment(first);
+        dao.insertDepartment(second);
+
+        List<Department> departments = dao.getAllDepartments();
+
+        List<Department> testDepartments = departments.stream()
+                .filter(department -> department.getName().startsWith("TEST_All"))
+                .toList();
+
+        assertEquals(2, testDepartments.size());
+        assertTrue(testDepartments.stream().allMatch(department -> department.getFileName() != null && !department.getFileName().isBlank()));
+        assertTrue(testDepartments.stream().allMatch(department -> department.getContentType() != null && !department.getContentType().isBlank()));
+        assertTrue(testDepartments.stream().allMatch(department -> department.getFileSize() > 0));
+        assertTrue(testDepartments.stream().allMatch(department -> department.getDepartmentImage() == null));
+    }
+
+    @Test
     void insertDepartment_shouldPersistAndReturnMatchingDepartment() {
         Department newDepartment = new Department(0, "TEST_Bakery", 0, 2, 12000.0, 5, false, "bakery.jpg", "image/jpeg", 3, new byte[]{1, 2, 3});
 
