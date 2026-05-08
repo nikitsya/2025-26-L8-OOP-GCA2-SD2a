@@ -113,26 +113,26 @@ OOP-GCA2/
 +-- README.md                         # Final project documentation and submission evidence
 +-- pom.xml                           # Maven configuration, dependencies, and build settings
 +-- sql/
-¦   +-- mysqlSetup.sql                # Recreates and seeds the MySQL database from scratch
+|   +-- mysqlSetup.sql                # Recreates and seeds the MySQL database from scratch
 +-- src/
-¦   +-- main/
-¦   ¦   +-- java/com/supermarketstore/
-¦   ¦   ¦   +-- client/               # Console client and socket request helpers
-¦   ¦   ¦   +-- client/upload/        # Binary file payload creation for uploads
-¦   ¦   ¦   +-- department/           # Department DTO, DAO interface, JDBC DAO, and JSON converter
-¦   ¦   ¦   +-- product/              # Product DTO, DAO interface, JDBC DAO, and JSON converter
-¦   ¦   ¦   +-- protocol/             # ClientRequest, RequestType, and ServerResponse classes
-¦   ¦   ¦   +-- server/               # Multithreaded server, routing, and request handling
-¦   ¦   +-- resources/images/         # Sample department and product image files
-¦   +-- test/java/com/supermarketstore/
-¦       +-- department/               # Department DAO, JSON, and binary handling tests
-¦       +-- product/                  # Product DAO, JSON, validation, and binary handling tests
-¦       +-- protocol/                 # Shared protocol wrapper and Base64 round-trip tests
-¦       +-- server/routing/           # RequestRouter request/response scenario tests
+|   +-- main/
+|   |   +-- java/com/supermarketstore/
+|   |   |   +-- client/               # Console client and socket request helpers
+|   |   |   +-- client/upload/        # Binary file payload creation for uploads
+|   |   |   +-- department/           # Department DTO, DAO interface, JDBC DAO, and JSON converter
+|   |   |   +-- product/              # Product DTO, DAO interface, JDBC DAO, and JSON converter
+|   |   |   +-- protocol/             # ClientRequest, RequestType, and ServerResponse classes
+|   |   |   +-- server/               # Multithreaded server, routing, and request handling
+|   |   +-- resources/images/         # Sample department and product image files
+|   +-- test/java/com/supermarketstore/
+|       +-- department/               # Department DAO, JSON, and binary handling tests
+|       +-- product/                  # Product DAO, JSON, validation, and binary handling tests
+|       +-- protocol/                 # Shared protocol wrapper and Base64 round-trip tests
+|       +-- server/routing/           # RequestRouter request/response scenario tests
 +-- docs/
-¦   +-- javadoc/                      # Generated Javadoc website, including index.html
+|   +-- javadoc/                      # Generated Javadoc website, including index.html
 +-- reports/
-¦   +-- coverage.png                  # IntelliJ IDEA coverage evidence for Stage 4
+|   +-- coverage.png                  # IntelliJ IDEA coverage evidence for Stage 4
 +-- lib/                              # Local library folder, if required by the environment
 +-- target/                           # Maven build output generated locally
     +-- downloads/
@@ -473,13 +473,17 @@ The committed `reports/coverage.png` screenshot shows the IntelliJ IDEA coverage
 
 ### 11.3 Screencast
 
+YouTube screencast link:
+
+<https://youtu.be/8RMKxQ6cFTU>
+
 Required filename:
 
 ```text
 2025-26-L8-OOP-GCA2-SD2a
 ```
 
-The screencast should demonstrate the running server, client CRUD requests, binary upload and retrieval, metadata-only
+The screencast demonstrates the running server, client CRUD requests, binary upload and retrieval, metadata-only
 retrieval, disconnect handling, tests, and coverage evidence.
 
 ## 12. OOP Requirements and Design Choices
@@ -514,7 +518,7 @@ which keeps request dispatch centralised and avoids a long conditional chain ins
 Before final upload, confirm these items:
 
 - `reports/coverage.png` exists and shows at least 70% line coverage for the required classes.
-- The screencast is exported with filename `2025-26-L8-OOP-GCA2-SD2a`.
+- The screencast is available from the YouTube link in section 11.3.
 - The contribution matrix in section 2.1 is complete, including any required effort/reviewer details.
 - The final README required by Moodle is submitted in the expected filename/location.
 - The database can be recreated from `sql/mysqlSetup.sql`.
