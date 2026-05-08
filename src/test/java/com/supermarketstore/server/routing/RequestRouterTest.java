@@ -238,6 +238,17 @@ class RequestRouterTest {
     }
 
     @Test
+    void route_whenRequestIsNull_returnsErrorResponse() {
+        RequestRouter router = new RequestRouter(emptyDepartmentDao(), emptyProductDao());
+
+        ServerResponse<?> response = router.route(null);
+
+        assertEquals("ERROR", response.getStatus());
+        assertEquals("Request must not be null", response.getMessage());
+        assertNull(response.getData());
+    }
+
+    @Test
     void route_whenDisconnectRequestIsSent_returnsOkResponse() {
         RequestRouter router = new RequestRouter(emptyDepartmentDao(), emptyProductDao());
 
