@@ -172,6 +172,59 @@ class RequestRouterTest {
     }
 
     @Test
+    void route_whenGetAllDepartmentsRequestIsSent_returnsOkResponse() {
+        Department first = new Department(1, "Bakery", 0, 2, 12000.0, 5, false);
+        Department second = new Department(2, "Frozen Foods", 1, 5, 20000.0, 7, true);
+
+        DepartmentDao departmentDao = new DepartmentDao() {
+            @Override
+            public List<Department> getAllDepartments() {
+                return List.of(first, second);
+            }
+
+            @Override
+            public Optional<Department> getDepartmentById(int id) {
+                return Optional.empty();
+            }
+
+            @Override
+            public boolean deleteDepartmentById(int id) {
+                return false;
+            }
+
+            @Override
+            public Department insertDepartment(Department department) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public Department updateDepartment(int id, Department department) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public List<Department> findDepartmentsByFilter(Predicate<Department> filter) {
+                return List.of();
+            }
+
+            @Override
+            public Optional<Department> getDepartmentImageById(int id) {
+                return Optional.empty();
+            }
+        };
+
+        RequestRouter router = new RequestRouter(departmentDao, emptyProductDao());
+
+        ClientRequest request = new ClientRequest(RequestType.GET_ALL_DEPARTMENTS.name(), null);
+
+        ServerResponse<?> response = router.route(request);
+
+        assertEquals("OK", response.getStatus());
+        assertEquals("Departments retrieved successfully", response.getMessage());
+        assertEquals(List.of(first, second), response.getData());
+    }
+
+    @Test
     void route_whenDisconnectRequestIsSent_returnsOkResponse() {
         RequestRouter router = new RequestRouter(emptyDepartmentDao(), emptyProductDao());
 
