@@ -599,18 +599,7 @@ Router / Command-style Dispatch:
 `RequestRouter` stores request handlers in a `Map<String, RequestHandler>`. Each request type maps to a handler lambda,
 which keeps request dispatch centralised and avoids a long conditional chain inside the server loop.
 
-## 13. Final Submission Checklist
-
-Final submission evidence included in this repository:
-
-- `reports/coverage.png` exists and shows at least 70% line coverage for the required classes.
-- The screencast is available from the YouTube link in section 11.3.
-- The contribution matrix in section 2.1 is complete, including any required effort/reviewer details.
-- This README contains the final project overview, run instructions, evidence, references, and AI tool use declaration.
-- The database can be recreated from `sql/mysqlSetup.sql`.
-- The server and client run from a clean checkout after setting `TEST_DB_PASS`.
-
-## 14. References
+## 13. References
 
 - Baeldung (n.d.) *Apache Maven Tutorial*. Available at: <https://www.baeldung.com/maven> (Accessed: 1 May 2026).
 - GeeksforGeeks (n.d.) *Maven Tutorial*. Available at: <https://www.geeksforgeeks.org/advance-java/maven-tutorial/> (Accessed: 1 May 2026).
@@ -622,7 +611,7 @@ Final submission evidence included in this repository:
 - Oracle (n.d.) *All About Sockets*. Available at: <https://docs.oracle.com/javase/tutorial/networking/sockets/> (Accessed: 1 May 2026).
 - GeeksforGeeks (n.d.) *Socket Programming in Java*. Available at: <https://www.geeksforgeeks.org/java/socket-programming-in-java/> (Accessed: 1 May 2026).
 
-## 15. AI Tool Use Declaration
+## 14. AI Tool Use Declaration
 
 AI tools were used to generate the main body of this README, interpret the assessment checklist,
 and review wording for clarity. AI tools also helped generate the main body of the code docstrings, suggested
