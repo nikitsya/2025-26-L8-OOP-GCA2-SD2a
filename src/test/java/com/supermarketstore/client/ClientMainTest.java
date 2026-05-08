@@ -173,7 +173,7 @@ class ClientMainTest {
         method.invoke(null, new PrintWriter(requestWriter, true), responses);
     }
 
-    private static BufferedReader responses(ServerResponse<?>... responses) throws Exception {
+    private static BufferedReader responses(ServerResponse<?>... responses) {
         String responseLines = Arrays.stream(responses)
                 .map(ClientMainTest::toJson)
                 .collect(Collectors.joining(System.lineSeparator()));
@@ -188,7 +188,7 @@ class ClientMainTest {
         }
     }
 
-    private static List<String> requestTypes(StringWriter writer) throws Exception {
+    private static List<String> requestTypes(StringWriter writer) {
         return Arrays.stream(writer.toString().split("\\R"))
                 .filter(line -> !line.isBlank())
                 .map(ClientMainTest::readRequest)
@@ -196,7 +196,7 @@ class ClientMainTest {
                 .toList();
     }
 
-    private static List<JsonNode> requestPayloads(StringWriter writer) throws Exception {
+    private static List<JsonNode> requestPayloads(StringWriter writer) {
         return Arrays.stream(writer.toString().split("\\R"))
                 .filter(line -> !line.isBlank())
                 .map(ClientMainTest::readRequest)
