@@ -263,6 +263,20 @@ class RequestRouterTest {
     }
 
     @Test
+    void route_whenGetProductByIdRequestIsMissingId_returnsErrorResponse() {
+        RequestRouter router = new RequestRouter(emptyDepartmentDao(), emptyProductDao());
+
+        ObjectNode payload = mapper.createObjectNode();
+        ClientRequest request = new ClientRequest(RequestType.GET_PRODUCT_BY_ID.name(), payload);
+
+        ServerResponse<?> response = router.route(request);
+
+        assertEquals("ERROR", response.getStatus());
+        assertEquals("Missing required field: id", response.getMessage());
+        assertNull(response.getData());
+    }
+
+    @Test
     void route_whenDisconnectRequestIsSent_returnsOkResponse() {
         RequestRouter router = new RequestRouter(emptyDepartmentDao(), emptyProductDao());
 
