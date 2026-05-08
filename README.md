@@ -27,10 +27,14 @@ the documentation and test evidence required for final submission.
 
 ### 2.1 Contribution Matrix
 
+This contribution matrix summarises the main ownership of each project area for the final submission. It is based on
+the Git history, feature ownership during the staged demos, and final review work. The Git authors `HannaBProjects` and
+`nikitsya` / `Nikita Smiichyk` correspond to Hanna Bokariuk and Nikita Smiichyk respectively.
+
 <details>
 <summary><strong>Click to expand the contribution matrix</strong></summary>
 
-| Feature / Task | Primary author | Reviewer / contributor | Estimated effort (hours) | Notes |
+| Feature / Task | Primary contributor | Supporting contributor / reviewer | Estimated effort (hours) | Evidence notes |
 |:--|:--|:--|--:|:--|
 | Domain proposal and entity list | Nikita Smiichyk | Hanna Bokariuk | 2 | Supermarket domain selected with Departments and Products as the main entities. |
 | Repository setup, branch structure, and Maven project setup | Nikita Smiichyk | Hanna Bokariuk | 4 | Maven Java 17 project with Jackson, MySQL Connector/J, and JUnit 5 dependencies. |
@@ -84,7 +88,7 @@ the documentation and test evidence required for final submission.
 | Test clean-up and fixture management | Nikita Smiichyk | Hanna Bokariuk | 4 | Added test row cleanup for product DAO tests and removed low-value product tests. |
 | Generated Javadocs and documentation organisation | Nikita Smiichyk | Hanna Bokariuk | 3 | Generated and organised Javadocs under `docs/javadoc`; Hanna added department class documentation. |
 | Final README | Nikita Smiichyk | Hanna Bokariuk | 2 | Wrote final project overview, run instructions, protocol docs, stage evidence, binary notes, OOP features, references, and submission checklist. |
-| Contribution matrix | Nikita Smiichyk | Hanna Bokariuk | 3 | Reworked the matrix into the final Stage 4 table format based on Git history and task ownership. |
+| Final contribution matrix and authorship review | Nikita Smiichyk | Hanna Bokariuk | 3 | Reworked the final contribution evidence using Git history, feature ownership, and Stage 4 submission responsibilities. |
 | Assessment checklist and final submission notes | Nikita Smiichyk | Hanna Bokariuk | 1 | Added final checklist, assessment rubric notes, stage tracking, and final submission reminders. |
 | Coverage evidence screenshot `/reports/coverage.png` | Hanna Bokariuk | Nikita Smiichyk | 2 | Prepared the IntelliJ IDEA coverage evidence for the full Stage 4 test suite; Nikita reviewed and committed the evidence file. |
 | Screencast recording and YouTube upload | Nikita Smiichyk | Hanna Bokariuk | 4 | Recorded, exported, uploaded, and documented the final YouTube screencast covering server/client demo, binary handling, tests, and design explanation. |
