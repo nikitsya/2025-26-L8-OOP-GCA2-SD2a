@@ -154,6 +154,43 @@ The project has two main domain entities.
 The schema also contains the bridge table `department_products`, which models the many-to-many relationship between
 departments and products.
 
+```mermaid
+erDiagram
+    departments {
+        int department_id PK
+        string name
+        int floor
+        int zone
+        double budget
+        int employee_count
+        boolean is_refrigerated
+        string file_name
+        string content_type
+        int file_size
+        blob department_image
+    }
+
+    products {
+        int product_id PK
+        string name
+        double price
+        boolean is_on_sale
+        double discount_price
+        int stock
+        string file_name
+        string content_type
+        int file_size
+        blob product_image
+    }
+
+    department_products {
+        int department_id PK, FK
+        int product_id PK, FK
+    }
+
+    departments ||--o{ department_products : "contains"
+    products ||--o{ department_products : "listed in"
+```
 ### 4.2 Validation and invalid data handling
 
 DTO fields are encapsulated and validated through constructors and setters. Examples include:
@@ -247,7 +284,7 @@ The application follows an N-tier structure. The client sends JSON requests over
 request, routes it to the correct handler, calls DAO interfaces, and the JDBC DAO implementations communicate with
 MySQL.
 
-```mermaid
+`````mermaid
 flowchart LR
     C["Client<br/>ClientMain"]
     P["JSON Protocol<br/>ClientRequest, RequestType, ServerResponse<T>"]
@@ -392,6 +429,47 @@ The client can attach these file fields to `ADD_*` and `UPDATE_*` payloads:
 | `contentType` or `content_type` | MIME type |
 | `fileSize` or `file_size` | File size in bytes |
 
+### 9.6 Sequence diagram: GET_DEPARTMENT_IMAGE_BY_ID
+
+```mermaid
+sequenceDiagram
+    participant Client as ClientMain
+    participant Server as ServerMain
+    participant Router as RequestRouter
+    participant Dao as JdbcDepartmentDao
+    participant Database as MySQL
+
+    Client->>Server: JSON request { type: GET_DEPARTMENT_IMAGE_BY_ID, payload: { id } }
+    Server->>Router: route(ClientRequest)
+    Router->>Dao: getDepartmentImageById(id)
+    Dao->>Database: SELECT ... department_image ... WHERE department_id = ?
+    Database-->>Dao: ResultSet with metadata and BLOB bytes
+    Dao-->>Router: Optional.of(Department)
+    Router-->>Server: ServerResponse.ok("Department image retrieved successfully", department)
+    Server-->>Client: JSON response with metadata and Base64 image bytes
+    Client->>Client: saveRetrievedFile(target/downloads/departments/...)
+```
+
+### 9.7 Sequence diagram: GET_PRODUCT_IMAGE_BY_ID
+
+```mermaid
+sequenceDiagram
+    participant Client as ClientMain
+    participant Server as ServerMain
+    participant Router as RequestRouter
+    participant Dao as JdbcProductDao
+    participant Database as MySQL
+
+    Client->>Server: JSON request { type: GET_PRODUCT_IMAGE_BY_ID, payload: { id } }
+    Server->>Router: route(ClientRequest)
+    Router->>Dao: getProductImageById(id)
+    Dao->>Database: SELECT ... product_image ... WHERE product_id = ?
+    Database-->>Dao: ResultSet with metadata and BLOB bytes
+    Dao-->>Router: Optional.of(Product)
+    Router-->>Server: ServerResponse.ok("Product image retrieved successfully", product)
+    Server-->>Client: JSON response with metadata and Base64 image bytes
+    Client->>Client: saveRetrievedFile(target/downloads/products/...)
+```
 ## 10. Stage 3 Evidence: Binary File Handling, Protocol Completion, and Testing
 
 | Feature | Requirement | Project evidence |
