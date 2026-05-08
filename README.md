@@ -51,6 +51,7 @@ the documentation and test evidence required for final submission.
 | Department JSON conversion | Hanna Bokariuk | Nikita Smiichyk | 4 | Implemented department to/from JSON and list conversion with Jackson. |
 | Product JSON conversion | Nikita Smiichyk | Hanna Bokariuk | 5 | Implemented product to/from JSON, list conversion, and error handling with Jackson. |
 | Architecture diagram and tier explanation | Nikita Smiichyk | Hanna Bokariuk | 2 | Created Mermaid architecture documentation showing client, protocol, server, DAO, and database layers. |
+| ER and sequence diagram updates | Hanna Bokariuk | Nikita Smiichyk | 3 | Added ER and binary retrieval sequence diagrams to make the README evidence clearer for Stage 4 review. |
 | Multithreaded server with `ExecutorService` | Nikita Smiichyk | Hanna Bokariuk | 7 | Built socket server setup, router wiring, client handling, and per-client thread pool execution. |
 | `ServerResponse<T>` wrapper and response mapping | Hanna Bokariuk | Nikita Smiichyk | 4 | Standardised server replies with `status`, `message`, and `data`; used typed responses throughout. |
 | Shared request protocol classes | Nikita Smiichyk | Hanna Bokariuk | 4 | Maintained `ClientRequest`, `RequestType`, and shared request/response structure. |
@@ -77,13 +78,16 @@ the documentation and test evidence required for final submission.
 | Department binary tests | Hanna Bokariuk | Nikita Smiichyk | 3 | Added department DAO file metadata and image byte assertions. |
 | Product binary tests | Nikita Smiichyk | Hanna Bokariuk | 4 | Added product metadata-only read tests, image retrieval tests, and binary byte assertions. |
 | Product extended validation and failure tests | Nikita Smiichyk | Hanna Bokariuk | 8 | Added product constructor, validation, JSON failure, DAO connection failure, and database failure tests. |
+| Stage 4 router and protocol tests | Hanna Bokariuk | Nikita Smiichyk | 6 | Added request router success, missing-id, unknown-type, null-request, and protocol wrapper coverage scenarios. |
+| Stage 4 client and server tests | Nikita Smiichyk | Hanna Bokariuk | 5 | Added client flow and server handling tests covering invalid JSON, valid requests, disconnects, and demo helper behaviour. |
+| Stage 4 department coverage tests | Hanna Bokariuk | Nikita Smiichyk | 3 | Added extra department DAO, JSON, Base64, and image retrieval tests to widen the final Stage 4 test evidence. |
 | Test clean-up and fixture management | Nikita Smiichyk | Hanna Bokariuk | 4 | Added test row cleanup for product DAO tests and removed low-value product tests. |
 | Generated Javadocs and documentation organisation | Nikita Smiichyk | Hanna Bokariuk | 3 | Generated and organised Javadocs under `docs/javadoc`; Hanna added department class documentation. |
 | Final README | Nikita Smiichyk | Hanna Bokariuk | 2 | Wrote final project overview, run instructions, protocol docs, stage evidence, binary notes, OOP features, references, and submission checklist. |
 | Contribution matrix | Nikita Smiichyk | Hanna Bokariuk | 3 | Reworked the matrix into the final Stage 4 table format based on Git history and task ownership. |
 | Assessment checklist and final submission notes | Nikita Smiichyk | Hanna Bokariuk | 1 | Added final checklist, assessment rubric notes, stage tracking, and final submission reminders. |
-| Coverage evidence screenshot `/reports/coverage.png` | Nikita Smiichyk | Hanna Bokariuk | 1 | Must be generated in IntelliJ IDEA using the full test suite before final submission. |
-| Screencast planning and export | Hanna Bokariuk | Nikita Smiichyk | 3 | Should cover both vertical slices, server/client demo, binary handling, tests, and design explanation. |
+| Coverage evidence screenshot `/reports/coverage.png` | Hanna Bokariuk | Nikita Smiichyk | 2 | Prepared the IntelliJ IDEA coverage evidence for the full Stage 4 test suite; Nikita reviewed and committed the evidence file. |
+| Screencast recording and YouTube upload | Nikita Smiichyk | Hanna Bokariuk | 4 | Recorded, exported, uploaded, and documented the final YouTube screencast covering server/client demo, binary handling, tests, and design explanation. |
 | Harvard references and AI usage declaration | Nikita Smiichyk | Hanna Bokariuk | 2 | Added references and AI tool use declaration in the final README. |
 | Final code formatting and clean-up | Nikita Smiichyk | Hanna Bokariuk | 3 | Performed project-wide formatting, package clean-up, unused asset removal, and shared refactoring. |
 
@@ -154,6 +158,43 @@ The project has two main domain entities.
 The schema also contains the bridge table `department_products`, which models the many-to-many relationship between
 departments and products.
 
+```mermaid
+erDiagram
+    departments {
+        int department_id PK
+        string name
+        int floor
+        int zone
+        double budget
+        int employee_count
+        boolean is_refrigerated
+        string file_name
+        string content_type
+        int file_size
+        blob department_image
+    }
+
+    products {
+        int product_id PK
+        string name
+        double price
+        boolean is_on_sale
+        double discount_price
+        int stock
+        string file_name
+        string content_type
+        int file_size
+        blob product_image
+    }
+
+    department_products {
+        int department_id PK, FK
+        int product_id PK, FK
+    }
+
+    departments ||--o{ department_products : "contains"
+    products ||--o{ department_products : "listed in"
+```
 ### 4.2 Validation and invalid data handling
 
 DTO fields are encapsulated and validated through constructors and setters. Examples include:
@@ -392,6 +433,47 @@ The client can attach these file fields to `ADD_*` and `UPDATE_*` payloads:
 | `contentType` or `content_type` | MIME type |
 | `fileSize` or `file_size` | File size in bytes |
 
+### 9.6 Sequence diagram: GET_DEPARTMENT_IMAGE_BY_ID
+
+```mermaid
+sequenceDiagram
+    participant Client as ClientMain
+    participant Server as ServerMain
+    participant Router as RequestRouter
+    participant Dao as JdbcDepartmentDao
+    participant Database as MySQL
+
+    Client->>Server: JSON request { type: GET_DEPARTMENT_IMAGE_BY_ID, payload: { id } }
+    Server->>Router: route(ClientRequest)
+    Router->>Dao: getDepartmentImageById(id)
+    Dao->>Database: SELECT ... department_image ... WHERE department_id = ?
+    Database-->>Dao: ResultSet with metadata and BLOB bytes
+    Dao-->>Router: Optional.of(Department)
+    Router-->>Server: ServerResponse.ok("Department image retrieved successfully", department)
+    Server-->>Client: JSON response with metadata and Base64 image bytes
+    Client->>Client: saveRetrievedFile(target/downloads/departments/...)
+```
+
+### 9.7 Sequence diagram: GET_PRODUCT_IMAGE_BY_ID
+
+```mermaid
+sequenceDiagram
+    participant Client as ClientMain
+    participant Server as ServerMain
+    participant Router as RequestRouter
+    participant Dao as JdbcProductDao
+    participant Database as MySQL
+
+    Client->>Server: JSON request { type: GET_PRODUCT_IMAGE_BY_ID, payload: { id } }
+    Server->>Router: route(ClientRequest)
+    Router->>Dao: getProductImageById(id)
+    Dao->>Database: SELECT ... product_image ... WHERE product_id = ?
+    Database-->>Dao: ResultSet with metadata and BLOB bytes
+    Dao-->>Router: Optional.of(Product)
+    Router-->>Server: ServerResponse.ok("Product image retrieved successfully", product)
+    Server-->>Client: JSON response with metadata and Base64 image bytes
+    Client->>Client: saveRetrievedFile(target/downloads/products/...)
+```
 ## 10. Stage 3 Evidence: Binary File Handling, Protocol Completion, and Testing
 
 | Feature | Requirement | Project evidence |
@@ -513,14 +595,14 @@ Router / Command-style Dispatch:
 `RequestRouter` stores request handlers in a `Map<String, RequestHandler>`. Each request type maps to a handler lambda,
 which keeps request dispatch centralised and avoids a long conditional chain inside the server loop.
 
-## 13. Known Final Submission Items To Check
+## 13. Final Submission Checklist
 
-Before final upload, confirm these items:
+Final submission evidence included in this repository:
 
 - `reports/coverage.png` exists and shows at least 70% line coverage for the required classes.
 - The screencast is available from the YouTube link in section 11.3.
 - The contribution matrix in section 2.1 is complete, including any required effort/reviewer details.
-- The final README required by Moodle is submitted in the expected filename/location.
+- This README contains the final project overview, run instructions, evidence, references, and AI tool use declaration.
 - The database can be recreated from `sql/mysqlSetup.sql`.
 - The server and client run from a clean checkout after setting `TEST_DB_PASS`.
 
@@ -545,4 +627,3 @@ draft the contribution matrix and estimate each team member's contribution by re
 tasks. The matrix was then checked, edited, and finalised by the team rather than being accepted as a fully automatic
 assessment. AI tools also helped suggest commit message wording from short descriptions of completed changes. The
 implementation, testing, review, and final submission decisions remain the responsibility of the project team.
-
