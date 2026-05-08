@@ -449,13 +449,13 @@ one server request/response scenario, and binary upload/retrieval assertions wit
 Current suite size:
 
 ```text
-104 JUnit 5 @Test methods across department, product, protocol, and router test classes
+123 JUnit 5 tests across department, product, protocol, client, upload, server, and router test classes
 ```
 
 Latest local verification:
 
 ```text
-Tests run: 83, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 123, Failures: 0, Errors: 0, Skipped: 0
 BUILD SUCCESS
 ```
 
@@ -468,8 +468,8 @@ conversion, and binary file handling classes. The required evidence file is:
 reports/coverage.png
 ```
 
-At the time this README was written, no `reports/coverage.png` file was present in the repository. Before final
-submission, run the full test suite with IntelliJ coverage and save the coverage panel screenshot to that path.
+The committed `reports/coverage.png` screenshot shows the IntelliJ IDEA coverage panel for the full
+`com.supermarketstore` package, with 91% line coverage overall.
 
 ### 11.3 Screencast
 
