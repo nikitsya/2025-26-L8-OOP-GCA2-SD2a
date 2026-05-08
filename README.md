@@ -113,26 +113,26 @@ OOP-GCA2/
 +-- README.md                         # Final project documentation and submission evidence
 +-- pom.xml                           # Maven configuration, dependencies, and build settings
 +-- sql/
-¦   +-- mysqlSetup.sql                # Recreates and seeds the MySQL database from scratch
+ï¿½   +-- mysqlSetup.sql                # Recreates and seeds the MySQL database from scratch
 +-- src/
-¦   +-- main/
-¦   ¦   +-- java/com/supermarketstore/
-¦   ¦   ¦   +-- client/               # Console client and socket request helpers
-¦   ¦   ¦   +-- client/upload/        # Binary file payload creation for uploads
-¦   ¦   ¦   +-- department/           # Department DTO, DAO interface, JDBC DAO, and JSON converter
-¦   ¦   ¦   +-- product/              # Product DTO, DAO interface, JDBC DAO, and JSON converter
-¦   ¦   ¦   +-- protocol/             # ClientRequest, RequestType, and ServerResponse classes
-¦   ¦   ¦   +-- server/               # Multithreaded server, routing, and request handling
-¦   ¦   +-- resources/images/         # Sample department and product image files
-¦   +-- test/java/com/supermarketstore/
-¦       +-- department/               # Department DAO, JSON, and binary handling tests
-¦       +-- product/                  # Product DAO, JSON, validation, and binary handling tests
-¦       +-- protocol/                 # Shared protocol wrapper and Base64 round-trip tests
-¦       +-- server/routing/           # RequestRouter request/response scenario tests
+ï¿½   +-- main/
+ï¿½   ï¿½   +-- java/com/supermarketstore/
+ï¿½   ï¿½   ï¿½   +-- client/               # Console client and socket request helpers
+ï¿½   ï¿½   ï¿½   +-- client/upload/        # Binary file payload creation for uploads
+ï¿½   ï¿½   ï¿½   +-- department/           # Department DTO, DAO interface, JDBC DAO, and JSON converter
+ï¿½   ï¿½   ï¿½   +-- product/              # Product DTO, DAO interface, JDBC DAO, and JSON converter
+ï¿½   ï¿½   ï¿½   +-- protocol/             # ClientRequest, RequestType, and ServerResponse classes
+ï¿½   ï¿½   ï¿½   +-- server/               # Multithreaded server, routing, and request handling
+ï¿½   ï¿½   +-- resources/images/         # Sample department and product image files
+ï¿½   +-- test/java/com/supermarketstore/
+ï¿½       +-- department/               # Department DAO, JSON, and binary handling tests
+ï¿½       +-- product/                  # Product DAO, JSON, validation, and binary handling tests
+ï¿½       +-- protocol/                 # Shared protocol wrapper and Base64 round-trip tests
+ï¿½       +-- server/routing/           # RequestRouter request/response scenario tests
 +-- docs/
-¦   +-- javadoc/                      # Generated Javadoc website, including index.html
+ï¿½   +-- javadoc/                      # Generated Javadoc website, including index.html
 +-- reports/
-¦   +-- coverage.png                  # IntelliJ IDEA coverage evidence for Stage 4
+ï¿½   +-- coverage.png                  # IntelliJ IDEA coverage evidence for Stage 4
 +-- lib/                              # Local library folder, if required by the environment
 +-- target/                           # Maven build output generated locally
     +-- downloads/
@@ -284,7 +284,7 @@ The application follows an N-tier structure. The client sends JSON requests over
 request, routes it to the correct handler, calls DAO interfaces, and the JDBC DAO implementations communicate with
 MySQL.
 
-`````mermaid
+```mermaid
 flowchart LR
     C["Client<br/>ClientMain"]
     P["JSON Protocol<br/>ClientRequest, RequestType, ServerResponse<T>"]
