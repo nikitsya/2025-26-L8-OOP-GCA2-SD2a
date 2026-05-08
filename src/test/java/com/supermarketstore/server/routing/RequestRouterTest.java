@@ -277,6 +277,59 @@ class RequestRouterTest {
     }
 
     @Test
+    void route_whenGetAllProductsRequestIsSent_returnsOkResponse() {
+        Product first = new Product(1, "Cola", 2.50, false, null, 40, new byte[]{1, 2, 3}, "cola.jpg", "image/jpeg", 3);
+        Product second = new Product(2, "Bread", 1.20, false, null, 25, new byte[]{4, 5, 6, 7}, "bread.jpg", "image/jpeg", 4);
+
+        ProductDao productDao = new ProductDao() {
+            @Override
+            public List<Product> getAllProducts() {
+                return List.of(first, second);
+            }
+
+            @Override
+            public Optional<Product> getProductById(int id) {
+                return Optional.empty();
+            }
+
+            @Override
+            public Optional<Product> getProductImageById(int id) {
+                return Optional.empty();
+            }
+
+            @Override
+            public boolean deleteProductById(int id) {
+                return false;
+            }
+
+            @Override
+            public Product insertProduct(Product product) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public Product updateProduct(int id, Product product) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public List<Product> findProductsByFilter(Predicate<Product> filter) {
+                return List.of();
+            }
+        };
+
+        RequestRouter router = new RequestRouter(emptyDepartmentDao(), productDao);
+
+        ClientRequest request = new ClientRequest(RequestType.GET_ALL_PRODUCTS.name(), null);
+
+        ServerResponse<?> response = router.route(request);
+
+        assertEquals("OK", response.getStatus());
+        assertEquals("Products retrieved successfully", response.getMessage());
+        assertEquals(List.of(first, second), response.getData());
+    }
+
+    @Test
     void route_whenDisconnectRequestIsSent_returnsOkResponse() {
         RequestRouter router = new RequestRouter(emptyDepartmentDao(), emptyProductDao());
 
