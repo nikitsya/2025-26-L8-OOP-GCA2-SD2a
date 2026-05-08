@@ -25,9 +25,8 @@ class RequestRouterTest {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
-    @Test
-    void route_whenGetDepartmentByIdRequestIsMissingId_returnsErrorResponse() {
-        DepartmentDao departmentDao = new DepartmentDao() {
+    private DepartmentDao emptyDepartmentDao() {
+        return new DepartmentDao() {
             @Override
             public List<Department> getAllDepartments() {
                 return List.of();
@@ -63,8 +62,10 @@ class RequestRouterTest {
                 return Optional.empty();
             }
         };
+    }
 
-        ProductDao productDao = new ProductDao() {
+    private ProductDao emptyProductDao() {
+        return new ProductDao() {
             @Override
             public List<Product> getAllProducts() {
                 return List.of();
@@ -100,8 +101,11 @@ class RequestRouterTest {
                 return List.of();
             }
         };
+    }
 
-        RequestRouter router = new RequestRouter(departmentDao, productDao);
+    @Test
+    void route_whenGetDepartmentByIdRequestIsMissingId_returnsErrorResponse() {
+        RequestRouter router = new RequestRouter(emptyDepartmentDao(), emptyProductDao());
 
         ObjectNode payload = mapper.createObjectNode();
         ClientRequest request = new ClientRequest(RequestType.GET_DEPARTMENT_BY_ID.name(), payload);
@@ -110,6 +114,73 @@ class RequestRouterTest {
 
         assertEquals("ERROR", response.getStatus());
         assertEquals("Missing required field: id", response.getMessage());
+        assertNull(response.getData());
+    }
+
+    @Test
+    void route_whenGetDepartmentByIdRequestIsValidAndDepartmentExists_returnsOkResponse() {
+        Department expectedDepartment = new Department(1, "Bakery", 0, 2, 12000.0, 5, false);
+
+        DepartmentDao departmentDao = new DepartmentDao() {
+            @Override
+            public List<Department> getAllDepartments() {
+                return List.of();
+            }
+
+            @Override
+            public Optional<Department> getDepartmentById(int id) {
+                return id == 1 ? Optional.of(expectedDepartment) : Optional.empty();
+            }
+
+            @Override
+            public boolean deleteDepartmentById(int id) {
+                return false;
+            }
+
+            @Override
+            public Department insertDepartment(Department department) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public Department updateDepartment(int id, Department department) {
+                throw new UnsupportedOperationException();
+            }
+
+            @Override
+            public List<Department> findDepartmentsByFilter(Predicate<Department> filter) {
+                return List.of();
+            }
+
+            @Override
+            public Optional<Department> getDepartmentImageById(int id) {
+                return Optional.empty();
+            }
+        };
+
+        RequestRouter router = new RequestRouter(departmentDao, emptyProductDao());
+
+        ObjectNode payload = mapper.createObjectNode();
+        payload.put("id", 1);
+        ClientRequest request = new ClientRequest(RequestType.GET_DEPARTMENT_BY_ID.name(), payload);
+
+        ServerResponse<?> response = router.route(request);
+
+        assertEquals("OK", response.getStatus());
+        assertEquals("Department retrieved successfully", response.getMessage());
+        assertEquals(expectedDepartment, response.getData());
+    }
+
+    @Test
+    void route_whenDisconnectRequestIsSent_returnsOkResponse() {
+        RequestRouter router = new RequestRouter(emptyDepartmentDao(), emptyProductDao());
+
+        ClientRequest request = new ClientRequest(RequestType.DISCONNECT.name(), null);
+
+        ServerResponse<?> response = router.route(request);
+
+        assertEquals("OK", response.getStatus());
+        assertEquals("Client disconnected successfully", response.getMessage());
         assertNull(response.getData());
     }
 }
