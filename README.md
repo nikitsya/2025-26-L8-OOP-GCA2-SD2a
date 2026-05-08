@@ -82,8 +82,8 @@ the documentation and test evidence required for final submission.
 | Final README | Nikita Smiichyk | Hanna Bokariuk | 2 | Wrote final project overview, run instructions, protocol docs, stage evidence, binary notes, OOP features, references, and submission checklist. |
 | Contribution matrix | Nikita Smiichyk | Hanna Bokariuk | 3 | Reworked the matrix into the final Stage 4 table format based on Git history and task ownership. |
 | Assessment checklist and final submission notes | Nikita Smiichyk | Hanna Bokariuk | 1 | Added final checklist, assessment rubric notes, stage tracking, and final submission reminders. |
-| Coverage evidence screenshot `/reports/coverage.png` | Nikita Smiichyk | Hanna Bokariuk | 1 | Must be generated in IntelliJ IDEA using the full test suite before final submission. |
-| Screencast planning and export | Hanna Bokariuk | Nikita Smiichyk | 3 | Should cover both vertical slices, server/client demo, binary handling, tests, and design explanation. |
+| Coverage evidence screenshot `/reports/coverage.png` | Nikita Smiichyk | Hanna Bokariuk | 1 | Generated in IntelliJ IDEA using the full test suite and committed as Stage 4 evidence. |
+| Screencast planning and export | Hanna Bokariuk | Nikita Smiichyk | 3 | Covers both vertical slices, server/client demo, binary handling, tests, and design explanation. |
 | Harvard references and AI usage declaration | Nikita Smiichyk | Hanna Bokariuk | 2 | Added references and AI tool use declaration in the final README. |
 | Final code formatting and clean-up | Nikita Smiichyk | Hanna Bokariuk | 3 | Performed project-wide formatting, package clean-up, unused asset removal, and shared refactoring. |
 
@@ -154,6 +154,43 @@ The project has two main domain entities.
 The schema also contains the bridge table `department_products`, which models the many-to-many relationship between
 departments and products.
 
+```mermaid
+erDiagram
+    departments {
+        int department_id PK
+        string name
+        int floor
+        int zone
+        double budget
+        int employee_count
+        boolean is_refrigerated
+        string file_name
+        string content_type
+        int file_size
+        blob department_image
+    }
+
+    products {
+        int product_id PK
+        string name
+        double price
+        boolean is_on_sale
+        double discount_price
+        int stock
+        string file_name
+        string content_type
+        int file_size
+        blob product_image
+    }
+
+    department_products {
+        int department_id PK, FK
+        int product_id PK, FK
+    }
+
+    departments ||--o{ department_products : "contains"
+    products ||--o{ department_products : "listed in"
+```
 ### 4.2 Validation and invalid data handling
 
 DTO fields are encapsulated and validated through constructors and setters. Examples include:
@@ -392,6 +429,47 @@ The client can attach these file fields to `ADD_*` and `UPDATE_*` payloads:
 | `contentType` or `content_type` | MIME type |
 | `fileSize` or `file_size` | File size in bytes |
 
+### 9.6 Sequence diagram: GET_DEPARTMENT_IMAGE_BY_ID
+
+```mermaid
+sequenceDiagram
+    participant Client as ClientMain
+    participant Server as ServerMain
+    participant Router as RequestRouter
+    participant Dao as JdbcDepartmentDao
+    participant Database as MySQL
+
+    Client->>Server: JSON request { type: GET_DEPARTMENT_IMAGE_BY_ID, payload: { id } }
+    Server->>Router: route(ClientRequest)
+    Router->>Dao: getDepartmentImageById(id)
+    Dao->>Database: SELECT ... department_image ... WHERE department_id = ?
+    Database-->>Dao: ResultSet with metadata and BLOB bytes
+    Dao-->>Router: Optional.of(Department)
+    Router-->>Server: ServerResponse.ok("Department image retrieved successfully", department)
+    Server-->>Client: JSON response with metadata and Base64 image bytes
+    Client->>Client: saveRetrievedFile(target/downloads/departments/...)
+```
+
+### 9.7 Sequence diagram: GET_PRODUCT_IMAGE_BY_ID
+
+```mermaid
+sequenceDiagram
+    participant Client as ClientMain
+    participant Server as ServerMain
+    participant Router as RequestRouter
+    participant Dao as JdbcProductDao
+    participant Database as MySQL
+
+    Client->>Server: JSON request { type: GET_PRODUCT_IMAGE_BY_ID, payload: { id } }
+    Server->>Router: route(ClientRequest)
+    Router->>Dao: getProductImageById(id)
+    Dao->>Database: SELECT ... product_image ... WHERE product_id = ?
+    Database-->>Dao: ResultSet with metadata and BLOB bytes
+    Dao-->>Router: Optional.of(Product)
+    Router-->>Server: ServerResponse.ok("Product image retrieved successfully", product)
+    Server-->>Client: JSON response with metadata and Base64 image bytes
+    Client->>Client: saveRetrievedFile(target/downloads/products/...)
+```
 ## 10. Stage 3 Evidence: Binary File Handling, Protocol Completion, and Testing
 
 | Feature | Requirement | Project evidence |
@@ -513,14 +591,14 @@ Router / Command-style Dispatch:
 `RequestRouter` stores request handlers in a `Map<String, RequestHandler>`. Each request type maps to a handler lambda,
 which keeps request dispatch centralised and avoids a long conditional chain inside the server loop.
 
-## 13. Known Final Submission Items To Check
+## 13. Final Submission Checklist
 
-Before final upload, confirm these items:
+Final submission evidence included in this repository:
 
 - `reports/coverage.png` exists and shows at least 70% line coverage for the required classes.
 - The screencast is available from the YouTube link in section 11.3.
 - The contribution matrix in section 2.1 is complete, including any required effort/reviewer details.
-- The final README required by Moodle is submitted in the expected filename/location.
+- This README contains the final project overview, run instructions, evidence, references, and AI tool use declaration.
 - The database can be recreated from `sql/mysqlSetup.sql`.
 - The server and client run from a clean checkout after setting `TEST_DB_PASS`.
 
@@ -545,4 +623,3 @@ draft the contribution matrix and estimate each team member's contribution by re
 tasks. The matrix was then checked, edited, and finalised by the team rather than being accepted as a fully automatic
 assessment. AI tools also helped suggest commit message wording from short descriptions of completed changes. The
 implementation, testing, review, and final submission decisions remain the responsibility of the project team.
-
